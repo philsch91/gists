@@ -90,7 +90,7 @@ oc expose dc rs --port=8080
 oc expose svc/xxx
 ```
 
-# Find FQDN
+## Find FQDN
 
 ```
 oc get routes | grep xxx | awk '{print $2}'
@@ -101,4 +101,15 @@ Hit `/info` endpoint of the service, using two different methods:
 ```
 http $(oc get routes | grep xxx | awk '{print $2}')/info
 curl -s $(oc get routes | grep xxx | awk '{print $2}')/info | jq .
+```
+
+## Adapt Quotas
+
+```
+oc get quota    # get quota names
+oc get quota -o yaml    # get yaml description of quotas (ResourceQuota)
+oc delete quota <quota-name> -n <project-name>
+oc create -f <file-name> -n <project-name>          # apply quotas (ResourceQuota) in template yaml file
+oc describe quota <quota-name> -n <project-name>    # verify quotas
+oc describe quota   # verify quotas
 ```
