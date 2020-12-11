@@ -10,13 +10,13 @@ GET cisl-2020.11.27/_search
 
 GET cisl-2020.11.27/_search
 {
-  "query": { 
-    "bool": { 
+  "query": {
+    "bool": {
       "must": [
         { "match": { "title":   "Search"        }},
         { "match": { "content": "Elasticsearch" }}
       ],
-      "filter": [ 
+      "filter": [
         { "term":  { "status": "published" }},
         { "range": { "publish_date": { "gte": "2015-01-01" }}}
       ]
@@ -29,9 +29,9 @@ GET cisl-2020.11.27/_search?scroll=1m&format=txt
 GET cisl-2020.11.27/_search?scroll=1m&pretty=true
 {
     "size": 10000,
-    "_source": ["@timestamp", "agent.hostname", "message"], 
+    "_source": ["@timestamp", "agent.hostname", "message"],
     "query": {
-        "bool": { 
+        "bool": {
            "must": [
               {"match": {"agent.hostname":"cisl-6-wtvhc"}},
               {"match": {"log.file.path": "/srv/tomcat/logs/catalina.2020-11-27.log"}}
@@ -54,7 +54,7 @@ GET cisl-2020.11.27/_search?scroll=1m&pretty=true
 GET cisl-2020.11.27/_search
 {
     "query": {
-        "bool": { 
+        "bool": {
            "must": [
             ],
             "filter": [
@@ -63,4 +63,11 @@ GET cisl-2020.11.27/_search
             ]
         }
     }
+}
+
+PUT /beat-log4j-2020.12.04/_settings
+{
+  "index" : {
+    "max_result_window": 100000
+  }
 }
