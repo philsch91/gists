@@ -71,3 +71,29 @@ PUT /beat-log4j-2020.12.04/_settings
     "max_result_window": 100000
   }
 }
+
+GET beat-log4j-2020.12.04/_search?scroll=1m&pretty=true
+{
+    "size": 100000,
+    "_source": ["@timestamp", "agent.hostname", "message"],
+    "query": {
+        "bool": {
+           "must": [
+              {"wildcard": {
+                "agent.hostname": {
+                "value": "cisl*"}
+              }}
+            ],
+            "filter": [
+              {"range": {"@timestamp": { "gte": "2020-12-04T08:39:31.000Z" }}}
+            ]
+        }
+    },
+    "sort": [
+      {
+        "@timestamp": {
+          "order": "asc"
+        }
+      }
+    ]
+}
