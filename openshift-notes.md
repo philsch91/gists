@@ -113,3 +113,8 @@ oc create -f <file-name> -n <project-name>          # apply quotas (ResourceQuot
 oc describe quota <quota-name> -n <project-name>    # verify quotas
 oc describe quota   # verify quotas
 ```
+
+## Sync files
+```
+oc rsync <pod-name>:/tmp/output.txt /tmp
+```
