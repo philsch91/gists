@@ -1,13 +1,36 @@
-GET _cat/indices/
-GET _cat/indices/cisl-2020.11.27
+# Elasticsearch Notes
 
+### Cat API
+```
+GET _cat/indices/
+GET _cat/indices?pretty=true
+GET _cat/indices/<index-name>-2020.11.27
+DELETE <index-name>-2020.12.15
+```
+
+### Settings
+```
+PUT _settings
+{
+  "index": {
+    "blocks": {
+      "read_only_allow_delete": "false"
+    }
+  }
+}
+```
+
+### Search
+```
 GET cisl-2020.11.27/_search
 {
     "query": {
         "match_all": {}
     }
 }
+```
 
+```
 GET cisl-2020.11.27/_search
 {
   "query": {
@@ -23,9 +46,30 @@ GET cisl-2020.11.27/_search
     }
   }
 }
+```
 
+```
+GET cisl-2020.11.27/_search
+{
+    "query": {
+        "bool": {
+           "must": [
+            ],
+            "filter": [
+              {"term": {"agent.hostname":"cisl-6-wtvhc"}},
+              {"term": {"log.file.path": "/srv/tomcat/logs/catalina.2020-11-27.log"}}
+            ]
+        }
+    }
+}
+```
+
+### Scroll API
+```
 GET cisl-2020.11.27/_search?scroll=1m&format=txt
+```
 
+```
 GET cisl-2020.11.27/_search?scroll=1m&pretty=true
 {
     "size": 10000,
@@ -49,28 +93,20 @@ GET cisl-2020.11.27/_search?scroll=1m&pretty=true
       }
     ]
 }
+```
 
-GET cisl-2020.11.27/_search
-{
-    "query": {
-        "bool": {
-           "must": [
-            ],
-            "filter": [
-              {"term": {"agent.hostname":"cisl-6-wtvhc"}},
-              {"term": {"log.file.path": "/srv/tomcat/logs/catalina.2020-11-27.log"}}
-            ]
-        }
-    }
-}
-
+### Index Settings
+```
 PUT /beat-log4j-2020.12.04/_settings
 {
   "index" : {
     "max_result_window": 100000
   }
 }
+```
 
+### Search and Scroll
+```
 GET beat-log4j-2020.12.04/_search?scroll=1m&pretty=true
 {
     "size": 100000,
@@ -96,6 +132,7 @@ GET beat-log4j-2020.12.04/_search?scroll=1m&pretty=true
       }
     ]
 }
+```
 
 ## filebeat.yml logstash example
 ```
