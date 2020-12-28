@@ -73,9 +73,44 @@ oc run rs --image=172.30.115.115:5000/go-test/reshifter
 oc status
 oc logs -f dc/xxx
 ```
-
 ```
 oc logs <pod-name> -c <container-name>
+```
+
+## Pause rollouts
+
+```
+oc rollout pause dc <dc-name>
+```
+
+## Resume rollouts
+
+```
+oc rollout resume dc <dc-name>
+```
+
+## Rollout deployment config
+
+```
+oc rollout latest <dc-name>
+```
+
+## Get triggers
+
+```
+oc set triggers dc --all
+```
+
+## Disable automatic triggers
+
+```
+oc set triggers dc <dc-name> --manual
+```
+
+## Enable automatic triggers
+
+```
+oc deploy --enable triggers
 ```
 
 ## Create service from DC
