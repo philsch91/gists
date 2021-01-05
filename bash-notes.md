@@ -1,5 +1,12 @@
 # Bash Notes
 
+### Search for string in files
+```
+grep -rnwl '/path/to/directory' -e 'searchstring'
+grep --include=\*.{c,h} -rnwl '/path/to/directory' -e 'searchstring'
+grep --exclude=\*.o -rnwl '/path/to/directory' -e 'searchstring'
+```
+
 ### Parameter Substitution
 ${var+alt_value}
 If var is set, use alt_value, else use null string.
