@@ -150,6 +150,13 @@ oc describe quota   # verify quotas
 ```
 
 ## Sync files
+
+### Copy files from container
 ```
 oc rsync <pod-name>:/tmp/output.txt /tmp
+```
+
+### Copy files to container
+```
+oc rsync . <pod-name>:/appbase/system_admin/ --exclude=* --include=security.xml -c <container-name>
 ```
