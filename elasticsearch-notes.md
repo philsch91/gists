@@ -20,6 +20,28 @@ PUT _settings
 }
 ```
 
+```
+PUT .kibana/_settings
+{
+  "index": {
+    "blocks": {
+      "read_only_allow_delete": "false"
+    }
+  }
+}
+```
+
+```
+PUT .opendistro_security/_settings
+{
+  "index": {
+    "blocks": {
+      "read_only_allow_delete": "false"
+    }
+  }
+}
+```
+
 ### Search
 ```
 GET cisl-2020.11.27/_search
