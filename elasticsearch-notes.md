@@ -134,6 +134,34 @@ GET beat-log4j-2020.12.04/_search?scroll=1m&pretty=true
 }
 ```
 
+```
+GET beat-log4j-2021.01.14/_search?scroll=1m&pretty=true
+{
+    "size": 100000,
+    "_source": ["@timestamp", "appName.keyword", "message"],
+    "query": {
+        "bool": {
+           "must": [
+              {"wildcard": {
+                "appName.keyword": {
+                "value": "mo-bff*"}
+              }}
+            ],
+            "filter": [
+              {"range": {"@timestamp": { "gte": "2021-01-14T00:00:00.000Z" }}}
+            ]
+        }
+    },
+    "sort": [
+      {
+        "@timestamp": {
+          "order": "asc"
+        }
+      }
+    ]
+}
+```
+
 ## filebeat.yml logstash example
 ```
 filebeat.inputs:
