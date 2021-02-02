@@ -7,6 +7,8 @@ GET _cat/indices?pretty=true
 GET _cat/indices/<index-name>-2020.11.27
 GET _cat/nodes
 DELETE <index-name>-2020.12.15
+DELETE <index-name>*
+DELETE *2021.02.01
 ```
 
 ### Settings
