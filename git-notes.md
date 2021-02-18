@@ -8,3 +8,7 @@
 4. `create pull request in order to merge <remote-name>/<temp-remote-branch-name> into <remote-name>/<remote-branch-name>`
 5. `git push -d <remote-name> <temp-remote-branch-name>`
 6. `git pull <remote-name> <remote-branch-name>`
+
+## Fetch and search for a remote branch
+1. `git fetch --all`
+2. `git branch -a | grep -Ei release*`
