@@ -143,6 +143,7 @@ curl -s $(oc get routes | grep xxx | awk '{print $2}')/info | jq .
 ```
 oc get quota    # get quota names
 oc get quota -o yaml    # get yaml description of quotas (ResourceQuota)
+oc get -o yaml quota <object-name> -n <project-name>
 oc delete quota <quota-name> -n <project-name>
 oc create -f <file-name> -n <project-name>          # apply quotas (ResourceQuota) in template yaml file
 oc describe quota <quota-name> -n <project-name>    # verify quotas
