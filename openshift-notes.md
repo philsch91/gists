@@ -53,6 +53,22 @@ oc new-build --strategy=docker --name='xxx' .
 oc start-build xxx --from-dir .
 ```
 
+## Get and apply objects
+
+```
+oc get dc <dc-name> -o yaml --export -n <project-name>
+
+oc get dc redis -o yaml --export -n itmp-italy-dev > dc-redis.yaml
+oc get pvc redis -o yaml --export -n itmp-italy-dev > pvc-redis.yaml
+oc get service redis -o yaml --export -n itmp-italy-dev > service-redis.yaml
+oc get secret redis -o yaml --export -n itmp-italy-dev > secret-redis.yaml
+
+oc apply -f secret-redis.yaml -n itmp-italy-test
+oc apply -f service-redis.yaml -n itmp-italy-test
+oc apply -f pvc-redis.yaml -n itmp-italy-test
+oc apply -f dc-redis.yaml -n itmp-italy-test
+```
+
 ## Follow build logs
 
 ```
