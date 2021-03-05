@@ -12,3 +12,8 @@
 ## Fetch and search for a remote branch
 1. `git fetch --all`
 2. `git branch -a | grep -Ei release*`
+
+## Set remote settings in config
+- `git config remote.origin.url https://github.com/abc/abc.git`
+- `git config remote.upstream.url https://github.com/abc/abc.git`
+- `git config branch.master.remote origin`
