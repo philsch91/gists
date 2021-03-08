@@ -9,7 +9,7 @@ grep --exclude=\*.o -rnwl '/path/to/directory' -e 'searchstring'
 
 ### Parameter Substitution
 ${var+alt_value}
-If var is set, use alt_value, else use null string.
+If var is set, use alt_value, else use null string.<br />
 ${var:+alt_value}
 If var is set and not null, use alt_value, else use null string
 ```
@@ -17,6 +17,16 @@ echo "${no_proxyy}${no_proxyy:+,}new-domain.tld"
 new-domain.tld
 echo "${no_proxy}${no_proxy:+,}new-domain.tld"
 domain1,domain2,domain3,domain4,new-domain.tld
+```
+
+### Replace String in XML tag
+```
+LOGGINGCONFIGFILE="${CONFIG_PATH}/log4net.config"
+
+if [ -n "${LOGLEVEL}" -a -f "${LOGGINGCONFIGFILE}" ]; then
+    echo "Substitute default value with ${LOGLEVEL} in ${LOGGINGCONFIGFILE}"
+    sed -i -E 's@(<level value=").*(" />)@\1'"$LOGLEVEL"'\2@' "${LOGGINGCONFIGFILE}"
+fi
 ```
 
 ### Misc 
