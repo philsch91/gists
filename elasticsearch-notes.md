@@ -186,3 +186,8 @@ GET beat-log4j-2021.01.14/_search?scroll=1m&pretty=true
     ]
 }
 ```
+
+### Kibana Console Proxy
+```
+curl -k 'https://<kibana-uri>/api/console/proxy?path=_cluster%2Fhealth&method=GET' -X 'POST' -H 'kbn-xsrf: true' -u '<user>:<password>'
+```
