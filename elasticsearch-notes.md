@@ -188,6 +188,18 @@ GET beat-log4j-2021.01.14/_search?scroll=1m&pretty=true
 ```
 
 ### Kibana Console Proxy
+
+Access Elasticsearch API via Kibana
+
+#### GET _cluster/health
 ```
 curl -k 'https://<kibana-uri>/api/console/proxy?path=_cluster%2Fhealth&method=GET' -X 'POST' -H 'kbn-xsrf: true' -u '<user>:<password>'
+```
+#### GET _cluster/pending_tasks
+```
+curl -k 'https://<kibana-uri>/api/console/proxy?path=_cluster%2Fpending_tasks&method=GET' -X 'POST' -H 'kbn-xsrf: true' -u '<user>:<password>'
+````
+#### GET _cat/indices
+```
+curl -k 'https://<kibana-uri>/api/console/proxy?path=_cat%2Findices&method=GET' -X 'POST' -H 'kbn-xsrf: true' -u '<user>:<password>'
 ```
