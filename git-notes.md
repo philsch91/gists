@@ -17,3 +17,7 @@
 - `git config remote.origin.url https://github.com/abc/abc.git`
 - `git config remote.upstream.url https://github.com/abc/abc.git`
 - `git config branch.master.remote origin`
+
+## Patch files - resolve merge conflicts partially
+1. `git switch master`
+1. `git checkout -p <branch-name> <file-name>`
