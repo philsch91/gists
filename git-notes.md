@@ -21,3 +21,11 @@
 ## Patch files - resolve merge conflicts partially
 1. `git switch master`
 1. `git checkout -p <branch-name> <file-name>`
+
+## Resolve merge conflicts
+1. `git fetch --all`
+1. `git switch dev`
+1. `git merge master`
+1. `git switch master`
+1. `git merge dev --no-ff`
+1. `git push`
