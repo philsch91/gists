@@ -9,6 +9,8 @@ GET _cat/nodes
 DELETE <index-name>-2020.12.15
 DELETE <index-name>*
 DELETE *2021.02.01
+GET <index-name>/_settings
+GET */_settings
 ```
 
 ### Settings
@@ -42,6 +44,12 @@ PUT .opendistro_security/_settings
       "read_only_allow_delete": "false"
     }
   }
+}
+```
+```
+PUT <index-name>/_settings
+{
+  "index.blocks.read_only_allow_delete": null
 }
 ```
 
@@ -202,4 +210,21 @@ curl -k 'https://<kibana-uri>/api/console/proxy?path=_cluster%2Fpending_tasks&me
 #### GET _cat/indices
 ```
 curl -k 'https://<kibana-uri>/api/console/proxy?path=_cat%2Findices&method=GET' -X 'POST' -H 'kbn-xsrf: true' -u '<user>:<password>'
+```
+
+### GET */_settings
+```
+curl -k 'https://<kibana-uri>/api/console/proxy?path=%2A%2F_settings&method=GET' -X 'POST' -H 'kbn-xsrf: true' -u '<user>:<password>'
+```
+Check for response
+```
+"index-name": {
+  "settings": {
+    "index": {
+      "blocks": {
+        "read_only_allow_delete": "true"
+      }
+    }
+  }
+}
 ```
