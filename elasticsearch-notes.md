@@ -216,7 +216,7 @@ curl -k 'https://<kibana-uri>/api/console/proxy?path=_cluster%2Fpending_tasks&me
 curl -k 'https://<kibana-uri>/api/console/proxy?path=_cat%2Findices&method=GET' -X 'POST' -H 'kbn-xsrf: true' -u '<user>:<password>'
 ```
 
-### GET */_settings
+#### GET */_settings
 ```
 curl -k 'https://<kibana-uri>/api/console/proxy?path=%2A%2F_settings&method=GET' -X 'POST' -H 'kbn-xsrf: true' -u '<user>:<password>'
 ```
