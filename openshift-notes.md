@@ -178,9 +178,15 @@ oc rsync <pod-name>:/tmp/output.txt /tmp
 oc rsync . <pod-name>:/appbase/system_admin/ --exclude=* --include=security.xml -c <container-name>
 ```
 
-## Add Service Account
+## Set policy
+
+### Add Service Account
 ```
 oc create sa <service-account-name>
 oc describe sa <service-account-name>
 oc policy add-role-to-user view system:serviceaccount:<project-name>:<service-account-name>
+```
+### Add role to user in projects
+```
+for projectname in $(oc get projects | awk '$1 != "NAME" {print $1}'); do echo ${projectname}; oc adm policy add-role-to-user admin firstname.surname@domain.com -n ${projectname}; done
 ```
