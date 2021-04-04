@@ -6,6 +6,14 @@ grep -rnwl '/path/to/directory' -e 'searchstring'
 grep --include=\*.{c,h} -rnwl '/path/to/directory' -e 'searchstring'
 grep --exclude=\*.o -rnwl '/path/to/directory' -e 'searchstring'
 ```
+### Search for large files
+```
+find . -xdev -type f -printf "%s\t%p\n" | sort -n | tail -20
+```
+### Remove high number of files
+```
+find . -type f -print0 | xargs -0 rm -v
+```
 
 ### Parameter Substitution
 ${var+alt_value}
