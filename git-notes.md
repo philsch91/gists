@@ -29,3 +29,7 @@
 1. `git switch master`
 1. `git merge dev --no-ff`
 1. `git push`
+
+## Clean working copy
+1. `git clean -nd`
+1. `git clean -fd`
