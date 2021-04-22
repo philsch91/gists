@@ -11,6 +11,32 @@ DELETE <index-name>*
 DELETE *2021.02.01
 GET <index-name>/_settings
 GET */_settings
+GET _cluster/settings
+```
+```
+PUT _cluster/settings
+{
+  "persistent": {
+    "cluster.routing.allocation.disk.threshold_enabled": true,
+    "cluster.routing.allocation.disk.watermark.flood_stage": "95%",
+    "cluster.routing.allocation.disk.watermark.low": "85%",
+    "cluster.routing.allocation.disk.watermark.high": "90%",
+    "cluster.info.update.interval": "1m"
+  }
+}
+```
+
+```
+PUT _cluster/settings
+{
+  "transient": {
+    "cluster.routing.allocation.disk.threshold_enabled": true,
+    "cluster.routing.allocation.disk.watermark.low": "100gb",
+    "cluster.routing.allocation.disk.watermark.high": "50gb",
+    "cluster.routing.allocation.disk.watermark.flood_stage": "10gb",
+    "cluster.info.update.interval": "1m"
+  }
+}
 ```
 
 ### Settings
