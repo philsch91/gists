@@ -58,15 +58,16 @@ oc start-build xxx --from-dir .
 ```
 oc get dc <dc-name> -o yaml --export -n <project-name>
 
-oc get dc redis -o yaml --export -n itmp-italy-dev > dc-redis.yaml
-oc get pvc redis -o yaml --export -n itmp-italy-dev > pvc-redis.yaml
-oc get service redis -o yaml --export -n itmp-italy-dev > service-redis.yaml
-oc get secret redis -o yaml --export -n itmp-italy-dev > secret-redis.yaml
+oc get dc redis -o yaml --export -n <project-name> > dc-redis.yaml
+oc get pvc redis -o yaml --export -n <project-name> > pvc-redis.yaml
+oc get service redis -o yaml --export -n <project-name> > service-redis.yaml
+oc get secret redis -o yaml --export -n <project-name> > secret-redis.yaml
+oc get dc,pvc,svc,route,configmap -l "<label-name> in (<label-value> [, <label-value-2>])" -o json >> <label-name>-<label-value>.json
 
-oc apply -f secret-redis.yaml -n itmp-italy-test
-oc apply -f service-redis.yaml -n itmp-italy-test
-oc apply -f pvc-redis.yaml -n itmp-italy-test
-oc apply -f dc-redis.yaml -n itmp-italy-test
+oc apply -f secret-redis.yaml -n <project-name>
+oc apply -f service-redis.yaml -n <project-name>
+oc apply -f pvc-redis.yaml -n <project-name>
+oc apply -f dc-redis.yaml -n <project-name>
 ```
 
 ## Follow build logs
