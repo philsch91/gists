@@ -50,7 +50,7 @@ SerialGC is automatically set in a container that can use <= 1 core
 ```
 
 ```
-JAVA_OPTS="${JAVA_OPTS} -XX:+UseContainerSupport -XX:InitialRAMPercentage=50 -XX:MinRAMPercentage=25 -XX:MaxRAMPercentage=80 -XX:NewRatio=4 -XX:SurvivorRatio=4"
+JAVA_OPTS="${JAVA_OPTS} -XX:+UseContainerSupport -XX:InitialRAMPercentage=50 -XX:MinRAMPercentage=25 -XX:MaxRAMPercentage=80 -XX:NewRatio=4 -XX:SurvivorRatio=4 -javaagent:/srv/jolokia-jvm-1.6.2-agent.jar=port=8778,host=0.0.0.0,user=jolokia,password=jolokia,policyLocation=classpath:/srv/jolokia/jolokia-access.xml -javaagent:/srv/prometheus/jmx_prometheus_javaagent-0.15.0.jar=9081:/srv/conf/prometheus/app.yml"
 java -jar app.jar ${JAVA_OPTS}
 ```
 
