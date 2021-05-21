@@ -22,7 +22,17 @@ java -XX:+PrintFlagsFinal -version | grep 'MaxHeapSize\|MaxRAMPercentage\|Initia
 
 ### Explicity enable G1GC and disable Mark Sweep Compact
 
-`-XX:+UseG1GC -XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly`
+```
+-XX:+UseG1GC -XX:-UseConcMarkSweepGC -XX:-UseCMSInitiatingOccupancyOnly
+```
+
+### Explicitly enable SerialGC
+
+SerialGC is automatically set in a container that can use <= 1 core
+
+```
+-XX:+UseSerialGC
+```
 
 ### Debug Memory
 
@@ -42,4 +52,11 @@ java -XX:+PrintFlagsFinal -version | grep 'MaxHeapSize\|MaxRAMPercentage\|Initia
 ```
 JAVA_OPTS="${JAVA_OPTS} -XX:+UseContainerSupport -XX:InitialRAMPercentage=50 -XX:MinRAMPercentage=25 -XX:MaxRAMPercentage=80 -XX:NewRatio=4 -XX:SurvivorRatio=4"
 java -jar app.jar ${JAVA_OPTS}
+```
+
+## jcmd
+
+```
+jcmd <pid> <command>
+jcmd 1234 VM.flags
 ```
