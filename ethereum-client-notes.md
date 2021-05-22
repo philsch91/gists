@@ -20,23 +20,34 @@ geth --syncmode "light" --datadir "D:\ethereum" --datadir.minfreedisk 1048576 --
 ```
 
 ### Geth JavaScript Console
+
+#### Linux/macOS
 ```
 geth attach
 ```
-
-### Node Info
+#### Windows
+```
+geth attach ipc:\\.\pipe\geth.ipc
+```
+#### Admin
 ```
 admin.nodeInfo
+admin.peers
+admin.addPeer("enode://<public-key>@<ip-address>:<port>")
+admin.chainSyncStatus
 ```
 
-### Network Connectivity
+#### Network
 ```
 net.listening
 net.peerCount
 ```
 
-### P2P
+#### Eth
+
+eth.syncing = false when the node is up to date
+
 ```
-admin.peers
-admin.addPeer("enode://<public-key>@<ip-address>:<port>")
+eth.syncing
+eth.blockNumber
 ```
