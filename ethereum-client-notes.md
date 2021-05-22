@@ -11,8 +11,8 @@ geth [--mainnet|--ropsten|--rinkeby|--goerli] --syncmode "fast"|"light" --datadi
 
 ### Start Geth on macOS
 ```
-caffeinate -i geth --mainnet --syncmode "fast" --datadir "/Volumes/<disk-name>/ethereum/geth" --datadir.minfreedisk 20480  --nat extip:$(curl --silent https://diagnostic.opendns.com/myip) 2>&1 | tee -a geth.log
-caffeinate -i /usr/bin/nohup geth --mainnet --syncmode "fast" --datadir "/Volumes/<disk-name>/ethereum/geth" --datadir.minfreedisk 20480  --nat extip:$(curl --silent https://diagnostic.opendns.com/myip) 2>&1 & disown | tee -a geth.log
+caffeinate -i geth --mainnet --syncmode "fast" --datadir "/Volumes/<disk-name>/ethereum/geth" --datadir.minfreedisk 20480 --nat extip:$(curl --silent https://diagnostic.opendns.com/myip) 2>&1 | tee -a geth.log
+caffeinate -i /usr/bin/nohup geth --mainnet --syncmode "fast" --datadir "/Volumes/<disk-name>/ethereum/geth" --datadir.minfreedisk 20480 --nat extip:$(curl --silent https://diagnostic.opendns.com/myip) 2>&1 & disown | tee -a geth.log
 ```
 ### Start Geth on Windows
 ```
