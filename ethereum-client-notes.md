@@ -6,13 +6,13 @@ By default, Geth runs a mainnet node. Testnets are provided as options, e.g. `--
 
 ### Geth CLI Options
 ```
-geth [--mainnet|--ropsten|--rinkeby|--goerli] --syncmode "fast"|"light" --datadir "/Volumes/<disk-name>/ethereum/geth" --datadir.minfreedisk 20480  --nat extip:$(curl --silent https://diagnostic.opendns.com/myip) [--maxpeers 0]
+geth [--mainnet|--ropsten|--rinkeby|--goerli] --syncmode "fast"|"light" --datadir "/Volumes/<disk-name>/ethereum/geth" --datadir.minfreedisk 20480 [--http] [--http.api eth,net,web3,personal,debug] [--http.corsdomain "*"] [--ws] [--ws.api eth,net,web3,personal,debug] [--ws.origins "*"] --nat extip:$(curl --silent https://diagnostic.opendns.com/myip) [--maxpeers 0]
 ```
 
 ### Start Geth on macOS
 ```
-caffeinate -i geth --mainnet --syncmode "fast" --datadir "/Volumes/<disk-name>/ethereum/geth" --datadir.minfreedisk 20480 --nat extip:$(curl --silent https://diagnostic.opendns.com/myip) 2>&1 | tee -a geth.log
-caffeinate -i /usr/bin/nohup geth --mainnet --syncmode "fast" --datadir "/Volumes/<disk-name>/ethereum/geth" --datadir.minfreedisk 20480 --nat extip:$(curl --silent https://diagnostic.opendns.com/myip) 2>&1 & disown | tee -a geth.log
+caffeinate -i geth --mainnet --syncmode "fast" --datadir "/Volumes/<disk-name>/ethereum/geth" --datadir.minfreedisk 20480 --http --http.api eth,net,web3,personal,debug --http.corsdomain "*" --ws --ws.api eth,net,web3,personal,debug --ws.origins "*" --nat extip:$(curl --silent https://diagnostic.opendns.com/myip) 2>&1 | tee -a geth.log
+caffeinate -i /usr/bin/nohup geth --mainnet --syncmode "fast" --datadir "/Volumes/<disk-name>/ethereum/geth" --datadir.minfreedisk 20480 --http --http.api eth,net,web3,personal,debug --http.corsdomain "*" --ws --ws.api eth,net,web3,personal,debug --ws.origins "*" --nat extip:$(curl --silent https://diagnostic.opendns.com/myip) 2>&1 & disown | tee -a geth.log
 ```
 ### Start Geth on Windows
 ```
