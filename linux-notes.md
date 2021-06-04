@@ -20,3 +20,15 @@ systemd services in `state=active` and `sub` either `running` or `exited`
 ```
 systemctl list-units --type=service --state=active
 ```
+
+## netcat
+
+Check network connectivity
+```
+nc -zv <host> <port>
+```
+
+Start network listening
+```
+nc -lk <port>
+```
