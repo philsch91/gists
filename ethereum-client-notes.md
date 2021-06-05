@@ -16,7 +16,7 @@ caffeinate -i /usr/bin/nohup geth --mainnet --syncmode "fast" --datadir "/Volume
 ```
 ### Start Geth on Windows
 ```
-geth --syncmode "light" --datadir "D:\ethereum" --datadir.minfreedisk 1048576 --http --http.api eth,net,web3,personal,debug --http.corsdomain "*" --ws --ws.api eth,net,web3,personal,debug --ws.origins "*" --nat extip:<ip-address> 2>&1 | ForEach-Object ToString | Tee-Object -FilePath "C:\logs\geth.log" -Append
+geth --syncmode "light" --datadir "D:\ethereum" --datadir.minfreedisk 1048576 --http --http.api eth,net,web3,personal,debug --http.corsdomain "*" --ws --ws.api eth,net,web3,personal,debug --ws.origins "*" --nat extip:$((Invoke-WebRequest -Uri https://diagnostic.opendns.com/myip).Content) 2>&1 | ForEach-Object ToString | Tee-Object -FilePath "C:\logs\geth.log" -Append
 ```
 
 ### Geth JavaScript Console
