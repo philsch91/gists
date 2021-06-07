@@ -1,5 +1,20 @@
 # Linux Notes
 
+## Shell
+
+### Redirections
+
+Redirect both STDOUT and STDERR to /dev/null.
+Redirect STDERR to STDOUT and STDOUT to /dev/null.
+```
+command >/dev/null 2>&1
+```
+
+Redirect only STDOUT to /dev/null, while STDERR is redirected to STDOUT, which is redirected to /dev/null
+```
+command 2>&1 >/dev/null
+```
+
 ## systemd
 
 ### List unit files
