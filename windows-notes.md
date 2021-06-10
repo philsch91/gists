@@ -7,9 +7,19 @@ List running wsl processes
 wsl --list --verbose
 ```
 
+Set wsl default version
+```
+wsl --set-default-version 2
+```
+
+Set wsl default distribution
+```
+wsl --set-default <wsl-name>
+```
+
 Set wsl version for process
 ```
-wsl --set-version <pid or name> 2
+wsl --set-version <wsl-name or wsl-pid> 2
 ```
 
 ## ATA TRIM
