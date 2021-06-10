@@ -1,5 +1,17 @@
 # Windows Notes
 
+## wsl
+
+List running wsl processes
+```
+wsl --list --verbose
+```
+
+Set wsl version for process
+```
+wsl --set-version <pid or name> 2
+```
+
 ## ATA TRIM
 
 ### Query TRIM setting
