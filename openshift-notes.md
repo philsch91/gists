@@ -33,9 +33,9 @@ oc project <project-name>
 Launches as pod supervised by DC:
 
 ```
-oc new-app --strategy=source IMAGE:TAG~https://github.com/handle/repo.git
+oc new-app --strategy=source IMAGE:TAG~https://github.com/user/project.git
 # for example:
-oc new-app --strategy=source python:2.7~https://github.com/mhausenblas/cwc.git -e APP_FILE=cwc.py -e CWCPORT=8080
+oc new-app --strategy=source python:2.7~https://github.com/user/project.git -e APP_FILE=project.py -e PORT=8080
 ```
 
 
@@ -68,6 +68,18 @@ oc apply -f secret-redis.yaml -n <project-name>
 oc apply -f service-redis.yaml -n <project-name>
 oc apply -f pvc-redis.yaml -n <project-name>
 oc apply -f dc-redis.yaml -n <project-name>
+```
+
+### Get templates
+```
+oc get template -n openshift | grep redis
+oc get template redis-persistent -o yaml -n openshift > path/to/redis-persistent-template.yml
+```
+
+### Process and apply templates
+```
+oc project <project-name>
+oc process -f path/to/redis-persistent-template.yml -p REDIS_PASSWORD=redis | oc create -f -
 ```
 
 ## Follow build logs
