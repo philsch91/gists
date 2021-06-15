@@ -121,7 +121,14 @@ oc rollout resume dc <dc-name>
 ## Rollout deployment config
 
 ```
-oc rollout latest <dc-name>
+oc rollout latest dc/<dc-name> -n <project-name>
+```
+
+## Restart pod
+
+The replication controller should make sure, that a new pod is started to maintain the set number of replicas in the deployment config.
+```
+oc delete pod <pod-name>
 ```
 
 ## Get triggers
@@ -165,6 +172,12 @@ Hit `/info` endpoint of the service, using two different methods:
 ```
 http $(oc get routes | grep xxx | awk '{print $2}')/info
 curl -s $(oc get routes | grep xxx | awk '{print $2}')/info | jq .
+```
+
+## Scale resources
+
+```
+oc scale --replicas=<count> [deployment|replicaset|replicationcontroller|statefulset|deploymentconfig|dc]/<object-name> -n <project-name>
 ```
 
 ## Adapt Quotas
