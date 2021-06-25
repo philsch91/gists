@@ -42,3 +42,7 @@ used to prevent filling up disk space in the CISL container
 ```
 while((1)); do echo "$(date)">/tmp/db2logfile.log; sleep 60; done &
 ```
+response time measurement
+```
+for((i=0;i<=3600;i++)); do echo "$(date)" >>/tmp/readiness.log; time curl -k --noproxy "*" http://localhost:3769/readiness >>/tmp/readiness.log; sleep 1; done &
+```
