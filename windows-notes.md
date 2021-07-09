@@ -1,6 +1,19 @@
 # Windows Notes
 
-## wsl
+## User Accounts
+
+Get user details
+```
+whoami
+echo %USERNAME%
+echo %USERDOMAIN%
+Get-LocalUser -Name 'username' | Select-Object *
+```
+
+RDP login with Microsoft account if USERDOMAIN=AzureAD<br />
+User account: AzureAD\<user@domain.tld>
+
+## WSL
 
 List running wsl processes
 ```
