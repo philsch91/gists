@@ -216,3 +216,25 @@ oc policy add-role-to-user view system:serviceaccount:<project-name>:<service-ac
 ```
 for projectname in $(oc get projects | awk '$1 != "NAME" {print $1}'); do echo ${projectname}; oc adm policy add-role-to-user admin firstname.surname@domain.com -n ${projectname}; done
 ```
+
+## Docker Images
+
+### Import Image
+```
+oc tag docker-registry.default.svc:<registry-port>/<project>/<image>:<tag> <project>/<image>:<tag>
+oc import-image <project>/<image>:<tag> --from=docker-registry-default.<registry-domain>/<project>/<image>:<tag> --insecure --confirm
+```
+
+### Delete Image Tag
+```
+oc delete istag/<image>:<tag>
+oc tag -d <image>:<tag>
+```
+
+### Docker Push and Pull
+```
+docker login -u openshift[|$(oc whoami)] -p $(oc whoami -t) [--insecure-skip-tls-verify=true] <registry-name>.<registry-domain>:<registry-port>
+docker pull <project><image>:<tag>
+docker tag <project><image>:<tag> <registry-name>.<registry-domain>:<registry-port>/<project>/<image>:<tag>
+docker push <registry-name>.<registry-domain>:<registry-port>/<project>/<image>:<tag>
+```
