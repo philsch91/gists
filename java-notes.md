@@ -55,7 +55,9 @@ SerialGC is automatically set in a container that can use <= 1 core
 
 ### Debug Memory
 
-`-XX: NativeMemoryTracking`
+```
+-XX: NativeMemoryTracking
+```
 
 ### Debugging
 
@@ -79,6 +81,7 @@ Heap size = MaxRAM / MaxRAMFraction<br />
 
 - `-XX:+UseContainerSupport` supported in Java 10 and backported to Java 8u191<br />
 - Java 10 deprecates `-XX:+UseCGroupMemoryLimitForHeap` and introduces `-XX:+UseContainerSupport`, which supersedes it.<br />
+- Approved JDK CSR for `-XX:InitialRAMPercentage`, `-XX:MinRAMPercentage` and `-XX:MaxRAMPercentage` [JDK-8186315](https://bugs.openjdk.java.net/browse/JDK-8186315)<br />
 - `-XX:+UseContainerSupport` is enabled by default<br />
 - `-XX:MaxRAMPercentage` does not recognize integer value and must be floating point value (float) [JDK-8219312](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=8219312)<br />
 
@@ -98,4 +101,18 @@ java -jar app.jar ${JAVA_OPTS}
 ```
 jcmd <pid> <command>
 jcmd 1234 VM.flags
+```
+
+## jmap
+
+```
+// Get Heap configuration
+jmap -heap <pid>
+```
+
+## jinfo
+
+```
+// Get used architecture
+jinfo -sysprops <pid> | grep sun.arch.data.model
 ```
