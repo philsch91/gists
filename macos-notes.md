@@ -22,3 +22,12 @@ vim -c "set nobomb" -c wq! <file-name>
 ```
 sudo powermetrics --samplers cpu_power,smc -i1000 -n1 | egrep -i 'power|CPU die temperature'
 ```
+
+## Time Machine
+
+### Time Machine via SMB
+
+1. `hdiutil create -size 600g -type SPARSEBUNDLE -fs "HFS+J" -volname TimeMachine TimeMachine.sparsebundle`
+1. copy TimeMachine.sparsebundle to SMB share
+1. mount the sparse image on the share as volume with a double click
+1. `sudo tmutil setdestination /Volumes/TimeMachine`
