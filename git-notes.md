@@ -30,6 +30,12 @@
 1. `git merge dev --no-ff`
 1. `git push`
 
+## Git stash
+1. `git stash (= git stash push)`
+1. `git stash list`
+1. `git stash apply stash@{<index>}`
+1. `git stash drop stash@{<index>}`
+
 ## Clean working copy
 1. `git clean -nd`
 1. `git clean -fd`
