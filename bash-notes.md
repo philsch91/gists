@@ -1,5 +1,41 @@
 # Bash Notes
 
+### test
+
+#### String operators
+```
+if [ -n "${VAR}" ]; then
+  # VAR is not empty
+fi
+
+if [ -n "${VAR}" -a -f "${FILE}" ]; then
+  # VAR is not empty and FILE exists as a regular file
+fi
+
+if [ ! -z "${VAR}" ]; then
+  # VAR is not empty
+fi
+
+if [ -z "${VAR}" ]; then
+  # VAR is empty
+fi
+
+if [ ${STATUS} -eq 200 ] && [ "${STRING}" = "${VALUE}" ]; then
+  # STATUS is 200 and STRING is equal to VALUE
+fi
+
+if [ ${STATUS} -ne 200 ] && [ "${STRING}" != "${VALUE}" ]; then
+  # STATUS is not equal to 200 and STRING is not equal to VALUE
+fi
+```
+
+#### File operators
+```
+if [ -f "${FILE_PATH}" ]; then
+  # file at FILE_PATH exists and is a regular file
+fi
+```
+
 ### Search for string in files
 ```
 grep -rnwl '/path/to/directory' -e 'searchstring'
