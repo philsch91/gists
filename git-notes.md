@@ -1,7 +1,15 @@
 # Git Documentation and Snippets
 
-## Merge local and remote Git branches with unrelated histories
+## Git diff
+```
+// check for merge conflict markers
+git diff --check
+// set exit code (1 = diff true, 0 = diff false)
+// writes also to stdout
+git diff --exit-code
+```
 
+## Merge local and remote Git branches with unrelated histories
 1. `git switch -c <branch-name>`
 2. `git pull <remote-name> <remote-branch-name> --allow-unrelated-histories`
 3. `git push <remote-name> HEAD:<temp-remote-branch-name>`
