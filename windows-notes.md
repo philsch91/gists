@@ -57,3 +57,14 @@ fsutil behavior set DisableDeleteNotify 0
 ```
 fsutil behavior set DisableDeleteNotfiy 1
 ```
+
+## Explorer
+```
+HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+DWORD DisablePreviewWindow = 1
+```
+
+## Automatic Updates
+```
+Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
+```
