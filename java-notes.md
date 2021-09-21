@@ -4,6 +4,20 @@
 
 - `java -X` will return a list of all -X options
 
+### Networking and Proxies
+
+Linux and macOS
+```
+JAVA_OPTS=-Dhttp.proxyHost=<proxy-dns-name-or-ip> -Dhttp.proxyPort=8080 -Dhttps.proxyHost=<proxy-dns-name-or-ip> -Dhttps.proxyPort=8080 -Dhttp.nonProxyHosts="localhost|127.0.0.1|10.*.*.*|*.company.com‌​|etc"
+echo $JAVA_OPTS
+```
+
+Windows
+```
+set JAVA_OPTS=-Dhttp.proxyHost=<proxy-dns-name-or-ip> -Dhttp.proxyPort=8080 -Dhttps.proxyHost=<proxy-dns-name-or-ip> -Dhttps.proxyPort=8080 -Dhttp.nonProxyHosts="localhost|127.0.0.1|10.*.*.*|*.company.com‌​|etc"
+echo %JAVA_OPTS%
+```
+
 ### Heap Size Settings
 
 Memory = Stack + Heap + Metaspace<br />

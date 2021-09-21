@@ -68,3 +68,8 @@ DWORD DisablePreviewWindow = 1
 ```
 Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
 ```
+
+## Internet Settings
+```
+Computer\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings
+```
