@@ -155,10 +155,13 @@ oc deploy --enable triggers
 oc expose dc rs --port=8080
 ```
 
-## Create route
+## Routes
 
 ```
 oc expose svc/xxx
+oc annotate route <route-name> router.openshift.io/cookie_name=JSESSIONID -n <project-name>
+oc annotate route <route-name> --overwrite haproxy.router.openshift.io/timeout=2m -n <project-name>
+oc annotate route <route-name> --overwrite haproxy.router.openshift.io/balance=roundrobin -n <project-name>
 ```
 
 ## Find FQDN
