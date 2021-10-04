@@ -17,6 +17,7 @@ User account: AzureAD\<user@domain.tld>
 
 List running wsl processes
 ```
+wsl -l -v
 wsl --list --verbose
 ```
 
@@ -72,4 +73,13 @@ Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU
 ## Internet Settings
 ```
 Computer\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings
+```
+
+## Docker
+```
+%localappdata%\Docker\log.txt
+C:\Users\<user>\AppData\Local\Docker\log.txt
+%appdata%\Docker\settings.json
+C:\Users\<user>\AppData\Roaming\Docker\settings.json
+C:\Users\<user>\.docker\config.json
 ```
