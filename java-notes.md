@@ -110,6 +110,12 @@ JAVA_OPTS="${JAVA_OPTS} -XX:+UseContainerSupport -XX:InitialRAMPercentage=50 -XX
 java -jar app.jar ${JAVA_OPTS}
 ```
 
+### Java Management Extensions (JMX)
+
+```
+java -jar app.jar -Dcom.sun.management.jmxremote.port=4447 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false
+```
+
 ## jcmd
 
 ```
@@ -129,4 +135,15 @@ jmap -heap <pid>
 ```
 // Get used architecture
 jinfo -sysprops <pid> | grep sun.arch.data.model
+```
+
+## jconsole
+```
+jconsole localhost:4447
+```
+
+## cmdline-jmxclient
+```
+java -jar cmdline-jmxclient-0.10.3.jar <user>:<password> <host>:<port> <bean> [<command>]
+java -jar cmdline-jmxclient-0.10.3.jar -:- localhost:4447 org.opin.framework:type=statistics,name=A3kSession,id=Rap Sessions
 ```
