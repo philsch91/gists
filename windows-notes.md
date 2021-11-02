@@ -21,6 +21,12 @@ wsl -l -v
 wsl --list --verbose
 ```
 
+Shutdown or terminate
+```
+wsl --shutdown
+wsl -t <distro-name>
+```
+
 Set wsl default version
 ```
 wsl --set-default-version 2
