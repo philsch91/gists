@@ -15,6 +15,13 @@ Redirect only STDOUT to /dev/null, while STDERR is redirected to STDOUT, which i
 command 2>&1 >/dev/null
 ```
 
+## find
+
+```
+# find and ignore permission denied errors
+find / -name "filename*" 2>/dev/null
+```
+
 ## systemd
 
 ### List unit files
