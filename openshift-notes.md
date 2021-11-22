@@ -124,8 +124,13 @@ oc rollout resume dc <dc-name>
 oc rollout latest dc/<dc-name> -n <project-name>
 ```
 
-## Restart pod
+## Pods
 
+### Delete evicted pods
+```
+oc get pods [-n <project-name>] | grep -i Evicted | awk '{print $1}' | xargs oc delete pod [-n <project-name>]
+```
+### Restart pod
 The replication controller should make sure, that a new pod is started to maintain the set number of replicas in the deployment config.
 ```
 oc delete pod <pod-name>
