@@ -15,6 +15,12 @@ Redirect only STDOUT to /dev/null, while STDERR is redirected to STDOUT, which i
 command 2>&1 >/dev/null
 ```
 
+## ln
+```
+# symlink (soft link)
+ln -s <destination-dir> <source-dir>
+```
+
 ## find
 
 ```
