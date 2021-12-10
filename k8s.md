@@ -3,12 +3,15 @@
 ## deployment
 ```
 kubectl [-n <namespace>] get deployment
-kubectl get deployment/<deployment-name> [-o yaml|wide]
+kubectl get deployment <deployment-name> [-o yaml|json|wide]
+kubectl get deployment/<deployment-name> [-o yaml|json|wide]
 ```
 
 ## pods
 ```
-kubectl get pods
+kubectl get pod
+kubectl get pod <pod-name>
+kubectl get pod/<pod-name>
 ```
 
 ## exec
@@ -34,4 +37,9 @@ kubectl get configmap/<configmap-name> [-o yaml]
 ```
 kubectl apply -f <file>
 cat file.yml | kubectl apply -f -
+```
+
+## patch
+```
+kubectl -n <namespace> patch <resource>/<resource-name> --type=json --patch='[{"op":"replace","path":"/<key1>/<key2>","value":<value>}]'
 ```
