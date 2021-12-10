@@ -47,3 +47,9 @@ git diff --exit-code
 ## Clean working copy
 1. `git clean -nd`
 1. `git clean -fd`
+
+## Change last commit message
+```
+// the last commit must not have been pushed
+git commit --amend -m "new commit message"
+```
