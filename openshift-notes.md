@@ -188,6 +188,11 @@ curl -s $(oc get routes | grep xxx | awk '{print $2}')/info | jq .
 oc scale --replicas=<count> [deployment|replicaset|replicationcontroller|statefulset|deploymentconfig|dc]/<object-name> -n <project-name>
 ```
 
+## Autoscale resources
+```
+oc get horizontalpodautoscaler | awk '{print $2}'
+oc get horizontalpodautoscaler -o template --template '{{range .items}}{{.spec.scaleTargetRef.name}}{{"\n"}}{{end}}'
+```
 ## Adapt Quotas
 
 ```
