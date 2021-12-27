@@ -8,4 +8,5 @@
 // negative lookbehind
 // match prod or production but not preprod or preproduction
 /(?<!pre)prod|(?<!pre)production/i
+/(?<!PRE)PROD/i
 ```
