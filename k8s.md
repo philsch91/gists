@@ -1,10 +1,16 @@
 # Kubernetes Gists
 
+## config
+```
+kubectl config current-context
+```
+
 ## deployment
 ```
 kubectl [-n <namespace>] get deployment
 kubectl get deployment <deployment-name> [-o yaml|json|wide]
 kubectl get deployment/<deployment-name> [-o yaml|json|wide]
+kubectl delete deployment/<deployment-name>
 ```
 
 ## pods
@@ -22,9 +28,15 @@ kubectl exec <pod> [-c <container>] -it -- /bin/bash -il
 kubectl exec <pod> [-c <container>] -it bash
 ```
 
+## logs
+```
+kubectl logs [-f] --tail 100 [-p] <pod | type/name> [-c <container>]
+kubectl logs [-f] --since=2h -l app=nginx --all-containers=true
+```
+
 ## scale
 ```
-kctl scale --replicas=<count> deployment|rs|rc|statefulset/<name>
+kubectl scale --replicas=<count> deployment|rs|rc|statefulset/<name>
 ```
 
 ## configmap

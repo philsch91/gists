@@ -244,6 +244,11 @@ oc delete istag/<image>:<tag>
 oc tag -d <image>:<tag>
 ```
 
+### Get Image Streams
+```
+oc get imagestreams/<image> -o jsonpath='{range .status.tags[*]}{.tag}{"\n"}'
+```
+
 ### Docker Push and Pull
 ```
 docker login -u openshift[|$(oc whoami)] -p $(oc whoami -t) [--insecure-skip-tls-verify=true] <registry-name>.<registry-domain>:<registry-port>
