@@ -1,0 +1,102 @@
+[
+  {
+    "AvailabilityZone": "eu-central-1c",
+    "AvailabilityZoneId": "euc1-az1",
+    "AvailableIpAddressCount": 123,
+    "CidrBlock": "10.251.1.0/25",
+    "DefaultForAz": false,
+    "MapPublicIpOnLaunch": false,
+    "MapCustomerOwnedIpOnLaunch": false,
+    "State": "available",
+    "SubnetId": "subnet-0000000001234abcd",
+    "VpcId": "vpc-0000000001234abcd",
+    "OwnerId": "123456789101",
+    "AssignIpv6AddressOnCreation": false,
+    "Ipv6CidrBlockAssociationSet": [],
+    "Tags": [
+      {
+        "Key": "Role",
+        "Value": "private_internal_1"
+      },
+      {
+        "Key": "Ext",
+        "Value": "3"
+      },
+      {
+        "Key": "Project",
+        "Value": "company_project"
+      },
+      {
+        "Key": "Environment",
+        "Value": "shared"
+      },
+      {
+        "Key": "Name",
+        "Value": "subnet_company_project_ec1_shared_private_internal_1_3"
+      },
+      {
+        "Key": "Region",
+        "Value": "eu-central-1"
+      },
+      {
+        "Key": "Service",
+        "Value": "subnet"
+      },
+      {
+        "Key": "OE",
+        "Value": "company"
+      }
+    ],
+    "SubnetArn": "arn:aws:ec2:eu-central-1:123456789101:subnet/subnet-0000000001234abcd"
+  },
+  {
+    "AvailabilityZone": "eu-central-1c",
+    "AvailabilityZoneId": "euc1-az1",
+    "AvailableIpAddressCount": 59,
+    "CidrBlock": "10.251.21.128/26",
+    "DefaultForAz": false,
+    "MapPublicIpOnLaunch": false,
+    "MapCustomerOwnedIpOnLaunch": false,
+    "State": "available",
+    "SubnetId": "subnet-0000000001234wxyz",
+    "VpcId": "vpc-0000000001234abcd",
+    "OwnerId": "123456789101",
+    "AssignIpv6AddressOnCreation": false,
+    "Ipv6CidrBlockAssociationSet": [],
+    "Tags": [
+      {
+        "Key": "Project",
+        "Value": "company_project"
+      },
+      {
+        "Key": "Ext",
+        "Value": "3"
+      },
+      {
+        "Key": "Role",
+        "Value": "private_internal_17"
+      },
+      {
+        "Key": "OE",
+        "Value": "company"
+      },
+      {
+        "Key": "Name",
+        "Value": "subnet_company_project_ec1_shared_private_internal_17_3"
+      },
+      {
+        "Key": "Region",
+        "Value": "eu-central-1"
+      },
+      {
+        "Key": "Service",
+        "Value": "subnet"
+      },
+      {
+        "Key": "Environment",
+        "Value": "shared"
+      }
+    ],
+    "SubnetArn": "arn:aws:ec2:eu-central-1:123456789101:subnet/subnet-0000000001234wxyz"
+  }
+]
