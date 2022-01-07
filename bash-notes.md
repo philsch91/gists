@@ -36,22 +36,39 @@ if [ -f "${FILE_PATH}" ]; then
 fi
 ```
 
-### Search for string in files
+### grep
+
+#### Search for string in files
 ```
 grep -rnwl '/path/to/directory' -e 'searchstring'
 grep --include=\*.{c,h} -rnwl '/path/to/directory' -e 'searchstring'
 grep --exclude=\*.o -rnwl '/path/to/directory' -e 'searchstring'
 ```
-### Search for large files
+
+### find
+
+#### Search for a directory
+```
+find / -type d -name "<dir-name>" 2>/dev/null
+```
+#### Search for large files
 ```
 find . -xdev -type f -printf "%s\t%p\n" | sort -n | tail -20
 ```
-### Remove high number of files
+#### Remove high number of files
 ```
 find . -type f -print0 | xargs -0 rm -v
 ```
 
-### Parameter Substitution
+### Variable processing
+```
+lastchar="${var:$((${#var}-1)):1}"
+if [ "$lastchar" != "/" ]; then
+  var="${var}/"
+fi
+```
+
+#### Parameter Substitution
 ${var+alt_value}
 If var is set, use alt_value, else use null string.<br />
 ${var:+alt_value}
@@ -63,7 +80,7 @@ echo "${no_proxy}${no_proxy:+,}new-domain.tld"
 domain1,domain2,domain3,domain4,new-domain.tld
 ```
 
-### Replace String in XML tag
+#### Replace String in XML tag
 ```
 LOGGINGCONFIGFILE="${CONFIG_PATH}/log4net.config"
 
