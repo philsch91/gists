@@ -1,20 +1,52 @@
 # Jenkins Notes
 
+## Tasks
 
-
-## Cancel tasks in the queue
+### Cancel tasks in the queue
 https://<jenkins-url>/script
 
 ```
 import hudson.model.*
 def q = Jenkins.instance.queue
-q.items.each { 
+q.items.each {
   q.cancel(it.task)
 }
 ```
 
-## Clear the task queue
-https://<jenkins-url>/script
+#### Cancel task method 1
+```
+import hudson.model.*
+import jenkins.model.Jenkins
+
+
+for (queued in Jenkins.instance.queue.items) {
+  Jenkins.instance.queue.cancel(queued.task)
+}
+
+```
+
+#### Cancel task method 2
+```
+import hudson.model.*
+import jenkins.model.Jenkins
+
+def i = 0
+def tasks = Jenkins.instance.queue.items.findAll {
+  println("task " + i + ": " + it.task.name)
+  i++
+}
+//tasks.each { Jenkins.instance.queue.cancel(it.task) }
+```
+
+```
+Jenkins.instance.queue.items.findAll {
+    !it.task.name.contains("Extenda") }.each {
+        println "Cancel ${it.task.name}"
+        Jenkins.instance.queue.cancel(it.task)
+    }
+```
+
+### Clear the task queue
 
 ```
 import hudson.model.*
@@ -24,15 +56,73 @@ queue.clear()
 println "Queue cleared"
 ```
 
-## Cancel and stop jobs
+## Build Jobs
+
+### Cancel and stop jobs
 https://<jenkins-url>/script
 
+#### Stop builds method 1
 ```
-Jenkins.instance.queue.items.findAll {
-    !it.task.name.contains("Extenda") }.each {
-        println "Cancel ${it.task.name}"
-        Jenkins.instance.queue.cancel(it.task)
+import hudson.model.*
+import jenkins.model.Jenkins
+
+def buildingJobs = Jenkins.instance.getAllItems(Job.class).findAll {
+  it.isBuilding()
+}
+
+//println(buildingJobs)
+
+def j = 0
+buildingJobs.each {
+  def jobName = it.toString()
+  //println(jobName + "\n")
+  def jobarr = jobName.split("\\[|\\]")
+  println("jobarr[1]:" + jobarr[1])
+
+  def job = Jenkins.instance.getItemByFullName(jobarr[1].trim())
+  for (build in job.builds) {
+    if (build.isBuilding()) {
+      println("build " + j + ": " + build)
+      //build.doStop();
+      build.doKill();
+      j++
     }
+  }
+}
+```
+
+#### Stop builds method 2
+```
+import hudson.model.*
+import jenkins.model.Jenkins
+
+for (job in Jenkins.instance.items) {
+  stopJobs(job)
+}
+
+def stopJobs(job) {
+  if (job in com.cloudbees.hudson.plugins.folder.Folder) {
+    for (child in job.items) {
+      stopJobs(child)
+	}
+  } else if (job in org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject) {
+    for (child in job.items) {
+      stopJobs(child)
+    }
+  } else if (job in org.jenkinsci.plugins.workflow.job.WorkflowJob) {
+    if (job.isBuilding()) {
+      for (build in job.builds) {
+        build.doKill()
+      }
+    }
+  }
+}
+```
+
+#### Stop builds method 3
+```
+import hudson.model.*
+import jenkins.model.Jenkins
 
 Jenkins.instance.items.each {
   stopJobs(it)
