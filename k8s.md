@@ -49,6 +49,12 @@ kubectl get configmap
 kubectl get configmap/<configmap-name> [-o yaml]
 ```
 
+## create
+```
+kubectl create secret docker-registry <secretname> --docker-server=<host> \
+    --docker-username=<username> --docker-password='<password>'
+```
+
 ## apply
 ```
 kubectl apply -f <file>
