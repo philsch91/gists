@@ -5,6 +5,11 @@
 kubectl config current-context
 ```
 
+## cluster-info
+```
+kubectl cluster-info
+```
+
 ## deployment
 ```
 kubectl [-n <namespace>] get deployment
@@ -64,4 +69,15 @@ cat file.yml | kubectl apply -f -
 ## patch
 ```
 kubectl -n <namespace> patch <resource>/<resource-name> --type=json --patch='[{"op":"replace","path":"/<key1>/<key2>","value":<value>}]'
+```
+
+## auth
+```
+kubectl auth can-i get pods --as system:<system-account-name>:namespace:<namespace-name>
+```
+
+## ReST API
+´´´
+api/v1/namespaces/<namespace-name>/status
+apis/apps/v1/namespaces/<namespace-name>/deployments
 ```
