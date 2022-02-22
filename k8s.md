@@ -77,7 +77,7 @@ kubectl auth can-i get pods --as system:<system-account-name>:namespace:<namespa
 ```
 
 ## ReST API
-´´´
+```
 api/v1/namespaces/<namespace-name>/status
 apis/apps/v1/namespaces/<namespace-name>/deployments
 ```
