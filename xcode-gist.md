@@ -3,5 +3,17 @@
 ## Support new devices with old Xcode
 
 ```
-sudo ln -s /Applications/Xcode-11.5.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport/13.4 /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport
+sudo ln -s /Applications/Xcode-13.2.1.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport/14.5 /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport
+```
+
+## Add sym link from new to old iOS DeviceSupport
+
+```
+sudo ln -sv /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport/14.5 /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport/14.7
+```
+
+## Unable to copy symbols from this device
+
+```
+rm -rf /Users/<username>/Library/Developer/Xcode/iOS\ DeviceSupport
 ```
