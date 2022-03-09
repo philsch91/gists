@@ -1,12 +1,26 @@
 # Git Documentation and Snippets
 
-## Git diff
+## diff
 ```
 // check for merge conflict markers
 git diff --check
 // set exit code (1 = diff true, 0 = diff false)
 // writes also to stdout
 git diff --exit-code
+```
+
+## push
+```
+// delete remote tag
+git push -d <remote-name> <tag-name>
+// delete remote tag with tag and branch of the same name
+git push -d origin refs/tags/<tag-name>
+```
+
+## tag
+```
+// delete local tag
+git tag -d <tag-name>
 ```
 
 ## Merge local and remote Git branches with unrelated histories
