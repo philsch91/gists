@@ -19,8 +19,18 @@ git push -d origin refs/tags/<tag-name>
 
 ## tag
 ```
+// create annotated tag
+git tag -a <tag-name> -m <message>
+// list local tags
+git tag -l "<tag-name>*"
+// push a tag to remote server
+git push <remote-name> refs/tags/<tag-name>
+// delete tag on remote server
+git push -d <remote-name> refs/tags/<tag-name>
 // delete local tag
 git tag -d <tag-name>
+// push all local tags not present on remote server
+git push <remote-name> --tags
 ```
 
 ## Merge local and remote Git branches with unrelated histories
