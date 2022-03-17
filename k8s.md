@@ -78,6 +78,11 @@ kubectl -n <namespace> patch <resource>/<resource-name> --type=json --patch='[{"
 kubectl auth can-i get pods --as system:<system-account-name>:namespace:<namespace-name>
 ```
 
+## top
+```
+kubectl -n <namespace> top pod <pod> --containers
+```
+
 ## ReST API
 ```
 api/v1/namespaces/<namespace-name>/status
