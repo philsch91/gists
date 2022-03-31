@@ -88,3 +88,11 @@ kubectl -n <namespace> top pod <pod> --containers
 api/v1/namespaces/<namespace-name>/status
 apis/apps/v1/namespaces/<namespace-name>/deployments
 ```
+
+## plugin
+```
+kubectl plugin list
+mv kubelogin kubectl-oidc_login
+// Windows
+setx /M path "%path%;C:\path\to\kubectl-oidc_login.exe"
+```
