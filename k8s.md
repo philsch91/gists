@@ -3,6 +3,17 @@
 ## config
 ```
 kubectl config current-context
+
+// set cluster
+kubectl config [--kubeconfig=config-demo] set-cluster <cluster-name> --server=https://<host>:<port> [--insecure-skip-tls-verify=true]
+// set credentials
+kubectl config [--kubeconfig=config-demo] set-credentials <credentials-name> [--client-certificate=path/to/certfile] [--client-key=path/to/keyfile] [--token=bearer_token] [--username=basic_user] [--password=basic_password]
+// set context
+kubectl config [--kubeconfig=config-demo] set-context <context-name> --cluster=<cluster-name> --user=<credentials-name>
+// use context
+kubectl config [--kubeconfig=config-demo] use-context <context-name>
+// view config
+kubectl config [--kubeconfig=config-demo] view --minify
 ```
 
 ## cluster-info
