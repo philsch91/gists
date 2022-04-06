@@ -86,7 +86,18 @@ kubectl -n <namespace> patch <resource>/<resource-name> --type=json --patch='[{"
 
 ## auth
 ```
-kubectl auth can-i get pods --as system:<system-account-name>:namespace:<namespace-name>
+// current namespace
+kubectl auth can-i '*' '*'
+kubectl auth can-i list deployments.extensions
+kubectl auth can-i get pods [--as system:<serviceaccount-name>:namespace:<namespace-name>]
+
+// any namespace
+kubectl auth can-i create deployments [--as <user>] --all-namespaces
+
+// specific namespace
+kubectl auth can-i create pods [--as <user>] --namespace default
+kubectl auth can-i list secrets [--as <user>] --namespace default
+kubectl auth can-i create deployments [--as system:serviceaccount:<namespace-name>:<serviceaccount-name>] --namespace default
 ```
 
 ## top
