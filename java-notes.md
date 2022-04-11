@@ -128,6 +128,8 @@ jcmd 1234 VM.flags
 ```
 // Get Heap configuration
 jmap -heap <pid>
+// Cannot connect to core dump or remote debug server. Use jhsdb jmap instead
+jhsdb jmap --heap --pid <pid>
 ```
 
 ## jinfo

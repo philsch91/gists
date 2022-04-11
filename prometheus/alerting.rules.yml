@@ -1,0 +1,719 @@
+groups:
+- name: alerting.rules
+  rules:
+  - alert: InstanceDown (Prod, Demo, ADP-Tools)
+  # Condition for alerting
+    expr: up{instance=~".*prod.*|.*demo.*|.*adp-tools.*", instance !~".*preprod.*"} == 0
+    for: 5m
+    # Labels - additional labels to be attached to the alert
+    labels:
+      severity: 'critical' 
+    # Annotation - additional informational labels to store more information
+    annotations:
+      #title: 'Instance {{ $lable.instance }} down'
+      identifier: "{{ $labels.job }} {{ $labels.instance}}"
+      description: "{{ $labels.job }} has been down for more than 5 minutes.\n"
+      summary: Instance {{ $labels.instance }} down
+
+  - alert: InstanceDown (Test, Dev)
+    expr: up{instance=~".*test.*|.*dev.*"} == 0
+    for: 5m
+    # Labels - additional labels to be attached to the alert
+    labels:
+      severity: 'info' 
+    # Annotation - additional informational labels to store more information
+    annotations:
+      #title: 'Instance {{ $lable.instance }} down'
+      identifier: "{{ $labels.job }} {{ $labels.instance}}"
+      description: "{{ $labels.job }} has been down for more than 5 minutes.\n"
+      summary: Instance {{ $labels.instance }} down
+
+  - alert: Persistentvolume Available Space
+    expr: predict_linear(kubelet_volume_stats_available_bytes[12h],3*24*3600) <= 0 and (1 / kubelet_volume_stats_capacity_bytes * kubelet_volume_stats_used_bytes) * 100 > 70
+    for: 15m
+    # Labels - additional labels to be attached to the alert
+    labels:
+      severity: 'critical' 
+    # Annotation - additional informational labels to store more information
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance}}"
+      description: "{{ $labels.persistentvolumeclaim }} volume usage of 100% is expected in the next 3 days\n VALUE = {{ $value }}\n"
+      summary: "{{ $labels.instance }} runs full in the next 3 days"
+
+  # node memory is filling up (< 10% left)
+  - alert: NodeOutOfMemory
+    expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance}}"
+      summary: "Host out of memory (instance {{ $labels.instance }})"
+      description: "Node memory is filling up (< 10% left)\n VALUE = {{ $value }}\n"
+  
+  # node high CPU load
+  - alert: NodeHighCpuLoad
+    expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance}}"
+      summary: "Host high CPU load (instance {{ $labels.instance }})"
+      description: "CPU load is > 80%\n  VALUE = {{ $value }}\n"
+
+  - alert: ContainerStatusReadyCritical
+    expr: sum by (container,namespace) (kube_pod_container_status_ready{namespace!~".*nonprod.*",namespace!~".*preprod.*",namespace=~".*prod.*",container!="radarlive-preinstallupgrade",container!="deployment",container!="filebeat"}) == 0
+    for: 10m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }} {{ $labels.pod }} {{ $labels.container }}"
+      summary: "Container {{$labels.container}} in pod {{ $labels.pod }} is not ready - value = {{ $value }}"
+      description: "Container {{$labels.container}} in pod {{ $labels.pod }} is not ready - value = {{ $value }}"
+
+  # Container CPU usage is above 80%
+  - alert: ContainerCpuUsage
+    #expr: (sum(rate(container_cpu_usage_seconds_total[3m])) BY (pod_name) * 100) > 80
+    expr: sum(rate(container_cpu_usage_seconds_total{image!="", container_name!="POD"}[5m])) by (pod_name, container_name) / sum(container_spec_cpu_quota{image!="", container_name!="POD"} / container_spec_cpu_period{image!="", container_name!="POD"}) by (pod_name, container_name) > 80
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }} {{ $labels.pod_name}}"
+      summary: "Container CPU usage (instance {{ $labels.container_name }})"
+      description: "Container CPU usage is above 80%\n VALUE = {{ $value }}\n"
+
+  # Container CPU usage is above 90%
+  - alert: ContainerCpuUsage
+    #expr: (sum(rate(container_cpu_usage_seconds_total[3m])) BY (pod_name) * 100) > 90
+    expr: sum(rate(container_cpu_usage_seconds_total{image!="", container_name!="POD"}[5m])) by (pod_name, container_name) / sum(container_spec_cpu_quota{image!="", container_name!="POD"}/container_spec_cpu_period{image!="", container_name!="POD"}) by (pod_name, container_name) > 90
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }} {{ $labels.pod_name}}"
+      summary: "Container CPU usage (instance {{ $labels.container_name }})"
+      description: "Container CPU usage is above 90%\n VALUE = {{ $value }}\n"
+
+  # Container CPU usage is above 90%
+  - alert: ContainerCpuUsage CISL
+    expr: sum(rate(container_cpu_usage_seconds_total{image!="", container_name=~"cisl.*"}[5m])) by (pod_name, container_name) / sum(container_spec_cpu_quota{image!="", container_name=~"cisl.*"}/container_spec_cpu_period{image!="", container_name=~"cisl.*"}) by (pod_name, container_name) > 90
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }} {{ $labels.pod_name}}"
+      summary: "Container CPU usage (instance {{ $labels.container_name }})"
+      description: "Container CPU usage is above 90%\n VALUE = {{ $value }}\n"
+
+  # # Container Memory usage is above 80%
+  - alert: ContainerMemoryUsageWarning
+    expr: sum by(pod_name, container_name, namespace) (container_memory_usage_bytes{container_name!="POD",namespace!~"adp-tools-.*"}) / sum by(pod_name, container_name, namespace) (container_spec_memory_limit_bytes{container_name!="POD",namespace!~"adp-tools-.*"}) * 100 > 80 
+     and 
+     sum by(pod_name, container_name, namespace) (container_memory_usage_bytes{container_name!="POD",namespace!~"adp-tools-.*"}) / sum by(pod_name, container_name, namespace) (container_spec_memory_limit_bytes{container_name!="POD",namespace!~"adp-tools-.*"}) * 100 < 95
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }} {{ $labels.pod_name}}"
+      summary: "Container Memory usage (instance {{ $labels.pod_name }})"
+      description: "Container Memory usage is above 80%\n VALUE = {{ $value }}\n"
+
+  # Container memory usage is above 95%
+  - alert: ContainerMemoryUsageCritical
+    ##expr: (sum(container_memory_usage_bytes) BY (pod_name) / sum(container_spec_memory_limit_bytes) BY (pod_name) * 100) > 80
+    #expr: sum by(pod_name, container_name, namespace) (container_memory_usage_bytes{container_name!~"POD|",namespace!~"adp-tools-.*"})
+      #/ sum by(pod_name, container_name, namespace) (container_spec_memory_limit_bytes{container_name!~"POD|",namespace!~"adp-tools-.*"}) * 100 > 95
+    # PS 20211125 MPDI-95624: added pod_name!~"cisl.*"
+    expr: sum by(pod_name, container_name, namespace) (container_memory_usage_bytes{container_name!~"POD|",namespace!~"adp-tools-.*",pod_name!~"cisl.*"})
+      / sum by(pod_name, container_name, namespace) (container_spec_memory_limit_bytes{container_name!~"POD|",namespace!~"adp-tools-.*",pod_name!~"cisl.*"}) * 100 > 95
+    for: 5m
+    labels:
+      severity: critical  # critical
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }} {{ $labels.pod_name }}"
+      summary: "Container Memory usage (instance {{ $labels.pod_name }})"
+      description: "Memory usage for container {{ $labels.container_name }} in pod {{ $labels.pod_name }} is {{ $value }}\n"
+
+  # Container memory working set is above 95%
+  - alert: ContainerMemoryWorkingSetCritical
+    # container_memory_working_set_bytes{pod_name=~".*",container_name!~"POD|filebeat|",namespace!~"adp-tools-.*|.*preprod.*",namespace=~".*prod.*"}
+    expr: sum(container_memory_working_set_bytes{pod_name=~".*",container_name!~"POD|filebeat|",namespace!~"adp-tools-.*"}) by (pod_name, container_name, namespace)
+      / sum(container_spec_memory_limit_bytes{pod_name=~".*",container_name!~"POD|filebeat|",namespace!~"adp-tools-.*"}) by (pod_name, container_name, namespace) * 100 > 95
+    for: 5m
+    labels:
+      severity: critical  # critical
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }} {{ $labels.pod_name }}"
+      summary: "Container memory working set (instance {{ $labels.instance }})"
+      description: "Memory working set for container {{ $labels.container_name }} in pod {{ $labels.pod_name }} is {{ $value }}\n"
+  
+  - alert: JVMMemoryBytesCommittedCritical
+    expr: sum(jvm_memory_bytes_committed{job=~".*"}) by (job) / sum(jvm_memory_bytes_max{job=~".*"}) by (job) * 100 > 90
+    for: 5m
+    labels:
+      severity: critical  # critical
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }}"
+      summary: "JVM memory bytes committed (instance {{ $labels.instance }})"
+      description: "JVM committed bytes ratio for {{ $labels.instance }} is {{ $value }}\n"
+
+  #- alert: ContainerMemoryUsageCritical CISL
+  #  expr: container_memory_usage_bytes{container_name=~"cisl.*"} / container_spec_memory_limit_bytes{container_name=~"cisl.*"} * 100 > 80
+  #  #expr: sum by(pod_name, container_name, namespace) (container_memory_usage_bytes{container_name="cisl",pod_name=~"cisl.*",namespace=~".*prod",namespace!~"adp-tools-.*|.*preprod"})
+  #    #/ sum by(pod_name, container_name, namespace) (container_spec_memory_limit_bytes{container_name="cisl",pod_name=~"cisl.*",namespace=~".*prod",namespace!~"adp-tools-.*|.*preprod"}) * 100 > 80
+  #  for: 5m
+  #  labels:
+  #    severity: critical
+  #  annotations:
+  #    identifier: "{{ $labels.job }} {{ $labels.instance }} {{ $labels.pod_name}}"
+  #    summary: "Container memory usage (instance {{ $labels.instance }})"
+  #    description: "Memory usage for container {{ $labels.container_name }} in pod {{ $labels.pod_name }} is {{ $value }}\n"
+
+  - alert: ContainerMemoryWorkingSetCritical CISL
+    expr: container_memory_working_set_bytes{container_name=~"cisl.*"} / container_spec_memory_limit_bytes{container_name=~"cisl.*"} * 100 > 99
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }} {{ $labels.pod_name}}"
+      summary: "Container memory working set (instance {{ $labels.instance }})"
+      description: "Memory working set for container {{ $labels.container_name }} in pod {{ $labels.pod_name }} is {{ $value }}\n"
+
+  # Logging Service Disk Usage Root
+  - alert: Logging Service Disk Usage Root
+    # expr: 100 *(1 - (node_filesystem_free_bytes{fstype=~"rootfs|xfs|fuse.glusterfs", job="$job", mountpoint="/"} / node_filesystem_size_bytes{fstype=~"xfs|fuse.glusterfs", job="$job", mountpoint="/"}) )
+    expr: sum by (instance,mountpoint,fstype)(100 * (1 - (node_filesystem_free_bytes{fstype=~"rootfs|xfs|fuse.glusterfs", mountpoint="/"} / node_filesystem_size_bytes{fstype=~"rootfs|xfs|fuse.glusterfs", mountpoint="/"}))) > 90
+    for: 5m
+    labels:
+      namespace: "{{ $labels.namespace }}"
+      severity: critical
+    annotations:
+      #identifier: "{{ $labels.job }}"
+      identifier: "{{ $labels.job }} {{$labels.instance}} {{$labels.mountpoint}}"
+      #description: "Logging service disk usage {{ $labels.job }}"
+      description: "Logging service {{$labels.instance}} disk usage for {{$labels.mountpoint}} = {{ $value }}"
+      summary: Logging service disk usage is above 80 percent.
+
+  # Logging Service Disk Usage Elasticsearch
+  - alert: Logging Service Disk Usage Elasticsearch
+    # expr: 100 *(1 - (node_filesystem_free_bytes{fstype=~"xfs|fuse.glusterfs", job="$job", mountpoint="/"} / node_filesystem_size_bytes{fstype=~"xfs|fuse.glusterfs", job="$job", mountpoint="/"}) )
+    expr: sum by(fstype, instance, mountpoint, namespace) (100 * (1 - (node_filesystem_free_bytes{fstype=~"ext4|xfs|fuse.glusterfs",mountpoint="/var/lib/elasticsearch"} / node_filesystem_size_bytes{fstype=~"ext4|xfs|fuse.glusterfs",mountpoint="/var/lib/elasticsearch"}))) > 80
+    for: 5m
+    labels:
+      namespace: "{{ $labels.namespace }}"
+      severity: critical
+    annotations:
+      #identifier: "{{ $labels.job }}"
+      identifier: "{{ $labels.job }} {{$labels.instance}} {{$labels.mountpoint}}"
+      #description: "Logging service disk usage {{ $labels.job }}"
+      description: "Logging service {{$labels.instance}} disk usage for {{$labels.mountpoint}} = {{ $value }}"
+      summary: Logging service disk usage is above 80 percent.
+
+  ### CISL
+  - alert: CISL a3k session
+    expr: opin_cisl_a3ksession_sessions == 0
+    for: 5m
+    labels:
+      severity: 'critical' 
+    annotations:
+      identifier: "{{ $labels.job }}"
+      description: "{{ $labels.instance }} of job {{ $labels.job }} has no open session for more than 5 minutes."
+      summary: No A3k session for {{ $labels.instance }} open.
+
+  # blackbox-http_body_statuscode_neq_0 critical: prod, preprod, demo
+  - alert: Health check http status code CISL
+    expr: probe_http_status_code{job=~"blackbox-http_body_statuscode_neq_0.*",instance=~".*prod.*|.*preprod.*|.*demo.*"} != 200
+    for: 5m
+    labels:
+      severity: 'critical'
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }}"
+      description: "job {{ $labels.job }} for instance {{ $labels.instance }} is not 200 and returns {{ $value }}"
+      summary: "job {{ $labels.job }} for instance {{ $labels.instance }} is not 200 and returns {{ $value }}"
+
+  - alert: Health check status code CISL
+    expr: probe_success{job=~"blackbox-http_body_statuscode_neq_0.*",instance=~".*prod.*|.*preprod.*|.*demo.*"} != 1
+    for: 5m
+    labels:
+      severity: 'critical'
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }}"
+      description: "job {{ $labels.job }} for instance {{ $labels.instance }} is not 1 and returns {{ $value }}"
+      summary: "job {{ $labels.job }} for instance {{ $labels.instance }} is not 1 and returns {{ $value }}"
+
+  # blackbox-http_body_statuscode_neq_0 warning: test, dev, intake
+  - alert: Health check http status code CISL
+    expr: probe_http_status_code{job=~"blackbox-http_body_statuscode_neq_0.*",instance=~".*test.*|.*dev.*|.*intake.*"} != 200
+    for: 5m
+    labels:
+      severity: 'warning'
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }}"
+      description: "job {{ $labels.job }} for instance {{ $labels.instance }} is not 200 and returns {{ $value }}"
+      summary: "job {{ $labels.job }} for instance {{ $labels.instance }} is not 200 and returns {{ $value }}"
+
+  - alert: Health check status code CISL
+    expr: probe_success{job=~"blackbox-http_body_statuscode_neq_0.*",instance=~".*test.*|.*dev.*|.*intake.*"} != 1
+    for: 5m
+    labels:
+      severity: 'warning'
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }}"
+      description: "job {{ $labels.job }} for instance {{ $labels.instance }} is not 1 and returns {{ $value }}"
+      summary: "job {{ $labels.job }} for instance {{ $labels.instance }} is not 1 and returns {{ $value }}"
+  
+  # Workaround for CISL memory leak
+  - alert: Uptime alert CISL
+    expr: (time()-container_start_time_seconds{container_name="cisl",namespace=~".*-prod.*"})/3600 > 44
+    for: 5m
+    labels:
+      severity: 'critical'
+    annotations:
+      identifier: "{{ $labels.pod_name }} {{ $labels.instance }}"
+      description: "instance {{ $labels.pod_name }} is up for more than 44 hours {{ $value }} - restart container"
+      summary: "instance {{ $labels.pod_name }} is up for more than 44 hours {{ $value }} - restart container"
+  ### CISL end
+
+  ### RAP
+  - alert: RAP a3ksession
+  # Condition for alerting
+    expr: opin_abs_kern_a3ksession_sessions == 0
+    for: 5m
+    # Labels - additional labels to be attached to the alert
+    labels:
+      severity: 'critical' 
+    # Annotation - additional informational labels to store more information
+    annotations:
+      #title: 'Instance {{ $lable.instance }} down'
+      identifier: "{{ $labels.job }}"
+      description: "{{ $labels.instance }} of job {{ $labels.job }} has no open session for more than 5 minutes."
+      summary: No a3ksession for {{ $labels.instance }} open.
+  ### RAP end
+
+  ### AOMS
+  - alert: AomsContainerStatusRestartsCritical
+    expr: changes(kube_pod_container_status_restarts_total{container=~"aoms.*",pod=~"aoms.*",namespace=~".*"}[20m]) > 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }} {{ $labels.pod }} {{ $labels.container }}"
+      summary: "Container {{$labels.container}} in pod {{ $labels.pod }} restart count = {{ $value }}"
+      description: "Container {{$labels.container}} in pod {{ $labels.pod }} restart count = {{ $value }}"
+
+  - alert: AomsContainerStatusTerminatedCritical
+    expr: changes(kube_pod_container_status_terminated{container=~"aoms.*",pod=~"aoms.*",namespace=~".*"}[20m]) > 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance }} {{ $labels.pod }} {{ $labels.container }}"
+      summary: "Container {{$labels.container}} in pod {{ $labels.pod }} terminated count = {{ $value }}"
+      description: "Container {{$labels.container}} in pod {{ $labels.pod }} terminated count = {{ $value }}"
+
+  # AOMS used Storage is above 80%
+  - alert: AomsStorageUsage
+    expr: (application_used_storage_percent{app="aoms",tier="rendering"}*100) > 80
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "Container Memory usage (instance {{ $labels.instance }})"
+      description: "AOMS Storage usage is above 80%\n VALUE = {{ $value }}"
+  - alert: AomsStorageUsage
+    expr: (application_used_storage_percent{app="aoms",tier="rendering"}*100) > 90
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "Container Memory usage (instance {{ $labels.instance }})"
+      description: "AOMS Storage usage is above 90%\n VALUE = {{ $value }}"
+  ### AOMS end
+  ### MO BFF
+  - alert: MoBffDataObjectProcessing
+    expr: (sum by (job)(http_server_requests_seconds_count{instance=~"mo-bff.*",status=~"5.*",uri=~"/v2/dataobject/process/"}) / (sum by (job)(http_server_requests_seconds_count{instance=~"mo-bff.*",status=~"2.*",uri=~"/v2/dataobject/process/"}) + sum by (job)(http_server_requests_seconds_count{instance=~"mo-bff.*",status=~"5.*",uri=~"/v2/dataobject/process/"})))*100 > 85
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "MO BFF dataobject processing (instance {{ $labels.instance }})"
+      description: "MO BFF dataobject processing fault ratio is above 85%\n VALUE = {{ $value }}"
+  - alert: MoBffSystemLoadAverage
+    expr: sum by (job) (system_load_average_1m{job=~"mo-bff.*"}) > 15
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "MO BFF load average (instance {{ $labels.instance }})"
+      description: "MO BFF load average is above 15\n VALUE = {{ $value }}"
+  ### MO BFF end
+  ### FNOL BFF
+  - alert: FnolBffDataObjectProcessing
+    # exception="CislBadRequestException"
+    expr: (sum by (job)(http_server_requests_seconds_count{instance=~"fnol-bff.*",status=~"5.*",uri=~"/dataobject/dataobject/"}) / (sum by (job)(http_server_requests_seconds_count{instance=~"fnol-bff.*",status=~"2.*",uri=~"/dataobject/dataobject/"}) + sum(http_server_requests_seconds_count{instance=~"fnol-bff.*",status=~"5.*",uri=~"/dataobject/dataobject/"})))*100 > 85
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "FNOL BFF dataobject processing (instance {{ $labels.instance }})"
+      description: "FNOL BFF dataobject processing fault ratio is above 85%\n VALUE = {{ $value }}"
+  - alert: FnolBffSystemLoadAverage
+    expr: sum by (job)(system_load_average_1m{job=~"fnol-bff.*"}) > 15
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "FNOL BFF load average (instance {{ $labels.instance }})"
+      description: "FNOL BFF load average is above 15\n VALUE = {{ $value }}"
+  ### FNOL BFF end
+  ### RadarLive AWS RDS
+  - alert: RadarLiveAwsRdsConnectionsAverage
+    expr: aws_rds_database_connections_average{dbinstance_identifier=~".*prod-radarlive.*"} == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "RadarLive database connections average (instance {{ $labels.instance }})"
+      description: "RadarLive database connection count is 0\n VALUE = {{ $value }}"
+  
+  - alert: RadarLiveAwsRdsFreeStorageSpaceAverage
+    expr: aws_rds_free_storage_space_average{dbinstance_identifier=~".*prod-radarlive.*"} < 5368709120
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "RadarLive database free storage space average (instance {{ $labels.instance }})"
+      description: "RadarLive database free storage space is below 5 GB\n VALUE = {{ $value }}"
+  
+  - alert: RadarLiveAwsRdsConnectionsAverageMissing
+    #expr: up{job=~"cloudwatch.*", dbinstance_identifier=~".*"} == 1 unless aws_rds_database_connections_average{job=~"cloudwatch.*", dbinstance_identifier=~".*"}
+    expr: max_over_time(aws_rds_database_connections_average{job=~"cloudwatch.*", dbinstance_identifier=~".*prod-radarlive.*"}[10m]) unless aws_rds_database_connections_average{job=~"cloudwatch.*", dbinstance_identifier=~".*prod-radarlive.*"}
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "RadarLive database connections metric is missing (instance {{ $labels.instance }})"
+      description: "RadarLive database connection metric is missing\n VALUE = {{ $value }}"
+  ###
+  ### AOMS AWS RDS
+  - alert: AomsAwsRdsConnectionsAverage
+    expr: aws_rds_database_connections_average{dbinstance_identifier=~".*prod-aoms.*"} == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "AOMS database connections average (instance {{ $labels.instance }})"
+      description: "AOMS database connection count is 0\n VALUE = {{ $value }}"
+  
+  - alert: AomsAwsRdsFreeStorageSpaceAverage
+    expr: aws_rds_free_storage_space_average{dbinstance_identifier=~".*prod-aoms.*"} < 5368709120
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "AOMS database free storage space average (instance {{ $labels.instance }})"
+      description: "AOMS database free storage space is below 5 GB\n VALUE = {{ $value }}"
+
+  - alert: AomsAwsRdsConnectionsAverageMissing
+    #expr: up{job=~"cloudwatch.*", dbinstance_identifier=~".*"} == 1 unless aws_rds_database_connections_average{job=~"cloudwatch.*", dbinstance_identifier=~".*"}
+    expr: max_over_time(aws_rds_database_connections_average{job=~"cloudwatch.*", dbinstance_identifier=~".*prod-aoms.*"}[10m]) unless aws_rds_database_connections_average{job=~"cloudwatch.*", dbinstance_identifier=~".*prod-aoms.*"}
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "AOMS database connections metric is missing (instance {{ $labels.instance }})"
+      description: "AOMS database connection metric is missing\n VALUE = {{ $value }}"
+  ###
+  ### DataObjectHandlerRouter AWS RDS
+  - alert: DataObjectHandlerRouterAwsRdsConnectionsAverage
+    expr: aws_rds_database_connections_average{dbinstance_identifier=~".*prod-dataobjecthandler.*"} == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "DataObject Handler Router database connections average (instance {{ $labels.instance }})"
+      description: "DataObject Handler Router database connection count is 0\n VALUE = {{ $value }}"
+  
+  - alert: DataObjectHandlerRouterAwsRdsFreeStorageSpaceAverage
+    expr: aws_rds_free_storage_space_average{dbinstance_identifier=~".*prod-dataobjecthandler.*"} < 5368709120
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "DataObject Handler Router database free storage space average (instance {{ $labels.instance }})"
+      description: "DataObject Handler Router database free storage space is below 5 GB\n VALUE = {{ $value }}"
+
+  ### Policy Service
+  # Stages: prod, demo
+  - alert: PolicyServiceNotAvailable
+    expr: probe_http_status_code{job="blackbox-policy-services", instance=~".*-prod.*|.*-demo.*|.*-preprod.*"} != 200
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "An endpoint/URL in a policy application returns an http error"
+  # Stages: dev, test
+  - alert: PolicyServiceNotAvailable
+    expr: probe_http_status_code{job="blackbox-policy-services", instance=~".*-dev.*|.*-test.*|.*-intake.*"} != 200
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "An endpoint/URL in a policy application returns an http error"
+  ###
+
+  ### CHS
+  # stages: prod, demo, preprod
+  - alert: CHSFrontEndServiceNotAvailable
+    expr: probe_http_status_code{job="blackbox-dataobject-handling-fe", instance=~".*-prod.*|.*-demo.*|.*-preprod.*"} != 200
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance}}"
+      summary: "An endpoint/URL in a DataObject-Handling FrontEnd-service returns an http status-error"
+      description: "Status code for {{ $labels.instance }} is {{ $value }}\n"
+  # stages: dev, test, temp, intake, hotfix
+  - alert: CHSFrontEndServiceNotAvailable
+    expr: probe_http_status_code{job="blackbox-dataobject-handling-fe", instance=~".*-dev.*|.*-test.*|.*-temp.*|.*-hotfix.*|.*-intake.*"} != 200
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance}}"
+      summary: "An endpoint/URL in a DataObject-Handling FrontEnd-service returns an http status-error"
+      description: "Status code for {{ $labels.instance }} is {{ $value }}\n"
+  # http error code in a DataObject Handling Service - bff
+  # stages: prod, demo, preprod
+  - alert: CHSBackendForFrontendServiceNotAvailable
+    expr: probe_http_status_code{job="blackbox-dataobject-handling-bff", instance=~".*-prod.*|.*-demo.*|.*-preprod.*"} != 200
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance}}"
+      summary: "An endpoint/URL in a DataObject-Handling BackendForFrontend-service returns an http status-error"
+      description: "Status code for {{ $labels.instance }} is {{ $value }}\n"
+  # stages: dev, test, temp, intake, hotfix
+  - alert: CHSBackendForFrontendServiceNotAvailable
+    expr: probe_http_status_code{job="blackbox-dataobject-handling-bff", instance=~".*-dev.*|.*-test.*|.*-temp.*|.*-hotfix.*|.*-intake.*"} != 200
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance}}"
+      summary: "An endpoint/URL in a DataObject-Handling BackendForFrontend-service returns an http status-error"
+      description: "Status code for {{ $labels.instance }} is {{ $value }}\n"
+  ###
+
+  ### Infinispan
+  - alert: InfinispanServiceDown
+    expr: up{job="infinispan-service"} == 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      title: Node {{ $labels.instance }} is down
+      description: Failed to scrape {{ $labels.job }} on {{ $labels.instance }} for more than 5 minutes. Service seems down.
+  ###
+
+  ### PDM
+  - alert: PDMServiceDown
+    expr: up{job="party-data-module"} == 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      title: Node {{ $labels.instance }} is down
+      description: Failed to scrape {{ $labels.job }} on {{ $labels.instance }} for more than 5 minutes. Service seems down.
+  ###
+
+  ### QnB
+  - alert: application-quote-and-buy-expert_ServiceDown
+    expr: up{job="application-quote-and-buy-expert"} == 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      title: Node {{ $labels.instance }} is down
+      description: Failed to scrape {{ $labels.job }} on {{ $labels.instance }} for more than 5 minutes. Service seems down.
+  ###
+
+  ### SDW
+  # stages: prod, demo, preprod
+  - alert: SDWSalesPortalNotAvailable
+    expr: probe_http_status_code{job="blackbox-sdw-sales-portal", instance=~".*-prod.*|.*-demo.*|.*-preprod.*"} != 200
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "An endpoint/URL in a sdw-sales-portal returns an http status-error"
+  # stages: dev, test, temp, intake, hotfix
+  - alert: SDWSalesPortalNotAvailable
+    expr: probe_http_status_code{job="blackbox-sdw-sales-portal", instance=~".*-dev.*|.*-test.*|.*-temp.*|.*-hotfix.*|.*-intake.*"} != 200
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "An endpoint/URL in a sdw-sales-portal returns an http status-error"
+
+  # service availability sdw-sales-portal-bff
+  - alert: sdw-sales-portal-bff_ServiceDown
+    expr: up{job="sdw-sales-portal-bff"} == 0
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      title: Node {{ $labels.instance }} is down
+      description: Failed to scrape {{ $labels.job }} on {{ $labels.instance }} for more than 5 minutes. Service seems down.
+
+  # jetty_threads_busy > 100 over 5 min sdw-sales-portal-bff
+  - alert: sdw-sales-portal-bff_jetty_threads_busy
+    expr: jetty_threads_busy{job="sdw-sales-portal-bff"} > 100
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      title: too many jetty threads {{ $labels.instance }}
+      description: too many jetty threads for {{ $labels.job }} on {{ $labels.instance }} for more than 5 minutes.
+  ###
+
+  # jvm_threads_live_threads > 150 over 5 min sdw-sales-portal-bff
+  - alert: sdw-sales-portal-bff_jvm_threads_live_threads
+    expr: jvm_threads_live_threads{job="sdw-sales-portal-bff"} > 150
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      title: too many jvm threads live threads {{ $labels.instance }}
+      description: too many jvm threads live threads for {{ $labels.job }} on {{ $labels.instance }} for more than 5 minutes.
+
+  # jdbc_connections_active==jdbc_connections_max over 5 min
+  - alert: sdw-sales-portal-bff_jvm_threads_live_threads
+    expr: jdbc_connections_active{job="sdw-sales-portal-bff"} >= jdbc_connections_max{job="sdw-sales-portal-bff"}
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      title: jdbc_connections_max reached {{ $labels.instance }}
+      description: maximum count of active jdbc_connections reached for more than 5 min {{ $labels.job }} on {{ $labels.instance }}
+  ###
+
+  ### ClamAV
+  # service availability ClamAV
+  - alert: ClamAVServiceDown
+    expr: up{job="clamav-service"} == 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      title: Node {{ $labels.instance }} is down
+      description: Failed to scrape {{ $labels.job }} on {{ $labels.instance }} for more than 5 minutes. Service seems down.
+  ###
+
+  ### UIEditor
+  - alert: UIEditorNgxServiceDown
+    expr: up{job="blackbox-http_2xx-ngx-uieditor"} == 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      title: Node {{ $labels.instance }} is down
+      description: Failed to scrape {{ $labels.job }} on {{ $labels.instance }} for more than 5 minutes. Service seems down.
+  
+  - alert: UIEditorBffServiceDown
+    expr: up{job="blackbox-http_springboot_actuator_health-bff-uieditor"} == 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      title: Node {{ $labels.instance }} is down
+      description: Failed to scrape {{ $labels.job }} on {{ $labels.instance }} for more than 5 minutes. Service seems down.
+  
+  - alert: UIEditorRwsServiceDown
+    expr: up{job="blackbox-http_springboot_actuator_health-rws-uieditor"} == 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      title: Node {{ $labels.instance }} is down
+      description: Failed to scrape {{ $labels.job }} on {{ $labels.instance }} for more than 5 minutes. Service seems down.
+  ###
+
+  ### CHR
+  - alert: DataObjectHandlerRouterAwsRdsConnectionsAverageMissing
+    #expr: up{job=~"cloudwatch.*", dbinstance_identifier=~".*"} == 1 unless aws_rds_database_connections_average{job=~"cloudwatch.*", dbinstance_identifier=~".*"}
+    expr: max_over_time(aws_rds_database_connections_average{job=~"cloudwatch.*", dbinstance_identifier=~".*prod-dataobjecthandler.*"}[10m]) unless aws_rds_database_connections_average{job=~"cloudwatch.*", dbinstance_identifier=~".*prod-dataobjecthandler.*"}
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }}"
+      summary: "DataObject Handler Router database connections metric is missing (instance {{ $labels.instance }})"
+      description: "DataObject Handler Router database connection metric is missing\n VALUE = {{ $value }}"
+  ###
+
+  ### UWWB
+  # Services availability Midcorp-UWWB
+  # stages: prod, demo, preprod
+  - alert: UWWBFrontEndServiceNotAvailable
+    expr: probe_http_status_code{job="blackbox-dataobject-handling-fe", instance=~".*-prod.*|.*-demo.*|.*-preprod.*"} != 200
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance}}"
+      summary: "An endpoint/URL in a Midcorp FrontEnd-service returns an http status-error"
+      description: "Status code for {{ $labels.instance }} is {{ $value }}\n"
+
+  # stages: dev, test, temp, intake, hotfix
+  - alert: UWWBFrontEndServiceNotAvailable
+    expr: probe_http_status_code{job="blackbox-http_2xx-ngx-midcorp", instance=~".*-dev.*|.*-test.*|.*-temp.*|.*-hotfix.*|.*-intake.*"} != 200
+    for: 5m
+    labels:
+      severity: info
+    annotations:
+      identifier: "{{ $labels.job }} {{ $labels.instance}}"
+      summary: "An endpoint/URL in a Midcorp FrontEnd-service returns an http status-error"
+      description: "Status code for {{ $labels.instance }} is {{ $value }}\n"
+
+  - alert: UwwbBffServiceDown
+    expr: up{job="springboot_actuator_prometheus_midcorp_uwwb_bff"} == 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      title: Node {{ $labels.instance }} is down
+      description: Failed to scrape {{ $labels.job }} on {{ $labels.instance }} for more than 5 minutes. Service seems down.
+  ###
+
+  ### Blackbox Exporter
+  - alert: HttpEndpointUnavailable
+    expr: probe_success{job=~"blackbox-http_2xx-.*"} == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      title: URL {{ $labels.instance }} is down
+      description: "Blackbox Exporter failed on {{ $labels.instance }} for more than 5 minutes. Service seems down. (Job: {{ $labels.job }})"
+  ###
