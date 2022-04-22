@@ -17,3 +17,10 @@ sudo ln -sv /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platfo
 ```
 rm -rf /Users/<username>/Library/Developer/Xcode/iOS\ DeviceSupport
 ```
+
+## ShowBuildOperationDuration
+
+```
+defaults write com.apple.dt.Xcode ShowBuildOperationDuration -bool "true"
+defaults read com.apple.dt.Xcode ShowBuildOperationDuration
+```
