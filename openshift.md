@@ -1,36 +1,36 @@
-# OpenShift Notes
+# OpenShift
 
-## Minishift: give user XXX cluster admin rights
+## Login
 
+### Minishift: give user cluster admin rights
 ```
 oc login -u system:admin
 oc adm policy add-cluster-role-to-user cluster-admin XXX
 ```
 
-## Log in via CLI
-
 Get from `https://<url>:8443/console/command-line` the token.
-
 ```
 oc login ...
 oc login https://<url> --token=<token>
 ```
 
-## Create project
+## Project
 
+### Create project
 ```
 oc new-project xxx --description="XXX" --display-name="xxx xxx xxx"
 ```
 
-## Change project
-
+### Change project
 ```
 oc project <project-name>
 ```
 
-## Create app and build from source on GitHub
+## New-App
 
-Launches as pod supervised by DC:
+### Create app and build from source on GitHub
+
+Launches as pod supervised by DC.
 
 ```
 oc new-app --strategy=source IMAGE:TAG~https://github.com/user/project.git
@@ -38,39 +38,46 @@ oc new-app --strategy=source IMAGE:TAG~https://github.com/user/project.git
 oc new-app --strategy=source python:2.7~https://github.com/user/project.git -e APP_FILE=project.py -e PORT=8080
 ```
 
-
-## Create app definition from Dockerfile
-
+### Create app definition from Dockerfile
 ```
 oc new-app --strategy=docker --name='$(app_name)' --context-dir='./app/' . --output yaml > app.yaml
 oc apply -f app.yaml
 ```
 
-## Build from image from local dir
-
+### Build from image from local dir
 ```
 oc new-build --strategy=docker --name='xxx' .
 oc start-build xxx --from-dir .
 ```
 
-## Get and apply objects
+## Get and Apply
 
+### Get and apply objects
 ```
-oc get dc <dc-name> -o yaml --export -n <project-name>
-
-oc get dc redis -o yaml --export -n <project-name> > dc-redis.yaml
-oc get pvc redis -o yaml --export -n <project-name> > pvc-redis.yaml
-oc get service redis -o yaml --export -n <project-name> > service-redis.yaml
-oc get secret redis -o yaml --export -n <project-name> > secret-redis.yaml
-oc get dc,pvc,svc,route,configmap -l "<label-name> in (<label-value> [, <label-value-2>])" -o json >> <label-name>-<label-value>.json
-
-oc apply -f secret-redis.yaml -n <project-name>
-oc apply -f service-redis.yaml -n <project-name>
-oc apply -f pvc-redis.yaml -n <project-name>
-oc apply -f dc-redis.yaml -n <project-name>
+oc -n <project-name> get dc <dc-name> -o yaml --export
+oc -n <project-name> get dc redis -o yaml --export >dc-redis.yaml
+oc -n <project-name> get pvc redis -o yaml --export >pvc-redis.yaml
+oc -n <project-name> get service redis -o yaml --export >service-redis.yaml
+oc -n <project-name> get secret redis -o yaml --export >secret-redis.yaml
+oc get dc,pvc,svc,route,configmap -l "<label-name> in (<label-value> [, <label-value-2>])" -o json >><label-name>-<label-value>.json
 ```
 
-### Get templates
+### Apply objects
+```
+oc -n <project-name> apply -f secret-redis.yaml
+oc -n <project-name> apply -f service-redis.yaml
+oc -n <project-name> apply -f pvc-redis.yaml
+oc -n <project-name> apply -f dc-redis.yaml
+```
+
+## Secret
+
+```
+oc -n <namespace-name> get secret/builder-dockercfg-<id> -o json | jq -r '.data.".dockercfg" | @base64d' | jq -r '."docker-registry.default.svc.cluster.local:5000".password'
+```
+
+## Template
+
 ```
 oc get template -n openshift | grep redis
 oc get template redis-persistent -o yaml -n openshift > path/to/redis-persistent-template.yml
@@ -82,22 +89,17 @@ oc project <project-name>
 oc process -f path/to/redis-persistent-template.yml -p REDIS_PASSWORD=redis | oc create -f -
 ```
 
-## Follow build logs
+## Run
 
-```
-oc logs -f bc/xxx
-```
-
-## Run simple
-
-TBD: how to find image?
-
+### Run simple
+TODO: how to find image?
 ```
 oc run rs --image=172.30.115.115:5000/go-test/reshifter
 ```
 
-## Check deployment
+## Log
 
+### Check deployment
 ```
 oc status
 oc logs -f dc/xxx
@@ -106,25 +108,29 @@ oc logs -f dc/xxx
 oc logs <pod-name> -c <container-name>
 ```
 
-## Pause rollouts
+### Follow build logs
+```
+oc logs -f bc/xxx
+```
 
+## Rollout
+
+### Pause rollouts
 ```
 oc rollout pause dc <dc-name>
 ```
 
-## Resume rollouts
-
+### Resume rollouts
 ```
 oc rollout resume dc <dc-name>
 ```
 
-## Rollout deployment config
-
+### Rollout deployment config
 ```
 oc rollout latest dc/<dc-name> -n <project-name>
 ```
 
-## Pods
+## Pod
 
 ### Delete evicted pods
 ```
@@ -136,31 +142,29 @@ The replication controller should make sure, that a new pod is started to mainta
 oc delete pod <pod-name>
 ```
 
-## Get triggers
+## Trigger
 
+## Get triggers
 ```
 oc set triggers dc --all
 ```
 
 ## Disable automatic triggers
-
 ```
 oc set triggers dc <dc-name> --manual
 ```
 
 ## Enable automatic triggers
-
 ```
 oc deploy --enable triggers
 ```
 
-## Create service from DC
-
+### Create service from DC
 ```
 oc expose dc rs --port=8080
 ```
 
-## Routes
+## Route
 
 ```
 oc expose svc/xxx
@@ -169,7 +173,7 @@ oc annotate route <route-name> --overwrite haproxy.router.openshift.io/timeout=2
 oc annotate route <route-name> --overwrite haproxy.router.openshift.io/balance=roundrobin -n <project-name>
 ```
 
-## Find FQDN
+### Find FQDN
 
 ```
 oc get routes | grep xxx | awk '{print $2}'
@@ -182,19 +186,24 @@ http $(oc get routes | grep xxx | awk '{print $2}')/info
 curl -s $(oc get routes | grep xxx | awk '{print $2}')/info | jq .
 ```
 
-## Scale resources
+## Scale
 
+### Scale resources
 ```
 oc scale --replicas=<count> [deployment|replicaset|replicationcontroller|statefulset|deploymentconfig|dc]/<object-name> -n <project-name>
 ```
 
-## Autoscale resources
+## HPA
+
+### Autoscale resources
 ```
 oc get horizontalpodautoscaler | awk '{print $2}'
 oc get horizontalpodautoscaler -o template --template '{{range .items}}{{.spec.scaleTargetRef.name}}{{"\n"}}{{end}}'
 ```
-## Adapt Quotas
 
+## Quota
+
+### Adapt Quotas
 ```
 oc get quota    # get quota names
 oc get quota -o yaml    # get yaml description of quotas (ResourceQuota)
@@ -205,7 +214,7 @@ oc describe quota <quota-name> -n <project-name>    # verify quotas
 oc describe quota   # verify quotas
 ```
 
-## Sync files
+## Rsync
 
 ### Copy files from container
 ```
@@ -217,7 +226,7 @@ oc rsync <pod-name>:/tmp/output.txt /tmp
 oc rsync . <pod-name>:/appbase/system_admin/ --exclude=* --include=security.xml -c <container-name>
 ```
 
-## Set policy
+## Policy
 
 ### Add Service Account
 ```

@@ -67,6 +67,11 @@ kubectl get configmap
 kubectl get configmap/<configmap-name> [-o yaml]
 ```
 
+## secret
+```
+kubectl -n <namespace-name> get secret/<secret-name> -o json | jq -r '.data.password | @base64d'
+```
+
 ## create
 ```
 kubectl create secret docker-registry <secretname> --docker-server=<host> \
