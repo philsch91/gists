@@ -1,5 +1,20 @@
 # openssl
 
+## genrsa
+
+Generate private key
+```
+openssl genrsa -out private.pem 2048
+chmod 600 private.pem
+```
+
+## req
+
+Create certificate signing request (CSR) with public key based on private key
+```
+openssl req -new -key private.pem -out signing.csr
+```
+
 ## .pem
 
 - Privacy Enhanced Mail
