@@ -1,4 +1,20 @@
-# Git Documentation and Snippets
+# Git
+
+Documentation, Notes and Snippets for Git
+
+## config
+```
+git config --global --add user.name $user
+git config --global --add user.email $email
+git config --global --add credential.helper "store --file $HOME/.git-credentials"
+git config --global --add http.https://github.com.proxy http://<proxy-host>:<proxy-port>
+git config --global --add filter.lfs.clean "git-lfs clean -- %f"
+git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"
+git config --global --add filter.lfs.process "git-lfs filter-process"
+git config --global --add filter.lfs.required true
+
+echo "https://${github_name}:${github_pat}@github.com" >>${HOME}/.git-credentials
+```
 
 ## diff
 ```

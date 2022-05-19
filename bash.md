@@ -1,4 +1,24 @@
-# Bash Notes
+# Bash
+
+Documentation, Notes and Snippets for Bash
+
+## functions
+```
+# option 1
+function set_default_gitconfig () {
+  arg1=$1
+  arg2=$2
+
+  return
+}
+# option 2
+set_default_gitconfig() {
+  arg1=$1
+  arg2=$2
+
+  return
+}
+```
 
 ### test
 
@@ -33,6 +53,13 @@ fi
 ```
 if [ -f "${FILE_PATH}" ]; then
   # file at FILE_PATH exists and is a regular file
+fi
+```
+
+### read
+```
+read -p "Enter your choice <y|n> " response
+if [ $response = "Y" ] || [ $response = "y" ]; then
 fi
 ```
 
