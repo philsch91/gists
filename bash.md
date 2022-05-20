@@ -22,22 +22,9 @@ set_default_gitconfig() {
 
 ### test
 
-#### String operators
 ```
-if [ -n "${VAR}" ]; then
-  # VAR is not empty
-fi
-
-if [ -n "${VAR}" -a -f "${FILE}" ]; then
-  # VAR is not empty and FILE exists as a regular file
-fi
-
-if [ ! -z "${VAR}" ]; then
-  # VAR is not empty
-fi
-
-if [ -z "${VAR}" ]; then
-  # VAR is empty
+if [ $# -ne 1 -a "$2" != "old" ]; then
+  # number of arguments is not equal to 1 and argument 2 is not equal to "old"
 fi
 
 if [ ${STATUS} -eq 200 ] && [ "${STRING}" = "${VALUE}" ]; then
@@ -49,10 +36,29 @@ if [ ${STATUS} -ne 200 ] && [ "${STRING}" != "${VALUE}" ]; then
 fi
 ```
 
+#### String operators
+```
+if [ -n "${VAR}" ]; then
+  # VAR is non-zero and not empty
+fi
+
+if [ -z "${VAR}" ]; then
+  # VAR is zero and empty
+fi
+
+if [ ! -z "${VAR}" ]; then
+  # VAR is not empty
+fi
+```
+
 #### File operators
 ```
 if [ -f "${FILE_PATH}" ]; then
   # file at FILE_PATH exists and is a regular file
+fi
+
+if [ -n "${VAR}" -a -f "${FILE}" ]; then
+  # VAR is not empty and FILE exists as a regular file
 fi
 
 if [ ! -f "${HOME}/.git-credentials" ] || ! grep -q $GITCONFIG_NAME $HOME/.git-credentials ; then
