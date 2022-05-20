@@ -54,6 +54,11 @@ fi
 if [ -f "${FILE_PATH}" ]; then
   # file at FILE_PATH exists and is a regular file
 fi
+
+if [ ! -f "${HOME}/.git-credentials" ] || ! grep -q $GITCONFIG_NAME $HOME/.git-credentials ; then
+  read -p "Git token: (https://github.com/settings/tokens): " GIT_TOKEN
+  echo "https://${GITCONFIG_NAME}:${GIT_TOKEN}@github.com" >>${HOME}/.git-credentials
+fi
 ```
 
 ### read
