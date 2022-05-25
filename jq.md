@@ -40,3 +40,8 @@ cat subnets.txt | jq -r '[.[] | select(.AvailabilityZone == "eu-central-1c")]' |
 ```
 cat subnets.txt | jq -r '[.[] | select(.AvailabilityZone == "eu-central-1c")]' | jq -r '[.[] | select(.Tags[] | select(.Key == "Name" and select(.Value | select(contains("private_internal")))))]' | jq -r '[.[] | {"SubnetName": .Tags[] | select(.Key == "Name") .Value, "SubnetId": .SubnetId}]'
 ```
+
+## @base64d
+```
+kubectl -n <namespace> get <resource-type>/<resource-name> -o json | jq -r '.key1.key2 | @base64d'
+```
