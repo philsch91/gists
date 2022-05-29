@@ -15,6 +15,13 @@ Create certificate signing request (CSR) with public key based on private key
 openssl req -new -key private.pem -out signing.csr
 ```
 
+## x509
+
+```
+// convert DER (.cer, .der, .crt) file to .pem
+openssl x509 -inform der -in <file.cer> -outform pem -out <file.pem>
+```
+
 ## .pem
 
 - Privacy Enhanced Mail
@@ -38,12 +45,12 @@ openssl req -new -key private.pem -out signing.csr
 
 ```
 // convert .pem to .p12
-// export certificate without private key into .p12 keystore
+// export certificate into .p12 keystore (without private key)
 // Linux and macOS
-openssl pkcs12 -export -nokeys -in certificate.pem -out certificate.p12
+openssl pkcs12 -export [-nokeys] -in certificate.pem -out certificate.p12
 // Windows + Git Bash
 winpty openssl pkcs12 -export -nokeys -in certificate.cer -out certificate.pfx
 
-// convert .p12 to .pem
-openssl pkcs12 -in certificate.p12 -out certificate.pem -nodes
+// convert .p12 to .pem (without certificates)
+openssl pkcs12 -in certificate.p12 -out certificate.pem -nodes [-nocerts]
 ```
