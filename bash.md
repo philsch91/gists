@@ -34,6 +34,14 @@ fi
 if [ ${STATUS} -ne 200 ] && [ "${STRING}" != "${VALUE}" ]; then
   # STATUS is not equal to 200 and STRING is not equal to VALUE
 fi
+
+STRING_VAR=abc-admin-assumerole
+if [ -z ${STRING_VAR##*admin-assumerole} ]; then
+  # STRING_VAR ends with substring admin-assumerole
+  echo "YES"
+else
+  echo "NO"
+fi
 ```
 
 #### String operators

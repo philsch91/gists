@@ -1,11 +1,17 @@
 # Regex Notes
 
 ## Negative Lookaround
+
+### Negative lookahead
 ```
-// negative lookahead
 // match prod or production but not preprod or preproduction
 /^(?!.*pre).*$/i
-// negative lookbehind
+// match valueabc but not valuexyz
+/^(?:(?!xyz).)*$/mg
+```
+
+### Negative lookbehind
+```
 // match prod or production but not preprod or preproduction
 /(?<!pre)prod|(?<!pre)production/i
 /(?<!PRE)PROD/i
