@@ -86,13 +86,13 @@ cat file.yml | kubectl apply -f -
 
 ## patch
 ```
-kubectl -n <namespace> patch <resource-type>/<resource-name> --type=json --patch='[{"op":"replace","path":"/<key1>/<key2>","value":<value>}]'
-kubectl -n <namespace> patch <resource-type>/<resource-name> --type='json' -p='[{"op":"add","path":"/<key1>/<key2>","value":<value>|{"key1":"val1"}|[<value1>,<value2>]}]'
+kubectl -n <namespace> patch <resource-type>/<resource-name> --type='json' --patch='[{"op":"replace","path":"/<key1>/<key2>","value":<value>}]'
+kubectl -n <namespace> patch <resource-type>/<resource-name> --type=json -p='[{"op":"add","path":"/<key1>/<key2>","value":<value>|{"key1":"val1"}|[<value1>,<value2>]}]'
 
 // patch op add token-ttl=0 and enable-skip-login for kubernetes-dashboard
-kubectl -n kubernetes-dashboard patch deployment/kubernetes-dashboard --type='json' -p='[ \
+kubectl -n kubernetes-dashboard patch deployment/kubernetes-dashboard --type=json -p='[ \
     {"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--token-ttl=0"}, \
-    {"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--enable-skip-login"}
+    {"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--enable-skip-login"} \
 ]'
 
 // patch op add (replace) namespace=kubernetes-dashboard, auto-generate-certificates, authentication-mode=basic, token-ttl=0, enable-skip-login and enable-insecure-login for kubernetes-dashboard
@@ -100,6 +100,9 @@ kubectl -n kubernetes-dashboard patch deployment/kubernetes-dashboard --type='js
 
 // patch op add service account to cluster role binding
 kubectl -n kubernetes-dashboard patch clusterrolebinding/basic-user --type='json' -p='[{"op":"add","path":"/subjects/-","value":{"kind":"ServiceAccount","name":"kubernetes-dashboard","namespace":"kubernetes-dashboard"}}]'
+
+// patch op add (replace) service accounts in cluster role binding
+kubectl -n kubernetes-dashboard patch clusterrolebinding/basic-user --type=json -p='[{"op":"add","path":"/subjects","value":[{"kind":"ServiceAccount","name":"basic-user","namespace":"kubernetes-dashboard"},{"kind":"ServiceAccount","name":"kubernetes-dashboard","namespace":"kubernetes-dashboard"}]}]"
 ```
 
 ## auth

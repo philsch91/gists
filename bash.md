@@ -42,6 +42,11 @@ if [ -z ${STRING_VAR##*admin-assumerole} ]; then
 else
   echo "NO"
 fi
+
+if [ ${STAGE_NAME} = "prod" ] || [ -z ${CLUSTER_NAME##*prod*} ] && [ ! -z ${CLUSTER_NAME##*nonprod*} ]; then
+  # return early if STAGE_NAME is equal to "prod" or CLUSTER_NAME contains "prod" and CLUSTER_NAME does not contain "nonprod"
+  exit 0
+fi
 ```
 
 #### String operators
