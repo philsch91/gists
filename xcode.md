@@ -1,4 +1,4 @@
-# Xcode gist
+# Xcode
 
 ## Support new devices with old Xcode
 

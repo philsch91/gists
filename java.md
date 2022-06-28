@@ -1,4 +1,4 @@
-# Java Notes
+# Java
 
 ## JVM Settings
 

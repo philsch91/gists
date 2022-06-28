@@ -1,4 +1,4 @@
-# macOS Notes
+# macOS
 
 ## BSD Programs and Commands
 

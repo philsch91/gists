@@ -1,4 +1,4 @@
-# Filebeat Notes
+# Filebeat
 
 ## filebeat.yml logstash example
 ```

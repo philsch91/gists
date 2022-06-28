@@ -1,4 +1,4 @@
-# Ethereum Client Notes
+# Ethereum Client
 
 ## Geth
 

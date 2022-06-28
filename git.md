@@ -66,9 +66,15 @@ git push <remote-name> --tags
 - `git config remote.upstream.url https://github.com/abc/abc.git`
 - `git config branch.master.remote origin`
 
+## checkout
+
 ## Patch files - resolve merge conflicts partially
-1. `git switch master`
-1. `git checkout -p <branch-name> <file-name>`
+```
+git switch <branch>
+git checkout -p <branch-name> <file-name>
+git switch -c <new-branch>
+git checkout -p <commit-sha> <file-name>
+```
 
 ## Resolve merge conflicts
 1. `git fetch --all`

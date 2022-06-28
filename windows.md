@@ -1,4 +1,4 @@
-# Windows Notes
+# Windows
 
 ## User Accounts
 

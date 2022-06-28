@@ -1,4 +1,4 @@
-# Elasticsearch Notes
+# Elasticsearch
 
 ### Cat API
 ```

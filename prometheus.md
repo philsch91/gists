@@ -1,4 +1,4 @@
-# Prometheus Notes
+# Prometheus
 
 ## Prometheus Flags
 

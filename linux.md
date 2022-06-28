@@ -1,4 +1,4 @@
-# Linux Notes
+# Linux
 
 ## Shell
 
