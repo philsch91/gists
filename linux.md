@@ -2,6 +2,15 @@
 
 ## Shell
 
+Default shell
+```
+echo $SHELL
+```
+Current shell
+```
+ps -o comm= $$
+```
+
 ### Redirections
 
 Redirect both STDOUT and STDERR to /dev/null.
