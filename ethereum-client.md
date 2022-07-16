@@ -16,8 +16,12 @@ caffeinate -i /usr/bin/nohup geth --mainnet --syncmode "fast" --datadir "/Volume
 ```
 ### Start Geth on Windows
 ```
+// mainnet light sync
 geth --syncmode "light" --datadir "D:\ethereum" --datadir.minfreedisk 1048576 --http --http.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --http.api eth,net,web3,personal,debug --http.corsdomain "*" --ws --ws.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --ws.api eth,net,web3,personal,debug --ws.origins "*" --nat extip:$((Invoke-WebRequest -Uri https://diagnostic.opendns.com/myip).Content) 2>&1 | ForEach-Object ToString | Tee-Object -FilePath "C:\logs\geth.log" -Append
+// ropsten testnet light sync
 geth --ropsten --syncmode "light" --datadir "D:\ethereum-ropsten" --datadir.minfreedisk 1048576 --http --http.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --http.api eth,net,web3,personal,debug --http.corsdomain "*" --ws --ws.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --ws.api eth,net,web3,personal,debug --ws.origins "*" --nat extip:$((Invoke-WebRequest -Uri https://diagnostic.opendns.com/myip).Content) 2>&1 | ForEach-Object ToString | Tee-Object -FilePath "C:\logs\geth-ropsten.log" -Append
+// mainnet snap sync
+geth --syncmode "snap" --datadir "D:\ethereum" --datadir.minfreedisk 524288 --http --http.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --http.api eth,net,web3,personal,debug --http.corsdomain "*" --ws --ws.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --ws.api eth,net,web3,personal,debug --ws.origins "*" --nat extip:$((Invoke-WebRequest -Uri https://myip.dnsomatic.com).Content) 2>&1 | ForEach-Object ToString | Tee-Object -FilePath "C:\logs\geth.log" -Append
 ```
 
 ### Geth JavaScript Console
@@ -50,5 +54,6 @@ eth.syncing = false when the node is up to date
 
 ```
 eth.syncing
+eth.syncing.highestBlock - eth.syncing.currentBlock
 eth.blockNumber
 ```

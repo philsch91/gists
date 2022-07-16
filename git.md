@@ -12,6 +12,7 @@ git config --global --add filter.lfs.clean "git-lfs clean -- %f"
 git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"
 git config --global --add filter.lfs.process "git-lfs filter-process"
 git config --global --add filter.lfs.required true
+git config --global core.autocrlf false
 
 echo "https://${github_name}:${github_pat}@github.com" >>${HOME}/.git-credentials
 ```
