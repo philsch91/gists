@@ -6,7 +6,7 @@ By default, Geth runs a mainnet node. Testnets are provided as options, e.g. `--
 
 ### Geth CLI Options
 ```
-geth [--mainnet|--ropsten|--rinkeby|--goerli] --syncmode "fast"|"light" --datadir "/Volumes/<disk-name>/ethereum/geth" --datadir.minfreedisk 20480 [--http] [--http.api eth,net,web3,personal,debug] [--http.corsdomain "*"] [--ws] [--ws.api eth,net,web3,personal,debug] [--ws.origins "*"] --nat extip:$(curl --silent https://diagnostic.opendns.com/myip) [--maxpeers 0]
+geth [--mainnet|--ropsten|--rinkeby|--goerli] --syncmode "snap|light|fast" --datadir "/Volumes/<disk-name>/ethereum/geth" --datadir.minfreedisk 20480 [--snapshot=false] [--http] [--http.addr <ip>] [--http.api eth,net,web3,personal,debug] [--http.corsdomain "*"] [--ws] [--ws.addr <ip>] [--ws.api eth,net,web3,personal,debug] [--ws.origins "*"] --nat extip:$(curl --silent https://diagnostic.opendns.com/myip) [--maxpeers 0]
 ```
 
 ### Start Geth on macOS
@@ -18,9 +18,11 @@ caffeinate -i /usr/bin/nohup geth --mainnet --syncmode "fast" --datadir "/Volume
 ```
 // mainnet light sync
 geth --syncmode "light" --datadir "D:\ethereum" --datadir.minfreedisk 1048576 --http --http.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --http.api eth,net,web3,personal,debug --http.corsdomain "*" --ws --ws.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --ws.api eth,net,web3,personal,debug --ws.origins "*" --nat extip:$((Invoke-WebRequest -Uri https://diagnostic.opendns.com/myip).Content) 2>&1 | ForEach-Object ToString | Tee-Object -FilePath "C:\logs\geth.log" -Append
+// mainnet light sync 20220717 Geth v1.10.20
+geth --syncmode "light" --datadir "D:\ethereum" --datadir.minfreedisk 1048576 --snapshot=false --http --http.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --http.api eth,net,web3,personal,debug --http.corsdomain "*" --ws --ws.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --ws.api eth,net,web3,personal,debug --ws.origins "*" --nat extip:$((Invoke-WebRequest -Uri https://myip.dnsomatic.com).Content) 2>&1 | ForEach-Object ToString | Tee-Object -FilePath "C:\logs\geth.log" -Append
 // ropsten testnet light sync
 geth --ropsten --syncmode "light" --datadir "D:\ethereum-ropsten" --datadir.minfreedisk 1048576 --http --http.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --http.api eth,net,web3,personal,debug --http.corsdomain "*" --ws --ws.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --ws.api eth,net,web3,personal,debug --ws.origins "*" --nat extip:$((Invoke-WebRequest -Uri https://diagnostic.opendns.com/myip).Content) 2>&1 | ForEach-Object ToString | Tee-Object -FilePath "C:\logs\geth-ropsten.log" -Append
-// mainnet snap sync
+// mainnet snap sync 20220715 Geth v1.10.20
 geth --syncmode "snap" --datadir "D:\ethereum" --datadir.minfreedisk 524288 --http --http.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --http.api eth,net,web3,personal,debug --http.corsdomain "*" --ws --ws.addr $((Get-NetIPConfiguration | Select-Object -ExpandProperty IPv4Address).IPAddress) --ws.api eth,net,web3,personal,debug --ws.origins "*" --nat extip:$((Invoke-WebRequest -Uri https://myip.dnsomatic.com).Content) 2>&1 | ForEach-Object ToString | Tee-Object -FilePath "C:\logs\geth.log" -Append
 ```
 
