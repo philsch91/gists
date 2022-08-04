@@ -58,9 +58,16 @@ git push <remote-name> --tags
 5. `git push -d <remote-name> <temp-remote-branch-name>`
 6. `git pull <remote-name> <remote-branch-name>`
 
-## Fetch and search for a remote branch
+## fetch
+
+### Fetch and search for a remote branch
 1. `git fetch --all`
 2. `git branch -a | grep -Ei release*`
+
+### Delete obsolete remote tracking branches
+```
+git fetch --all --prune
+```
 
 ## Set remote settings in config
 - `git config remote.origin.url https://github.com/abc/abc.git`
@@ -71,8 +78,10 @@ git push <remote-name> --tags
 
 ## Patch files - resolve merge conflicts partially
 ```
+// patch from a branch name
 git switch <branch>
 git checkout -p <branch-name> <file-name>
+// patch via a commit-sha
 git switch -c <new-branch>
 git checkout -p <commit-sha> <file-name>
 ```
