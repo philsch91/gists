@@ -5,7 +5,7 @@ Documentation, Notes and Snippets for Bash
 ## functions
 ```
 # option 1
-function set_default_gitconfig () {
+function set_default_gitconfig() {
   arg1=$1
   arg2=$2
 

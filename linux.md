@@ -35,6 +35,8 @@ ln -s <destination-dir> <source-dir>
 ```
 # find and ignore permission denied errors
 find / -name "filename*" 2>/dev/null
+# recursively find all files in cwd and call dos2unix for them
+find . -type f -print0 | xargs -0 dos2unix
 ```
 
 ## systemd

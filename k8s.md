@@ -3,6 +3,7 @@
 ## config
 ```
 kubectl config current-context
+kubectl config get-contexts
 
 // set cluster
 kubectl config [--kubeconfig=config-demo] set-cluster <cluster-name> --server=https://<host>:<port> [--insecure-skip-tls-verify=true]
