@@ -57,6 +57,14 @@ kubectl logs [-f] --tail 100 [-p] <pod | type/name> [-c <container>]
 kubectl logs [-f] --since=2h -l app=nginx --all-containers=true
 ```
 
+## rollout
+```
+// restart daemonset
+kubectl -n <namespace> rollout restart daemonset/<daemonset-name>
+// watch daemonset restart
+kubectl -n <namespace> rollout status daemonset/<daemonset-name>
+```
+
 ## scale
 ```
 kubectl scale --replicas=<count> deployment|rs|rc|statefulset/<name>
