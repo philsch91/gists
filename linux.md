@@ -37,6 +37,8 @@ ln -s <destination-dir> <source-dir>
 find / -name "filename*" 2>/dev/null
 # recursively find all files in cwd and call dos2unix for them
 find . -type f -print0 | xargs -0 dos2unix
+# recursively find all files in cwd containing the given regular expression
+find . -type f -print0 | xargs -0 grep <regex>
 ```
 
 ## systemd
