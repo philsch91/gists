@@ -130,6 +130,11 @@ kubectl auth can-i list secrets [--as <user>] --namespace default
 kubectl auth can-i create deployments [--as system:serviceaccount:<namespace-name>:<serviceaccount-name>] --namespace default
 ```
 
+## customresourcedefinition
+```
+kubectl get customresourcedefinition
+```
+
 ## top
 ```
 kubectl -n <namespace> top pod <pod> --containers
