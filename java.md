@@ -149,3 +149,29 @@ jconsole localhost:4447
 java -jar cmdline-jmxclient-0.10.3.jar <user>:<password> <host>:<port> <bean> [<command>]
 java -jar cmdline-jmxclient-0.10.3.jar -:- localhost:4447 org.opin.framework:type=statistics,name=A3kSession,id=Rap Sessions
 ```
+
+## keytool
+```
+// list keystore entries
+keytool -list -v -keystore keystore.jks -storepass <password>
+
+// change keystore password
+keytool -storepasswd -keystore keystore.jks
+
+// convert keystore format to PKCS12
+keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.jks -deststoretype pkcs12
+
+// copy an entry from one keystore to another
+keytool -importkeystore -srckeystore srckeystore.jks -srcstorepass <src-password> -srcalias <src-alias> -destkeystore destkeystore.jks -deststorepass <dest-password>
+
+// import private key and certificates (PKCS12)
+// If the pfx does not contain a password, the keytool will crash with a NullPointerException.
+keytool -importkeystore -srckeystore <key.pfx|example.p12> -srcstoretype pkcs12 -srcstorepass <src-password> -srcalias <src-alias> -destkeystore keystore.jks -deststorepass <dest-password> [-deststoretype jks] -destalias <dest-alias>
+
+// change password of a key entry
+// set password for private key
+keytool -keypasswd -keystore keystore.jks -storepass <store-password> -alias <alias-name> -new <new-password> -keypass <old-password>
+
+// change key password of an entry
+keytool -list -keystore keystore.jks -storepass <store-password> -alias <alias-name> -keypasswd <>
+```

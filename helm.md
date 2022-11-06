@@ -10,5 +10,5 @@ helm list -aq
 ## uninstall
 
 ```
-helm uninstall <name> # formerly helm delete <name>
+helm uninstall <name> -n <namespace> # formerly helm delete <name>
 ```
