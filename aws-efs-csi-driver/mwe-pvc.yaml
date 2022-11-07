@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+  creationTimestamp: "2022-01-20T16:38:31Z"
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    #app.kubernetes.io/instance: test
+    #app.kubernetes.io/managed-by: Helm
+  name: test-volume
+  namespace: default
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: efs-sc
+  volumeMode: Filesystem
+  #volumeName: pvc-7109db07-ec1e-4995-9048-fe3793d48bae
+#status:
+#  accessModes:
+#  - ReadWriteMany
+#  capacity:
+#    storage: 10Gi
+#  phase: Bound
