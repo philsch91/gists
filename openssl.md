@@ -51,6 +51,17 @@ openssl pkcs12 -export [-nokeys] -in certificate.pem -out certificate.p12
 // Windows + Git Bash
 winpty openssl pkcs12 -export -nokeys -in certificate.cer -out certificate.pfx
 
+// export certificate and private key into pkcs12 keystore
+// generate pkcs12 file with cert and key for Java keystore
+openssl pkcs12 -export -in <certificate.pem> -inkey <certificate.key> -out <certificate.p12> -passout pass:<password> -name <certificate-name>
+
 // convert .p12 to .pem (without certificates)
 openssl pkcs12 -in certificate.p12 -out certificate.pem -nodes [-nocerts]
+```
+
+## s_client
+
+// show remote SSL certificate
+```
+echo | openssl s_client -showcerts -servername <hostname> -connect <hostname>:443 2>/dev/null | openssl x509 -inform pem -noout -text
 ```

@@ -152,21 +152,36 @@ java -jar cmdline-jmxclient-0.10.3.jar -:- localhost:4447 org.opin.framework:typ
 
 ## keytool
 ```
+// import single PEM certificate
+// and create keystore if needed
+keytool -import|-importcert -alias <alias> -file <cert.pem|cert.cer> -keystore keystore.jks -storepass <password>
+// import cert chain into truststore
+echo "yes" | keytool -import -alias <alias> -keystore cacerts -file <rootcert.pem|rootcert.cer> --storepass <password>
+
+// convert PEM file with SSL certificate trust chain
+// or private key and certificate for mutual SSL authentication to DER file
+openssl x509 -outform der -in <pem-file> -out <der-file>
+//
+// import DER certificate
+// and create keystore if needed
+keytool -import -alias <alias> -file <cert.der> -keystore keystore.jks -storepass <password>
+
 // list keystore entries
 keytool -list -v -keystore keystore.jks -storepass <password>
 
 // change keystore password
 keytool -storepasswd -keystore keystore.jks
 
-// convert keystore format to PKCS12
+// convert Java keystore to PKCS12 file
 keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.jks -deststoretype pkcs12
 
 // copy an entry from one keystore to another
 keytool -importkeystore -srckeystore srckeystore.jks -srcstorepass <src-password> -srcalias <src-alias> -destkeystore destkeystore.jks -deststorepass <dest-password>
 
-// import private key and certificates (PKCS12)
+// convert PKCS12 file to Java keystore
+// import private key and certificates from PKCS12 file into Java keystore
 // If the pfx does not contain a password, the keytool will crash with a NullPointerException.
-keytool -importkeystore -srckeystore <key.pfx|example.p12> -srcstoretype pkcs12 -srcstorepass <src-password> -srcalias <src-alias> -destkeystore keystore.jks -deststorepass <dest-password> [-deststoretype jks] -destalias <dest-alias>
+keytool -importkeystore -srckeystore <certname.pfx|certname.p12> -srcstoretype pkcs12 -srcstorepass <src-password> -srcalias <src-alias|certname> -destkeystore keystore.jks -deststorepass <dest-password> -deststoretype jks -destalias <dest-alias|certname>
 
 // change password of a key entry
 // set password for private key

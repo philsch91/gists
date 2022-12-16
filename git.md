@@ -4,6 +4,7 @@ Documentation, Notes and Snippets for Git
 
 ## config
 ```
+git config --global --list
 git config --global --add user.name $user
 git config --global --add user.email $email
 git config --global --add credential.helper "store --file $HOME/.git-credentials"
