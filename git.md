@@ -13,7 +13,22 @@ git config --global --add filter.lfs.clean "git-lfs clean -- %f"
 git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"
 git config --global --add filter.lfs.process "git-lfs filter-process"
 git config --global --add filter.lfs.required true
+
+// Set core.autocrlf to false to not change the line endings at all
 git config --global core.autocrlf false
+// Set core.autocrlf to input to convert CRLF to LF on commit but not on checkout
+git config --global core.autocrlf input
+// Set core.autocrlf to true to ensure line endings in files you checkout are correct for Windows
+// For compatibility, line endings are converted to Unix style when you commit files
+git config --global core.autocrlf true
+
+// Set core.safecrlf to true (default) or warn to verify if the conversion is reversible for the current setting of core.autocrlf
+// Set core.safecrlf to true (default) to reject irreversible conversations
+git config --global core.safecrlf true
+// Set core.safecrlf to warn to only print a warning but accept an irreversible conversion
+git config --global core.safecrlf warn
+// Set core.safecrlf to false to suppress warnings but still auto convert
+git config --global core.safecrlf false
 
 echo "https://${github_name}:${github_pat}@github.com" >>${HOME}/.git-credentials
 ```
