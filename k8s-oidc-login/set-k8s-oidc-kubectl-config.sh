@@ -14,7 +14,6 @@ function print_debug() {
 
 OUTPUT=$(kubectl oidc-login 2>&1 >/dev/null)
 RC=$?
-
 print_debug "RC: $RC"
 
 if [ $RC -ne 0 ] && [ $RC -ne 1 ]; then
@@ -67,10 +66,13 @@ OUTPUT=$(kubectl oidc-login setup \
 	--oidc-client-secret ${OIDC_CLIENT_SECRET} \
 	--oidc-extra-scope groups,email 2>&1 >/dev/null)
 
-print_debug "RC: $?"
+RC=$?
 print_debug "$OUTPUT"
+print_debug "RC: $RC"
 
-OUTPUT=$(kubectl config set-credentials ${OIDC_CLIENT_ID}-credentials \
+CREDENTIALS_CONFIG_ENTRY_NAME="${OIDC_CLIENT_ID}-credentials"
+
+OUTPUT=$(kubectl config set-credentials ${CREDENTIALS_CONFIG_ENTRY_NAME} \
 	--exec-api-version=client.authentication.k8s.io/v1beta1 \
 	--exec-command=kubectl \
 	--exec-arg=oidc-login \
@@ -81,17 +83,26 @@ OUTPUT=$(kubectl config set-credentials ${OIDC_CLIENT_ID}-credentials \
 	--exec-arg=--oidc-extra-scope=groups \
 	--exec-arg=--oidc-extra-scope=email)
 
-print_debug "RC: $?"
+RC=$?
 print_debug "$OUTPUT"
+print_debug "RC: $RC"
 
-OUTPUT=$(kubectl config set-cluster ${CLUSTER_NAME}-cluster --server=${CLUSTER_URL} --embed-certs --certificate-authority=${CLUSTER_CA})
-print_debug "$OUTPUT"
+CLUSTER_CONFIG_ENTRY_NAME="${CLUSTER_NAME}-cluster"
 
-OUTPUT=$(kubectl config set-context ${CLUSTER_NAME}-${OIDC_CLIENT_ID}-context --cluster=${CLUSTER_NAME}-cluster --user=${OIDC_CLIENT_ID}-credentials)
+OUTPUT=$(kubectl config set-cluster ${CLUSTER_CONFIG_ENTRY_NAME} --server=${CLUSTER_URL} --embed-certs --certificate-authority=${CLUSTER_CA})
+RC=$?
 print_debug "$OUTPUT"
+print_debug "RC: $RC"
+
+CONTEXT_CONFIG_ENTRY_NAME="${CLUSTER_NAME}-${OIDC_CLIENT_ID}-context"
+
+OUTPUT=$(kubectl config set-context ${CONTEXT_CONFIG_ENTRY_NAME} --cluster=${CLUSTER_CONFIG_ENTRY_NAME} --user=${CREDENTIALS_CONFIG_ENTRY_NAME})
+RC=$?
+print_debug "$OUTPUT"
+print_debug "RC: $RC"
 
 echo ""
 echo "Use new context via the following command:"
-echo "kubectl config use-context ${CLUSTER_NAME}-${OIDC_CLIENT_ID}-context"
+echo "kubectl config use-context ${CONTEXT_CONFIG_ENTRY_NAME}"
 
 exit 0
