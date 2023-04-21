@@ -106,7 +106,7 @@ Heap size = MaxRAM / MaxRAMFraction<br />
 ```
 
 ```
-// -XX:MinRAMPercentage and -XX:MaxRAMPercentage must be integer value
+// -XX:MinHeapFreeRatio=40 -XX:MaxHeapFreeRatio must be integer value
 -XX:+UseContainerSupport -XX:MinHeapFreeRatio=40 -XX:MaxHeapFreeRatio=70
 ```
 
