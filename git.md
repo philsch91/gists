@@ -33,6 +33,11 @@ git config --global core.safecrlf false
 echo "https://${github_name}:${github_pat}@github.com" >>${HOME}/.git-credentials
 ```
 
+### Set remote settings in config
+- `git config remote.origin.url https://github.com/abc/abc.git`
+- `git config remote.upstream.url https://github.com/abc/abc.git`
+- `git config branch.master.remote origin`
+
 ## diff
 ```
 // check for merge conflict markers
@@ -64,6 +69,10 @@ git push -d <remote-name> refs/tags/<tag-name>
 git tag -d <tag-name>
 // push all local tags not present on remote server
 git push <remote-name> --tags
+// fetch <tag-name-1> from remote repo and create reference <tag-name-2> in local repo
+git fetch <remote-name> refs/tags/<tag-name-1>:refs/tags/<tag-name-2>
+// fetch all tags from remote repo
+git fetch [--all] --tags [--prune]
 ```
 
 ## Merge local and remote Git branches with unrelated histories
@@ -85,14 +94,13 @@ git push <remote-name> --tags
 git fetch --all --prune
 ```
 
-## Set remote settings in config
-- `git config remote.origin.url https://github.com/abc/abc.git`
-- `git config remote.upstream.url https://github.com/abc/abc.git`
-- `git config branch.master.remote origin`
-
 ## checkout
+```
+// create and checkout new branch from tag
+git checkout -b <branch-tag-name> refs/tags/<tag-name>
+```
 
-## Patch files - resolve merge conflicts partially
+### Patch files - resolve merge conflicts partially
 ```
 // patch from a branch name
 git switch <branch>
@@ -100,6 +108,12 @@ git checkout -p <branch-name> <file-name>
 // patch via a commit-sha
 git switch -c <new-branch>
 git checkout -p <commit-sha> <file-name>
+```
+
+## branch
+```
+// create new branch from tag
+git branch <branch-tag-name> refs/tags/<tag-name>
 ```
 
 ## Resolve merge conflicts
