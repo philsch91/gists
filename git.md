@@ -49,6 +49,9 @@ git diff --exit-code
 
 ## push
 ```
+// push local branch <local-branch-name> named as <remote-branch-name> to remote repo
+// and where a remote tag with the same name exists
+git push <remote-name> refs/heads/<remote-branch-name>:refs/heads/<local-branch-name>
 // delete remote tag
 git push -d <remote-name> <tag-name>
 // delete remote tag with tag and branch of the same name
