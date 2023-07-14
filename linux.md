@@ -41,10 +41,34 @@ find . -type f -print0 | xargs -0 dos2unix
 find . -type f -print0 | xargs -0 grep <regex>
 ```
 
+## SysV
+
+```
+ls -lah /etc/init.d/
+ls -lah /etc/rc*
+// update-rc.d
+update-rc.d <service> disable
+update-rc.d apache2 disable
+// or via chkconfig
+sudo apt-get install chkconfig
+chkconfig <service> off|on
+chkconfig --add <service>
+// or via sysv-rc-conf
+sudo apt-get install sysv-rc-conf
+// or via rcconf
+sudo apt-get install rcconf
+```
+
 ## systemd
 
-### List unit files
+### Start and stop services
+```
+systemctl status <service>
+systemctl start <service>
+systemctl stop <service>
+```
 
+### List unit files
 ```
 systemctl list-unit-files --type=service --state=enabled,running,generated
 systemctl list-unit-files | grep -i enabled
@@ -60,6 +84,12 @@ systemctl list-units --type=service --state=running
 systemd services in `state=active` and `sub` either `running` or `exited`
 ```
 systemctl list-units --type=service --state=active
+```
+
+### Enable and disable services
+```
+systemctl enable <service>
+systemctl disable <service>
 ```
 
 ## netcat

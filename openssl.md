@@ -15,6 +15,61 @@ Create certificate signing request (CSR) with public key based on private key
 openssl req -new -key private.pem -out signing.csr
 ```
 
+## genrsa + req
+
+```
+// generate RSA encrypted private key
+openssl genrsa -out subsubdomain.subdomain.domain.com.key.pem 2048
+
+// create a v3 ext file for subject alternative name (SAN) properties
+cat > subsubdomain.subdomain.domain.com.v3.ext << EOF
+nsCertType = server
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = subsubdomain.subdomain.domain.com
+DNS.2 = subsubdomain.subdomain2.domain.com
+EOF
+
+// create CSR with public key based on passed private key and properties
+openssl req -new -key subsubdomain.subdomain.domain.com.key.pem -out subsubdomain.subdomain.domain.com.csr -subj '/C=AT/ST=Vienna/L=Vienna/O=MyOrganisation/OU=MyOrganisationalUnit' -extfile subsubdomain.subdomain.domain.com.v3.ext
+```
+
+## genrsa + req + x509
+
+```
+CA_NAME="Test-Root-CA"
+
+// generate AES encrypted private key
+openssl genrsa -aes256 -out ${CA_NAME}.cakey.pem 4096
+
+// create self-signed root certificate, 1826 days = 5 years
+openssl req -x509 -new -nodes -key ${CA_NAME}.cakey.pem -sha256 -days 1826 -out ${CA_NAME}.cert.pem -subj '/CN=MyRootCA/C=AT/ST=Vienna/L=Vienna/O=MyOrganisation'
+
+// create certificate signing request
+MY_DOMAIN="domain.com"
+openssl req -new -nodes -out ${MY_DOMAIN}.csr -newkey rsa:4096 -keyout ${MY_DOMAIN}.key -subj "/CN=${MY_DOMAIN}/C=AT/ST=Vienna/L=Vienna/O=MyOrganisation"
+
+// create a v3 ext file for subject alternative name (SAN) properties
+cat > ${MY_DOMAIN}.v3.ext << EOF
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = ${MY_DOMAIN}
+EOF
+
+// create certificate for service
+openssl x509 -req -in ${MY_DOMAIN}.csr -CA ${CA_NAME}.cert.pem -CAkey ${CA_NAME}.cakey.pem -CAcreateserial -out ${MY_DOMAIN}.cert.pem -days 730 -sha256 -extfile ${MY_DOMAIN}.v3.ext
+
+// create file with server/service certificate and self-signed root certificate for certificate chain
+cat ${MY_DOMAIN}.cert.pem ${CA_NAME}.cert.pem >chain.crt
+```
+
 ## x509
 
 ```
