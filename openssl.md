@@ -23,19 +23,25 @@ openssl genrsa -out subsubdomain.subdomain.domain.com.key.pem 2048
 
 // create a v3 ext file for subject alternative name (SAN) properties
 cat > subsubdomain.subdomain.domain.com.v3.ext << EOF
+[req]
+req_extensions = req_ext
+
 nsCertType = server
 authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
 keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
 extendedKeyUsage = serverAuth
+
+[req_ext]
 subjectAltName = @alt_names
+
 [alt_names]
 DNS.1 = subsubdomain.subdomain.domain.com
 DNS.2 = subsubdomain.subdomain2.domain.com
 EOF
 
-// create CSR with public key based on passed private key and properties
-openssl req -new -key subsubdomain.subdomain.domain.com.key.pem -out subsubdomain.subdomain.domain.com.csr -subj '/C=AT/ST=Vienna/L=Vienna/O=MyOrganisation/OU=MyOrganisationalUnit' -extfile subsubdomain.subdomain.domain.com.v3.ext
+// create CSR with public key based on passed private key and configuration file
+openssl req -new -key subsubdomain.subdomain.domain.com.key.pem -out subsubdomain.subdomain.domain.com.csr -subj '/C=AT/ST=Vienna/L=Vienna/O=MyOrganisation/OU=MyOrganisationalUnit' -config subsubdomain.subdomain.domain.com.v3.ext
 ```
 
 ## genrsa + req + x509
