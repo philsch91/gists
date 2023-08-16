@@ -17,6 +17,46 @@ Remove Byte Order Mark (BOM)
 vim -c "set nobomb" -c wq! <file-name>
 ```
 
+## SIPS
+```
+# Resample image so height and width aren't greater than specified size.
+sips <input-filename> -Z <pixels-height-width-max> --out <output-filename>
+# Resample image at specified size. Image apsect ratio may be altered.
+sips <input-filename> -z <pixels-height> <pixels-width> --out <output-filename>
+```
+
+## pkgutil
+```
+# List all installed packages
+# TODO: Check if an executed .app file installs itself as package
+pkgutil --pkgs
+
+# Show package info
+# date -r <install-unix-timestamp>
+pkgutil --pkg-info <package-name>
+
+# List files for package
+pkgutil --files <package-name>
+
+# List only files (not directories) in --files listing for package
+pkgutil --only-files --files <package-name>
+
+# List files for package and delete them
+pkgutil --only-files --files <package-name> | tr '\n' '\0' | xargs -n 1 -0 -p sudo rm [-if]
+
+# List only directories (not files) in --files listing for package
+pkgutil --only-dirs --files <package-name>
+
+# List directories for package and delete them
+pkgutil --only-dirs --files <package-name> | tr '\n' '\0' | xargs -n 1 -0 -p sudo rmdir
+
+# Remove package receipt (after removing the files)
+pkgutil --forget <package-name>
+
+# Unlink package (not documented)
+pkgutil --unlink <package-name>
+```
+
 ## Softwareupdate
 
 ```
