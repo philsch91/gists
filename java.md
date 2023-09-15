@@ -112,13 +112,13 @@ Heap size = MaxRAM / MaxRAMFraction<br />
 
 ```
 JAVA_OPTS="${JAVA_OPTS} -XX:+UseContainerSupport -XX:InitialRAMPercentage=50 -XX:MinRAMPercentage=25 -XX:MaxRAMPercentage=80 -XX:MinHeapFreeRatio=40 -XX:MaxHeapFreeRatio=70 -XX:NewRatio=4 -XX:SurvivorRatio=4 -javaagent:/srv/jolokia-jvm-1.6.2-agent.jar=port=8778,host=0.0.0.0,user=jolokia,password=jolokia,policyLocation=classpath:/srv/jolokia/jolokia-access.xml -javaagent:/srv/prometheus/jmx_prometheus_javaagent-0.15.0.jar=9081:/srv/conf/prometheus/app.yml"
-java -jar app.jar ${JAVA_OPTS}
+java ${JAVA_OPTS} -jar app.jar
 ```
 
 ### Java Management Extensions (JMX)
 
 ```
-java -jar app.jar -Dcom.sun.management.jmxremote.port=4447 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false
+java -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.port=4447 -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.rmi.port=4447 [-XX:+DisableAttachMechanism] [-Dcom.sun.management.jmxremote.local.only=true] -jar app.jar
 ```
 
 ## jcmd
