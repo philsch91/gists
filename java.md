@@ -73,6 +73,12 @@ SerialGC is automatically set in a container that can use <= 1 core
 -XX: NativeMemoryTracking
 ```
 
+### Debug javax.net
+```
+-Djavax.net.debug=all
+-Djavax.net.debug=ssl:session
+```
+
 ### Debugging
 
 `-Xdebug -agentlib:jdwp=transport=dt_socket,address=8300,server=y,suspend=n`
