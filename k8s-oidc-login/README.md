@@ -1,5 +1,7 @@
 # K8s OIDC Login
 
+[set-k8s-oidc-kubectl-config.sh](https://github.com/philsch91/scripts/blob/main/set-k8s-oidc-kubectl-config.sh)
+
 ## Installation and Setup
 1. Download kubelogin binary
 2. Move kubelogin into same directory as kubectl (optional)
