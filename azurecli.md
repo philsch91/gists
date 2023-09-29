@@ -33,6 +33,11 @@ az ad sp show --id <guid>
 az ad sp list
 az ad sp list --filter "displayName eq '<sp-name>-acr-pull'"
 az ad sp list --query "[?contains(displayName,'<sp-name>-acr-push')]"
+az ad sp list --display-name <displayName> --query '[].id'
+az ad sp show --id <id or appId> // get .appId
+az ad sp list --filter "appId eq '<appId>'"
+az ad sp owner list --id <id or appId> --query '[]' // --query '[].displayName'
+az ad sp credential list --id <id or appId> // only owners
 ```
 
 Service Principal Creation for ACR
