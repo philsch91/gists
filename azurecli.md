@@ -25,6 +25,7 @@ kubectl -n <namespace> get secret <secretname> -o json|jq '.data|map_values(@bas
 ## AD APP
 ```
 az ad app show --id <guid>
+az ad app list --display-name <displayName>
 ```
 
 ## AD SP
@@ -35,9 +36,11 @@ az ad sp list --filter "displayName eq '<sp-name>-acr-pull'"
 az ad sp list --query "[?contains(displayName,'<sp-name>-acr-push')]"
 az ad sp list --display-name <displayName> --query '[].id'
 az ad sp show --id <id or appId> // get .appId
+az ad sp list --display-name <displayName> --query '[].appId'
 az ad sp list --filter "appId eq '<appId>'"
-az ad sp owner list --id <id or appId> --query '[]' // --query '[].displayName'
-az ad sp credential list --id <id or appId> // only owners
+az ad sp owner list --id <id or appId> [--query '[].displayName']
+az ad sp credential list --id <id or appId> [--query '[].endDateTime'] // only owners
+az ad sp credential reset --id <appId> --end-date <Y-m-d>
 ```
 
 Service Principal Creation for ACR

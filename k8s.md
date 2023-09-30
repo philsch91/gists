@@ -27,6 +27,8 @@ kubectl cluster-info
 kubectl [-n <namespace>] get deployment
 kubectl get deployment <deployment-name> [-o yaml|json|wide]
 kubectl get deployment/<deployment-name> [-o yaml|json|wide]
+kubectl get deployment/<deployment-name> -o jsonpath='{.spec.template.spec.containers[0].args}'
+kubectl get deployment/<deployment-name> -o jsonpath='{.spec.template.spec.containers[0].image}'
 kubectl delete deployment/<deployment-name>
 ```
 
