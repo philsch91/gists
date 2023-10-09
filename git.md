@@ -142,3 +142,11 @@ git branch <branch-tag-name> refs/tags/<tag-name>
 // the last commit must not have been pushed
 git commit --amend -m "new commit message"
 ```
+
+## gc
+
+error: cannot lock ref 'refs/remotes/<remote-name>/<remote-branch-name>'
+```
+git gc --prune=now
+git reset --hard <remote-name>/<remote-branch-name>
+```
