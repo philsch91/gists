@@ -118,6 +118,9 @@ openssl pkcs12 -export -in <certificate.pem> -inkey <certificate.key> -out <cert
 
 // convert .p12 to .pem (without certificates)
 openssl pkcs12 -in certificate.p12 -out certificate.pem -nodes [-nocerts]
+
+// extract private key and certificates from a PKCS#12 (.pfx) file
+openssl pkcs12 -in <certificate.pfx> -info -nodes
 ```
 
 ## s_client
