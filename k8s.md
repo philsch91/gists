@@ -116,6 +116,15 @@ kubectl -n kubernetes-dashboard patch clusterrolebinding/basic-user --type='json
 kubectl -n kubernetes-dashboard patch clusterrolebinding/basic-user --type=json -p='[{"op":"add","path":"/subjects","value":[{"kind":"ServiceAccount","name":"basic-user","namespace":"kubernetes-dashboard"},{"kind":"ServiceAccount","name":"kubernetes-dashboard","namespace":"kubernetes-dashboard"}]}]"
 ```
 
+## cp
+```
+// copy from pod to local system
+kubectl -n <namespace cp <pod-name>:/<container>/<path>/<file-name> ./<file-name>
+
+// copy from local system to container
+kubectl -n <namespace> cp /local/path/<file-name> <pod-name>:/<container>/<path> -c <container-name>
+```
+
 ## auth
 ```
 // current namespace
