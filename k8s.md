@@ -22,7 +22,13 @@ kubectl config [--kubeconfig=config-demo] view --minify
 kubectl cluster-info
 ```
 
-## deployment
+## get
+
+```
+for r in $(kubectl -n <namespace> get deployment,sts,ds | tail -n +2 | awk '{print $1}'); do echo $r; kubectl -n <namespace> get $r -o jsonpath='{.spec.template.spec.containers[0].image}'; echo; done
+```
+
+### get deployment
 ```
 kubectl [-n <namespace>] get deployment
 kubectl get deployment <deployment-name> [-o yaml|json|wide]
@@ -32,7 +38,7 @@ kubectl get deployment/<deployment-name> -o jsonpath='{.spec.template.spec.conta
 kubectl delete deployment/<deployment-name>
 ```
 
-## pods
+### get pods
 ```
 kubectl get pod
 kubectl get pod <pod-name>
@@ -119,7 +125,7 @@ kubectl -n kubernetes-dashboard patch clusterrolebinding/basic-user --type=json 
 ## cp
 ```
 // copy from pod to local system
-kubectl -n <namespace cp <pod-name>:/<container>/<path>/<file-name> ./<file-name>
+kubectl -n <namespace> cp <pod-name>:/<container>/<path>/<file-name> ./<file-name>
 
 // copy from local system to container
 kubectl -n <namespace> cp /local/path/<file-name> <pod-name>:/<container>/<path> -c <container-name>
