@@ -25,6 +25,11 @@ sips <input-filename> -Z <pixels-height-width-max> --out <output-filename>
 sips <input-filename> -z <pixels-height> <pixels-width> --out <output-filename>
 ```
 
+## strings
+```
+strings /path/to/file.pdf | grep -i FontName
+```
+
 ## pkgutil
 ```
 # List all installed packages
@@ -56,6 +61,31 @@ pkgutil --forget <package-name>
 # Unlink package (not documented)
 pkgutil --unlink <package-name>
 ```
+
+## launchctl
+```
+launchctl list
+launchctl print system
+launchctl print gui/<user-id>
+launchctl load -w /System/Library/LaunchDaemons/org.apache.httpd.plist
+launchctl load -w /System/Library/LaunchDaemons/ssh.plist
+launchctl unload -w /Library/LaunchAgents/com.adobe.AdobeCreativeCloud.plist
+// new syntax
+launchctl bootstrap gui/<user-id> /System/Library/LaunchDaemons/ssh.plist
+launchctl bootout gui/<user-id> /System/Library/LaunchDaemons/ssh.plist
+```
+
+### launchctl .plist locations
+- /Library/LaunchDaemons/
+System wide daemons provided by the admin
+- /Library/LaunchAgents/
+User daemons provided by the admin
+- ~/Library/LaunchAgents/
+User daemons provided by the user
+- /System/Library/LaunchDaemons/
+macOS system daemons
+- /System/Library/LaunchAgents/
+macOS user daemons
 
 ## Softwareupdate
 
@@ -90,3 +120,8 @@ sudo powermetrics --samplers cpu_power,smc -i1000 -n1 | egrep -i 'power|CPU die 
 1. copy TimeMachine.sparsebundle to SMB share
 1. mount the sparse image on the share as volume with a double click
 1. `sudo tmutil setdestination /Volumes/TimeMachine`
+
+## apachectl
+```
+apachectl [start|stop|restart|graceful|status|fullstatus|configtest]
+```
