@@ -93,11 +93,13 @@ macOS user daemons
 sudo softwareupdate --reset-ignored
 sudo softwareupdate --ignore "macOS Catalina"
 sudo softwareupdate --ignore "macOS Big Sur"
+# Read local updates
+defaults read ~/Library/Preferences/com.apple.preferences.softwareupdate.plist
 # Remove system preferences badge
 defaults write com.apple.systempreferences AttentionPrefBundleIDs 0
-# Remove update badge
+# Clear updates and remove update badge
 defaults delete com.apple.preferences.softwareupdate LatestMajorOSSeenByUserBundleIdentifier
-# Get list of software updates
+# Refresh and get list of software updates
 softwareupdate --list
 # Advanced
 # Attention: change files from another disk, otherwise system will be read-only
