@@ -101,6 +101,9 @@ git fetch --all --prune
 ```
 // create and checkout new branch from tag
 git checkout -b <branch-tag-name> refs/tags/<tag-name>
+// error: The following untracked working tree files would be overwritten by checkout:
+// force checkout which will delete local not indexed files
+git checkout -f refs/tags/<tag-name>
 ```
 
 ### Patch files - resolve merge conflicts partially
@@ -134,6 +137,11 @@ git branch <branch-tag-name> refs/tags/<tag-name>
 1. `git stash drop stash@{<index>}`
 
 ## Clean working copy
+
+`-n` = dry run<br />
+`-d` = remove untracked directories in addition to untracked files<br />
+`-f` = force<br />
+
 1. `git clean -nd`
 1. `git clean -fd`
 
