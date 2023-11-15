@@ -94,6 +94,7 @@ fi
 grep -rnwl '/path/to/directory' -e 'searchstring'
 grep --include=\*.{c,h} -rnwl '/path/to/directory' -e 'searchstring'
 grep --exclude=\*.o -rnwl '/path/to/directory' -e 'searchstring'
+grep -ri -n|l [--include="*.txt *.php *.sh"] <search-string> .
 ```
 
 ### find
