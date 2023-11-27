@@ -30,6 +30,8 @@ aws ec2 describe-nat-gateways --output json | jq -r '.NatGateways[].NatGatewayAd
 ## EKS
 ```
 aws eks describe-cluster --name <cluster-name> | jq -r '.cluster.resourcesVpcConfig.publicAccessCidrs'
+
+aws autoscaling terminate-instance-in-auto-scaling-group --instance-id <instance_id> --should-decrement-desired-capacity [--region <region>]
 ```
 
 ## S3

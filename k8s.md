@@ -45,6 +45,12 @@ kubectl get pod <pod-name>
 kubectl get pod/<pod-name>
 ```
 
+## describe
+```
+// check for overcommitted resource limits (undercommitted nodes)
+kubectl describe node/<node-name>
+```
+
 ## exec
 ```
 kubectl exec <pod> [-c <container>] -- <command>
@@ -154,7 +160,15 @@ kubectl get customresourcedefinition
 
 ## top
 ```
-kubectl -n <namespace> top pod <pod> --containers
+kubectl top node <node-name>
+kubectl -n <namespace> top pod <pod> --containers 2>/dev/null
+```
+
+## drain
+```
+kubectl cordon <node-name>
+kubectl drain [--ignore-daemonsets] <node-name>
+kubectl uncordon <node-name>
 ```
 
 ## ReST API
