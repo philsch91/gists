@@ -30,8 +30,25 @@ aws ec2 describe-nat-gateways --output json | jq -r '.NatGateways[].NatGatewayAd
 ## EKS
 ```
 aws eks describe-cluster --name <cluster-name> | jq -r '.cluster.resourcesVpcConfig.publicAccessCidrs'
+
+aws eks list-nodegroups --cluster <cluster-name>
+
 # drain node (instance) first
 aws autoscaling terminate-instance-in-auto-scaling-group --instance-id <instance-id> --should-decrement-desired-capacity [--region <region>]
+
+# eksctl
+eksctl get nodegroup --cluster=<cluster-name> [--name=<nodegroup-name>]
+eksctl scale nodegroup --cluster=<cluster-name> --name=<nodegroup-name> --nodes=<desired-count>  [--nodes-min=<min-size> ] [--nodes-max=<max-size>] [--wait]
+
+# cordon + drain nodes and nodegroup
+eksctl drain nodegroup --cluster=<clusterName> --name=<nodegroupName>
+# uncordon nodes and nodegroup
+eksctl drain nodegroup --cluster=<clusterName> --name=<nodegroupName> --undo
+
+# drain all pods from the nodegroup, delete nodes and nodegroup
+eksctl delete nodegroup --cluster=<clusterName> --name=<nodegroupName>
+# delete nodes and nodegroup
+eksctl delete nodegroup --cluster=<clusterName> --name=<nodegroupName> --disable-eviction
 ```
 
 ## S3
