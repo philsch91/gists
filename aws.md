@@ -53,12 +53,16 @@ eksctl delete nodegroup --cluster=<clusterName> --name=<nodegroupName> --disable
 
 ## S3
 ```
-aws s3 ls s3://bucket-name
-<no output because bucket was empty>
+aws s3 ls s3://<bucket-name>
+# no output because bucket was empty
 
+aws s3 ls s3://<bucket-name>/<path>/<object>
+2022-12-22 18:55:50         20 test.txt
+
+# upload (copy)
 aws s3 cp test.txt s3://bucket-name/test.txt
 upload: test.txt to s3://bucket-name/test.txt
 
-aws s3 ls s3://bucket-name
-2022-12-22 18:55:50         20 test.txt
+# read/get (copy)
+aws s3 cp <S3-URL> - | less
 ```
