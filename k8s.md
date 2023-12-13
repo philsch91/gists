@@ -126,6 +126,12 @@ kubectl -n kubernetes-dashboard patch clusterrolebinding/basic-user --type='json
 
 // patch op add (replace) service accounts in cluster role binding
 kubectl -n kubernetes-dashboard patch clusterrolebinding/basic-user --type=json -p='[{"op":"add","path":"/subjects","value":[{"kind":"ServiceAccount","name":"basic-user","namespace":"kubernetes-dashboard"},{"kind":"ServiceAccount","name":"kubernetes-dashboard","namespace":"kubernetes-dashboard"}]}]"
+
+// disable pod scheduling for daemonset by adding temporary non-existing `nodeSelector`
+kubectl -n <namespace> patch daemonset <ds-name> -p '{"spec": {"template": {"spec": {"nodeSelector": {"non-existing": "true"}}}}}'
+
+// enable pod scheduling for daemonset by removing temporary non-existing `nodeSelector`
+kubectl -n <namespace> patch daemonset <ds-name> --type json -p='[{"op": "remove", "path": "/spec/template/spec/nodeSelector/non-existing"}]'
 ```
 
 ## cp
