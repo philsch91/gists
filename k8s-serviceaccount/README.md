@@ -4,6 +4,7 @@
 ```
 kubectl -n default apply -f serviceaccount.yaml
 kubectl -n default apply -f serviceaccount-clusterrolebinding.yaml
+kubectl -n default apply -f serviceaccount-token.yaml
 ```
 
 ### Create serviceaccount with role and rolebinding
