@@ -43,6 +43,7 @@ kubectl delete deployment/<deployment-name>
 kubectl get pod
 kubectl get pod <pod-name>
 kubectl get pod/<pod-name>
+kubectl get pod/<pod-name> -o jsonpath='{.spec.containers[*].name}'
 ```
 
 ## describe

@@ -50,8 +50,12 @@ git diff --exit-code
 ## push
 ```
 // push local branch <local-branch-name> named as <remote-branch-name> to remote repo
+git push origin <local-branch-name>:<remote-branch-name>
+
+// push local branch <local-branch-name> named as <remote-branch-name> to remote repo
 // and where a remote tag with the same name exists
 git push <remote-name> refs/heads/<remote-branch-name>:refs/heads/<local-branch-name>
+
 // delete remote tag
 git push -d <remote-name> <tag-name>
 // delete remote tag with tag and branch of the same name
@@ -122,7 +126,19 @@ git checkout -p <commit-sha> <file-name>
 git branch <branch-tag-name> refs/tags/<tag-name>
 ```
 
-## Resolve merge conflicts
+## merge
+
+```
+# assuming `feature` is our current branch (git branch)
+
+# merge preferring our current (feature) branch changes for merge conflicts
+git merge -Xours master # ours (current): feature, theirs: master
+
+# merge preferring their (master) branch changes for merge conflicts
+git merge -Xtheirs master # ours (current): feature, theirs: master
+```
+
+### Resolve merge conflicts
 1. `git fetch --all`
 1. `git switch dev`
 1. `git merge master`
@@ -130,11 +146,28 @@ git branch <branch-tag-name> refs/tags/<tag-name>
 1. `git merge dev --no-ff`
 1. `git push`
 
+## rebase
+```
+# assuming `release` is our current branch (git branch)
+
+# rebase preferring our (master) branch changes for merge conflicts
+git rebase -Xours master # ours: master, theirs (current): release
+
+# rebase preferring their current (release) branch changes for merge conflicts
+git rebase -Xtheirs master # ours: master, theirs (current): release
+```
+
 ## Git stash
 1. `git stash (= git stash push)`
 1. `git stash list`
 1. `git stash apply stash@{<index>}`
 1. `git stash drop stash@{<index>}`
+
+## worktree
+```
+git worktree add <path (../<new-branch-name>)>
+git worktree add <path (../<dir-name>)> <branch>
+```
 
 ## Clean working copy
 
