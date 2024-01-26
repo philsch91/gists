@@ -56,16 +56,42 @@ kubectl describe node/<node-name>
 
 ## exec
 ```
-kubectl exec <pod> [-c <container>] -- <command>
+kubectl exec <pod> [-c <container>] -- <command> <arg1> <arg2> ... <argn>
 kubectl exec <pod> [-c <container>] -- date
-kubectl exec <pod> -- nc -zv <host> <port>
-//switch to raw terminal mode; sends stdin to 'bash' in container <container> from pod <pod> and sends stdout/stderr from 'bash' back to the client
-kubectl exec <pod> [-c <container>] -it -- /bin/bash -il
+kubectl exec <pod> [-c <container>] -- cat /var/log/system.log
+kubectl exec <pod> [-c <container>] -- nc -zv <host> <port>
 kubectl exec <pod> [-c <container>] -it bash
-// Git Bash
-kubectl exec <pod> [-c <container>] -it -- bash -il
+// switch to raw terminal mode
+// sends stdin to 'bash' in container <container> from pod <pod> (exec -it) and sends stdout/stderr from 'bash' back to the client (bash -il)
+// --stdin = -i, --tty = -t
+kubectl exec <pod> [-c <container>] -it -- /bin/bash -il
 // Git Bash + winpty
-winpty kubectl exec <pod> -c <container> -it -- bash -il
+winpty kubectl exec <pod> [-c <container>] -it -- bash -il
+```
+
+## debug
+```
+// add an ephemeral debug container to a running Pod for debugging another container in the Pod
+// The --target parameter targets the process namespace of the given container.
+// It is necessary for `kubectl run` as it does not enable process namespace sharing in the Pod it creates.
+kubectl debug -it <pod-name> --image=busybox:1.28 --target=<container-name-to-debug>
+
+// create a copy of a pod while adding a new container
+// The `--share-processes` flag allows the containers in this Pod to see processes from the other containers in the Pod.
+kubectl debug -it <pod-name-to-copy> --image=ubuntu --share-processes --copy-to=<pod-name>-debug
+
+// create a copy of a pod and container while changing the command
+kubectl debug -it <pod-name-to-copy> --copy-to=<pod-name>-debug --container=<container-name-to-copy> -- sh
+
+// create a copy of a pod while changing the container images
+// The value `*=ubuntu` for the `--set-image` flag changes all container images
+kubectl debug <pod-name-to-copy> --copy-to=<pod-name>-debug --set-image=*=ubuntu
+```
+
+### debug container
+```yaml
+- name: container-name
+  command: ["sh"]
 ```
 
 ## logs
