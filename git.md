@@ -14,6 +14,8 @@ git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"
 git config --global --add filter.lfs.process "git-lfs filter-process"
 git config --global --add filter.lfs.required true
 
+git config --global alias.allog "log --all --decorate --oneline --graph"
+
 // Set core.autocrlf to false to not change the line endings at all
 git config --global core.autocrlf false
 // Set core.autocrlf to input to convert CRLF to LF on commit but not on checkout
