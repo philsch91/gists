@@ -131,13 +131,14 @@ git branch <branch-tag-name> refs/tags/<tag-name>
 ## merge
 
 ```
-# assuming `feature` is our current branch (git branch)
+# merge commits in (from) `feature` into (to) `master`
+# assuming `master` is our current branch (git branch)
 
-# merge preferring our current (feature) branch changes for merge conflicts
-git merge -Xours master # ours (current): feature, theirs: master
+# merge preferring our current (master) branch changes for merge conflicts
+git merge -Xours feature # ours (current): master, theirs: feature
 
-# merge preferring their (master) branch changes for merge conflicts
-git merge -Xtheirs master # ours (current): feature, theirs: master
+# merge preferring their (feature) branch changes for merge conflicts
+git merge -Xtheirs feature # ours (current): master, theirs: feature
 ```
 
 ### Resolve merge conflicts
@@ -150,6 +151,7 @@ git merge -Xtheirs master # ours (current): feature, theirs: master
 
 ## rebase
 ```
+# rebase commits in (from) `release` on (to) `master`
 # assuming `release` is our current branch (git branch)
 
 # rebase preferring our (master) branch changes for merge conflicts
