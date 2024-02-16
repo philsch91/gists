@@ -13,6 +13,7 @@ git config --global --add filter.lfs.clean "git-lfs clean -- %f"
 git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"
 git config --global --add filter.lfs.process "git-lfs filter-process"
 git config --global --add filter.lfs.required true
+git config --global core.symlinks true
 
 git config --global alias.allog "log --all --decorate --oneline --graph"
 
@@ -20,8 +21,8 @@ git config --global alias.allog "log --all --decorate --oneline --graph"
 git config --global core.autocrlf false
 // Set core.autocrlf to input to convert CRLF to LF on commit but not on checkout
 git config --global core.autocrlf input
-// Set core.autocrlf to true to ensure line endings in files you checkout are correct for Windows
-// For compatibility, line endings are converted to Unix style when you commit files
+// Set core.autocrlf to true to ensure line endings in files on checkout are converted from LF to CRLF for Windows
+// For compatibility, line endings are converted to LF (Unix) style on commit
 git config --global core.autocrlf true
 
 // Set core.safecrlf to true (default) or warn to verify if the conversion is reversible for the current setting of core.autocrlf
