@@ -1,8 +1,14 @@
 # Visual Studio Code
 
-## vscode-java
+## User Settings
 
-<dir>/.vscode/settings.json<br />
+`/c/Users/<username>/AppData/Roaming/Code/User/settings.json`
+
+## Workspace Settings
+
+`<dir>/.vscode/settings.json`
+
+## vscode-java
 
 ```
 {
