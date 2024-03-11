@@ -114,3 +114,8 @@ nc -lk <port>
 ```
 ldapsearch -x -H ldaps://<ldap-host>:636 -D "CN=TU001,OU=Service_Accounts,OU=Accounts,DC=domain,DC=rootdom,DC=net" -w '<password>' -b "DC=rootdom,DC=net" "cn=<user-id>" dn
 ```
+
+## getent
+```
+getent hosts <hostname>
+```

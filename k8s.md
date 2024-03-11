@@ -202,7 +202,7 @@ kubectl -n <namespace> top pod <pod> --containers 2>/dev/null
 ## drain
 ```
 kubectl cordon <node-name>
-kubectl drain [--ignore-daemonsets] [--delete-emptydir-data] [--delete-local-data] <node-name>
+kubectl drain [--ignore-daemonsets] [--delete-emptydir-data] [--delete-local-data] [--disable-eviction] <node-name>
 // power down or terminate node or delete VM backing the node if needed
 // resume pod scheduling
 kubectl uncordon <node-name>
