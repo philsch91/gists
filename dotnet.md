@@ -9,5 +9,6 @@ dotnet new gitignore
 dotnet dev-certs https
 dotnet dev-certs https --trust
 dotnet add <project-name (CompanyName.ProductName.ProjectName.csproj)> package <package-name> [-v <version-number>] [options]
-dotnet run
+dotnet build [-c|--configuration <CONFIGURATION|Debug>]
+dotnet run [-c|--configuration <CONFIGURATION>] [arg1...argn]
 ```
