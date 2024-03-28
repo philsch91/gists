@@ -8,7 +8,8 @@ dotnet new console|mvc -o <output-directory> -lang C# [-v q(uiet)|m(inimal)|n(or
 dotnet new gitignore
 dotnet dev-certs https
 dotnet dev-certs https --trust
-dotnet add <project-name (CompanyName.ProductName.ProjectName.csproj)> package <package-name> [-v <version-number>] [options]
+dotnet add [<project-name (CompanyName.ProductName.ProjectName.csproj)>] package <package-name> [-v <version-number>] [options]
+dotnet remove [<project-name (CompanyName.ProductName.ProjectName.csproj)>] package <package-name>
 dotnet build [-c|--configuration <CONFIGURATION|Debug>]
 dotnet run [-c|--configuration <CONFIGURATION>] [arg1...argn]
 ```
