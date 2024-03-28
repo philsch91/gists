@@ -10,6 +10,8 @@ dotnet dev-certs https
 dotnet dev-certs https --trust
 dotnet add [<project-name (CompanyName.ProductName.ProjectName.csproj)>] package <package-name> [-v <version-number>] [options]
 dotnet remove [<project-name (CompanyName.ProductName.ProjectName.csproj)>] package <package-name>
+dotnet restore
+dotnet nuget locals all [(-l|--list)|(-c|--clear)]
 dotnet build [-c|--configuration <CONFIGURATION|Debug>]
 dotnet run [-c|--configuration <CONFIGURATION>] [arg1...argn]
 ```
