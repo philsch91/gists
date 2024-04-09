@@ -12,6 +12,7 @@ dotnet add [<project-name (CompanyName.ProductName.ProjectName.csproj)>] package
 dotnet remove [<project-name (CompanyName.ProductName.ProjectName.csproj)>] package <package-name>
 dotnet restore
 dotnet nuget locals all [(-l|--list)|(-c|--clear)]
-dotnet build [-c|--configuration <CONFIGURATION|Debug>]
-dotnet run [-c|--configuration <CONFIGURATION>] [arg1...argn]
+dotnet build [<project-name (CompanyName.ProductName.ProjectName.csproj)>] [-c|--configuration <CONFIGURATION|Debug|Release>] [-o|--output <output-directory>]
+dotnet publish [<project-name (CompanyName.ProductName.ProjectName.csproj)>] [-c|--configuration <CONFIGURATION|Debug|Release>] [-o|--output <output-directory>]
+dotnet run [-c|--configuration <CONFIGURATION|Debug|Release>] [arg1...argn]
 ```
