@@ -108,6 +108,12 @@ mv /System/Library/LaunchAgents/com.apple.SoftwareUpdateNotificationManager.plis
 /System/Library/UserNotifications/Bundles/com.apple.SoftwareUpdateNotification.bundle/Contents/Info.plist
 ```
 
+## Finder
+
+```
+defaults write com.apple.finder CreateDesktop 0
+```
+
 ## powermetrics
 
 ```
