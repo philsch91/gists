@@ -1,10 +1,31 @@
 # helm
 
+## create
+```
+helm create <chart-name>
+```
+
+## template
+```
+helm template <chart-name>
+```
+
+## package
+```
+helm package <chart-name>
+```
+
 ## repo
+
+### repo index
+```
+helm repo index <sub-folder-for-index-file/> --url <url-path-for-helm-chart-package>
+```
 
 ### repo add
 ```
 helm repo add <repo-name> <repo-url | https://charts.external-secrets.io>
+helm repo list
 ```
 
 ## pull
@@ -21,11 +42,24 @@ helm pull <chart-name> --repo <repo-url | https://charts.external-secrets.io> --
 
 ## install
 ```
-helm install <name> \
+helm install <chart-name> \
   <repo-name>/<chart-name> \
-  --namespace <namespace | name> \
+  --name=<application-name> \
+  -n <namespace-name> | --namespace <namespace-name> \
   --create-namespace \
   --set installCRDs=true
+```
+
+## upgrade
+```
+helm upgrade -i <chart-name> \
+  -f values.yaml \
+  --set clusterName=<cluster-name> \
+  --set ingress.enabled=true \
+  --create-namespace \
+  --timeout=10m \
+  --debug \
+  [--wait --dry-run=<server|client> | --atomic]
 ```
 
 ## list
