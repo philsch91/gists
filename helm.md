@@ -25,6 +25,7 @@ helm repo index <sub-folder-for-index-file/> --url <url-path-for-helm-chart-pack
 ### repo add
 ```
 helm repo add <repo-name> <repo-url | https://charts.external-secrets.io>
+helm repo update  // force refresh chart version
 helm repo list
 ```
 
