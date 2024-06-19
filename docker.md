@@ -1,29 +1,41 @@
 # Docker
 
-## Docker Login
+## Login
 ```
 docker login <docker-registry-uri> -u <user-name> -p <password> [--password-stdin]
 ```
 
-### Containers
+## Containers
 
+### run
 run new container image: `docker run -dt [--entrypoint new-entrypoint|/bin/bash] --name <container-name> [-e <env-var-name>=<env-var-value> ...] [-p 443:443] <image>:<tag>`\
 run container image interactively: `docker run [--rm] -it <image>:<tag> [<cmd>]`<br />
 
+### ps
 show all running and stopped containers: `docker ps -a`\
 stop all running containers: `docker stop (docker ps -aq)`\
+
+### rm
 remove container: `docker rm <container-id>`\
 remove all containers: `docker rm (docker ps -aq)`<br />
 
+### start
 start existing container: `docker start <container-name>`\
-start bash shell in running container: `docker exec -it <container-name> bash`\
+### exec
+execute bash shell in running container: `docker exec -it <container-name> bash`\
+### stop
 stop container: `docker stop <container-id>`\
 
-### Images
+### Image
 
 show all images: `docker image ls`\
 remove all images: `docker image rm (docker ps -q)`\
 remove image: `docker image rm <image-id>`<br />
+
+```
+docker image tag <repo>/<name>:<tag> <registry-host>:<port>/<repo>/<name>:<tag>
+docker image push <registry-host>:<port>/<repo>/<name>:<tag>
+```
 
 ### Skopeo
 ```
