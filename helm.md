@@ -48,16 +48,25 @@ helm install <chart-name> \
   --name=<application-name> \
   -n <namespace-name> | --namespace <namespace-name> \
   --create-namespace \
-  --set installCRDs=true
+  -f [<dir>/]values.yaml \
+  [--set clusterName=<cluster-name> \]
+  [--set ingress.enabled=true \]
+  [--set "ingress.hosts[0].host=<app.domain.tld>,ingress.hosts[0].paths[0].path=/" \]
+  [--set image.pullPolicy=Always \]
+  [--set installCRDs=true \]
+  --timeout=10m \
+  --debug \
+  [--wait --dry-run[=<server|client>] | --atomic]
 ```
 
 ## upgrade
 ```
 helm upgrade -i <chart-name> \
-  -f values.yaml \
-  --set clusterName=<cluster-name> \
-  --set ingress.enabled=true \
+  <repo-name>/<chart-name> \
   --create-namespace \
+  -f [<dir>/]values.yaml \
+  [--set ingress.enabled=true \]
+  [--set "ingress.hosts[0].host=<app.domain.tld>,ingress.hosts[0].paths[0].path=/" \]
   --timeout=10m \
   --debug \
   [--wait --dry-run=<server|client> | --atomic]
