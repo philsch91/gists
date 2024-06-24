@@ -41,6 +41,11 @@ helm pull <repo-name>/<chart-name> --version <version | 0.7.0> [--untar] [--unta
 helm pull <chart-name> --repo <repo-url | https://charts.external-secrets.io> --version <version | 0.9.11> [--untar] [--untardir . | ./<optional-subdir>]
 ```
 
+## dependency
+```
+helm dependency update
+```
+
 ## install
 ```
 helm install <chart-name> \
