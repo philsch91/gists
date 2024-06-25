@@ -48,8 +48,8 @@ helm dependency update
 
 ## install
 ```
-helm install <chart-name> \
-  <repo-name>/<chart-name> \
+helm install <release-name> \
+  <repo-name>/<chart-name> | . (=local chart with subchart dependencies) \
   --name=<application-name> \
   -n <namespace-name> | --namespace <namespace-name> \
   --create-namespace \
@@ -66,8 +66,9 @@ helm install <chart-name> \
 
 ## upgrade
 ```
-helm upgrade -i <chart-name> \
-  <repo-name>/<chart-name> \
+helm upgrade -i <release-name> \
+  <repo-name>/<chart-name> | . (=local chart with subchart dependencies) \
+  -n <namespace-name> | --namespace <namespace-name> \
   --create-namespace \
   -f [<dir>/]values.yaml \
   [--set ingress.enabled=true \]
