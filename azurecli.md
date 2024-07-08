@@ -22,13 +22,19 @@ az aks get-credentials --overwrite-existing --resource-group <rg-name> --name <a
 kubectl -n <namespace> get secret <secretname> -o json|jq '.data|map_values(@base64d)'
 ```
 
-## AD APP
+## acr
+```
+az acr show --name <name> [--query 'id']
+az role assignment list --role Owner --scope $(az acr show --name <name> --query 'id' | sed "s/\"//g")
+```
+
+## ad app
 ```
 az ad app show --id <guid>
 az ad app list --display-name <displayName>
 ```
 
-## AD SP
+## ad sp
 ```
 az ad sp show --id <guid>
 az ad sp list
