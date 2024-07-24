@@ -15,7 +15,9 @@ git config --global --add filter.lfs.process "git-lfs filter-process"
 git config --global --add filter.lfs.required true
 git config --global core.symlinks true
 
+git config --global pull.rebase true
 git config --global alias.allog "log --all --decorate --oneline --graph"
+git config --global alias.lga "log --all --decorate --pretty=oneline --graph"
 
 // Set core.autocrlf to false to not change the line endings at all
 git config --global core.autocrlf false
