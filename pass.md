@@ -5,9 +5,8 @@
 pass init -p org philipp@org.com
 pass init -p example philipp@example.at
 
-~$ pwd
-/home/user/.password-store
-mv -v .gpg-id org/.gpg-id.bkp
+pwd # /home/user/.password-store
+mv -v .gpg-id org/.gpg-id.bkp # backup
 mv -v suboe.org.com.gpg org/
 ```
 
@@ -30,8 +29,22 @@ pass insert example/entry1
 [Enter password for example/entry1:] <philipp@example.at:pa$$w0rd>
 ```
 
+## pass rm
+```
+pass rm example/entry1
+```
+
 ## pass show
 ```
 pass show org/suboe.org.com
 pass show example/entry1
+```
+
+## pass git
+```
+pass git <command>
+pass git status
+pass git log
+pass git remote -v
+pass git push
 ```
