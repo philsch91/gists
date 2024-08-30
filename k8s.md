@@ -166,7 +166,7 @@ kubectl -n <namespace> patch daemonset <ds-name> --type json -p='[{"op": "remove
 ## cp
 ```
 // copy from pod to local system
-kubectl -n <namespace> cp <pod-name>:/<container>/<path>/<file-name> ./<file-name>
+kubectl -n <namespace> cp <pod-name>:/<container>/<path>/<file-name> ./<file-name> --retries 999
 
 // copy from local system to container
 kubectl -n <namespace> cp /local/path/<file-name> <pod-name>:/<container>/<path> -c <container-name>
