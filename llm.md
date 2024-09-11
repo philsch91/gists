@@ -8,7 +8,12 @@
 4. `which llm`
 5. `gcc --version`
 6. Apple Silicon macOS: `CMAKE_ARGS="-DLLAMA_METAL=on" FORCE_CMAKE=1 llm install llama-cpp-python`<br />
-   WSL: `llm install llama-cpp-python`
+   Nvidia CUDA: `CMAKE_ARGS="-DLLAMA_CUBLAS=on" llm install llama-cpp-python`<br />
+   OpenBLAS: `CMAKE_ARGS="-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS" llm install llama-cpp-python`<br />
+   CLBLast: `CMAKE_ARGS="-DLLAMA_CLBLAST=on" llm install llama-cpp-python`<br />
+   AMD ROCm: `CMAKE_ARGS="-DLLAMA_HIPBLAS=on" llm install llama-cpp-python`<br />
+   no GPU acceleration: `llm install llama-cpp-python`<br />
+   pip (secondary option): `pip install llama-cpp-python`<br />
 7. `llm install llm-llama-cpp`
 
 ## models-dir
@@ -23,12 +28,12 @@
 
 ### download-model
 
-1. `llm llama-cpp download-model https://huggingface.co/LiteLLMs/Llama-3-8B-Web-GGUF/resolve/main/Q6_K/Q6_K-00001-of-00001.gguf --alias llama3-8b-web --alias llama38bw --alias l38bw`
+1. `llm llama-cpp download-model https://huggingface.co/LiteLLMs/Llama-3-8B-Web-GGUF/resolve/main/Q6_K/Q6_K-00001-of-00001.gguf --alias llama3-8b-web --alias llama38bw --alias l3-8b-w --alias l3-8-w`
 
 ### add-model
 
 1. `cp -rv /path/to/<model-file>.gguf "$(llm llama-cpp models-dir/)"`
-2. `llm llama-cpp add-model "$(llm llama-cpp models-dir/<model-file>.gguf)" --alias <alias1 (llama3-8b-web)> --alias <alias2 (llama3-8-w)> --alias <alias3 (l38w)>`
+2. `llm llama-cpp add-model "$(llm llama-cpp models-dir/<model-file>.gguf)" --alias <alias1 (llama-3-8b-web)> --alias <alias2 (llama-3-8-w)> --alias <alias3 (l-3-8-w)> --alias <alias4 (l38w)>`
 
 ## models
 
