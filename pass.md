@@ -48,3 +48,9 @@ pass git log
 pass git remote -v
 pass git push
 ```
+
+## pass restart
+```
+gpgconf --kill gpg-agent
+exec bash/zsh
+```
