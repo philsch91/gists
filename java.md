@@ -41,6 +41,13 @@ java -XX:+PrintFlagsFinal -version | grep -i HeapSize
 java -XX:+PrintFlagsFinal -version | grep -i 'MaxHeapSize\|MaxRAMPercentage\|InitialHeapSize\|InitialRAMPercentage'
 ```
 
+### HotSpot JVM Logging
+
+#### Enable HotSpot JVM Logging
+```
+-Xlog -XX:LogFile=<path> -Xlog:gc:file=/var/log/gc.log
+```
+
 ### Garbage Collection Settings
 
 #### Explicity enable G1GC and disable Mark Sweep Compact
@@ -67,21 +74,48 @@ SerialGC is automatically set in a container that can use <= 1 core
 -XX:NewRatio=4 -XX:SurvivorRatio=4
 ```
 
-### Debug Memory
+### Debugging
+
+#### Debug Memory
 
 ```
--XX: NativeMemoryTracking
+-XX:NativeMemoryTracking
 ```
 
-### Debug javax.net
+#### Debug javax.net
 ```
 -Djavax.net.debug=all
 -Djavax.net.debug=ssl:session
 ```
 
-### Debugging
+#### Java Debug Wire Protocol (JDWP)
 
-`-Xdebug -agentlib:jdwp=transport=dt_socket,address=8300,server=y,suspend=n`
+```
+>= Java 9
+java -agentlib:jdwp=transport=<dt_socket|dt_shmem(Windows)>,suspend=n,server=y,address=<127.0.0.1|0.0.0.0|*>:8000
+
+>= Java 5
+java -agentlib:jdwp=transport=dt_socket,suspend=n,server=y,address=8000 <ClassName>
+
+<= Java 5
+-Xdebug -agentlib:jdwp=transport=dt_socket,suspend=n,server=y,address=8000
+
+// Debugger
+jdb -attach|listen|run 127.0.0.1:8000
+// set breakpoints
+jdb > stop in ClassName.<init>
+jdb > stop in ClassName.main(java.lang.String[])
+jdb > stop at ClassName:9(=line-number)
+// evaluate variables
+jdb > eval ClassName.staticClassFieldName
+jdb > eval instanceName.instanceFieldName
+jdb > eval print localVariableName
+jdb > print new ClassName(10(=value)).instanceFieldName
+// delete breakpoint
+jdb > clear ClassName:9(=line-number)
+// list existing set breakpoints
+jdb > clear
+```
 
 ### cgroup Memory Settings
 
@@ -124,7 +158,7 @@ java ${JAVA_OPTS} -jar app.jar
 ### Java Management Extensions (JMX)
 
 ```
-java -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.port=4447 -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.rmi.port=4447 [-XX:+DisableAttachMechanism] [-Dcom.sun.management.jmxremote.local.only=true] -jar app.jar
+java -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.port=4447 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.rmi.port=4447 [-XX:+DisableAttachMechanism] [-Dcom.sun.management.jmxremote.local.only=true] -jar app.jar
 ```
 
 ## jcmd
