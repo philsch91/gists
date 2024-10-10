@@ -1,5 +1,14 @@
 # pass
 
+## gpg
+```
+gpg --generate-key
+gpg --list-keys
+gpg --export -a philipp@example.at [<id>] >/tmp/public.key
+gpg --import /tmp/public.key # prints key name
+gpg --edit-key <key-name>
+```
+
 ## pass init
 ```
 pass init -p org philipp@org.com
@@ -8,6 +17,8 @@ pass init -p example philipp@example.at
 pwd # /home/user/.password-store
 mv -v .gpg-id org/.gpg-id.bkp # backup
 mv -v suboe.org.com.gpg org/
+
+pass init -p org $(cat org/.gpg-id) # re-encrypt
 ```
 
 ## pass generate and edit
