@@ -23,7 +23,7 @@ pass init -p org $(cat org/.gpg-id) # re-encrypt
 
 ## pass generate and edit
 ```
-pass generate example/entry1
+pass generate example/entry1 [n(password-length)]
 pass edit example/entry1
 
 ~$ ls -lah .password-store/example/
@@ -38,17 +38,30 @@ drwx------ 5 user user 4.0K May 16 17:13 ..
 ```
 pass insert example/entry1
 [Enter password for example/entry1:] <philipp@example.at:pa$$w0rd>
+pass insert -m|--multiline example/multiline-entry
+<password>
+URL: https://subdomain.tld.com/
+Username: xyz
+Secret Question 1: What is your name?
 ```
 
-## pass rm
+## pass
 ```
-pass rm example/entry1
+pwd # ~/.password-store
+pass # prints hierarchical view of password store
+pass org/suboe.org.com/entry1 # retrieve password
+pass -c|--clip org/suboe.org.com/entry1 # retrieve password via Xorg xclip or wl-clipboard
 ```
 
 ## pass show
 ```
 pass show org/suboe.org.com
 pass show example/entry1
+```
+
+## pass rm
+```
+pass rm example/entry1
 ```
 
 ## pass git
