@@ -25,6 +25,7 @@ locals {
 ## Usage
 ```
 terraform init
+terraform fmt [-check] [-recursive] resource.tf
 terraform plan [-destroy] [-var-file="testing.tfvars(.json)"] [-var 'name=value'] [-var 'listname=["a", "b", "c"]'] [-out terraform.tfplan]
 terraform apply [-destroy] [-var-file="testing.tfvars(.json)"] [terraform.tfplan]
 ```
