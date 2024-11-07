@@ -1,12 +1,23 @@
 # Visual Studio Code
 
 ```
-code --list-extensions --show-versions
+export NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
+code --list-extensions --show-versions --ignore-certificate-errors
+```
+
+## Extensions
+```
+F1 > <extension-name> : <command>
+F1 > Extensions: Install VSIX...
+F1 > Network Proxy Test: Test Connection
+F1 > Network Proxy Test: Show OS Certificates
 ```
 
 ## User Settings
 
-`/c/Users/<username>/AppData/Roaming/Code/User/settings.json`
+- Windows: `/c/Users/<username>/AppData/Roaming/Code/User/settings.json`<br />
+- Linux: `$HOME/.config/Code/User/settings.json`<br />
+- macOS: `$HOME/Library/Application Support/Code/User/settings.json`<br />
 
 ## Workspace Settings
 
