@@ -5,7 +5,13 @@ WSL Kernel Installation Dir: `C:\Windows\System32\lxss\tools`<br />
 WSL Distribution Default Installation Dir: `%USERPROFILE%\AppData\Local\Packages\<PackageName>`<br />
 
 ## WSL in Registry
-- `HKCU:\Software\Microsoft\Windows\CurrentVersion\Lxss`
+- `HKCU\Software\Microsoft\Windows\CurrentVersion\Lxss`
+- `HKCU\Software\Microsoft\Windows\CurrentVersion\Lxss\DefaultDistribution`
+- `HKCU\Software\Microsoft\Windows\CurrentVersion\Lxss\DefaultVersion`
+- `HKCU\Software\Microsoft\Windows\CurrentVersion\Lxss\{DistributionId}`
+- `HKCU\Software\Microsoft\Windows\CurrentVersion\Lxss\{DistributionId}\DistributionName`
+- `HKCU\Software\Microsoft\Windows\CurrentVersion\Lxss\{DistributionId}\BasePath`
+- `HKCU\Software\Microsoft\Windows\CurrentVersion\Lxss\{DistributionId}\DefaultUid`
 
 ## wsl
 ```
@@ -24,6 +30,7 @@ wsl --import <distribution-name> <install-location (.\newdir\<distro-name>)> <fi
 wsl --terminate <distribution-name>
 wsl --shutdown
 wsl hostname -I
+<distribution-name> config --default-user <username> (id -u <username>)
 ```
 
 ## apt
