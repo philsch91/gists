@@ -119,3 +119,14 @@ ldapsearch -x -H ldaps://<ldap-host>:636 -D "CN=TU001,OU=Service_Accounts,OU=Acc
 ```
 getent hosts <hostname>
 ```
+
+## update-ca-certificates
+```
+# /usr/share/ca-certificates/
+cp -v root_ca.crt /usr/share/ca-certificates/<sub-dir>/
+sudo bash -c "if ! grep <sub-dir>/root_ca.crt /etc/ca-certificates.conf; then echo \"<sub-dir>/root_ca.crt\" >>/etc/ca-certificates.conf; fi;"
+# /usr/local/share/ca-certificates/
+cp -v root_ca.crt /usr/local/share/ca-certificates/
+sudo update-ca-certificates # updates certificates in /etc/ssl/certs/ca-certificates.crt
+openssl s_client -connect foo.whatever.com:443 -CApath /etc/ssl/certs
+```
