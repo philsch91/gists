@@ -27,6 +27,7 @@ wsl --set-default <distribution-name>
 wsl --manage <distro-name> --move <new-location>
 wsl --export <distribution-name> <file-name (.\dir\<distro-name>.tar)> [--vhd]
 wsl --import <distribution-name> <install-location (.\newdir\<distro-name>)> <file-name (.\dir\<distro-name>.tar)> [--vhd] [--version <1|2>]
+wsl -d <distribution-name> -u <username|root>
 wsl --terminate <distribution-name>
 wsl --shutdown
 wsl hostname -I
