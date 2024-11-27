@@ -80,12 +80,16 @@ kubectl debug -it <pod-name> --image=busybox:1.28 --target=<container-name-to-de
 // The `--share-processes` flag allows the containers in this Pod to see processes from the other containers in the Pod.
 kubectl debug -it <pod-name-to-copy> --image=ubuntu --share-processes --copy-to=<pod-name>-debug
 
-// create a copy of a pod and container while changing the command
-kubectl debug -it <pod-name-to-copy> --copy-to=<pod-name>-debug --container=<container-name-to-copy> -- sh
-
 // create a copy of a pod while changing the container images
 // The value `*=ubuntu` for the `--set-image` flag changes all container images
 kubectl debug <pod-name-to-copy> --copy-to=<pod-name>-debug --set-image=*=ubuntu
+
+// create a copy of a pod and container while changing the command
+kubectl debug -it <pod-name-to-copy> --copy-to=<pod-name>-debug --container=<container-name-to-copy> -- sh
+kubectl annotate --overwrite pod <pod-name>-debug livenessprobe=disabled
+
+// create a copy of pod with changed probes avoiding restarts
+kubectl get pod/<pod-name>-debug -o json | kubectl patch --type=json -f - -p='[{"op": "replace", "path": "/spec/containers/0/livenessProbe", "value": {"exec":{"command":["/bin/sh", "-c", "cat /opt/toolchain-base/bin/liveness_probe.sh"]}}}, {"op": "replace", "path": "/spec/containers/0/readinessProbe", "value": {"exec":{"command":["/bin/sh", "-c", "cat /opt/toolchain-base/bin/readiness_probe.sh"]}}}, {"op": "replace", "path": "/metadata/name", value: "<pod-name>-debug-2"}]' --dry-run=client -o yaml | kubectl apply -f -
 ```
 
 ### debug container
@@ -149,6 +153,12 @@ kubectl -n kubernetes-dashboard patch deployment/kubernetes-dashboard --type=jso
 
 // patch op add (replace) namespace=kubernetes-dashboard, auto-generate-certificates, authentication-mode=basic, token-ttl=0, enable-skip-login and enable-insecure-login for kubernetes-dashboard
 kubectl -n kubernetes-dashboard patch deployment/kubernetes-dashboard --type='json' -p='[{"op":"add","path":"/spec/template/spec/containers/0/args","value":["--namespace=kubernetes-dashboard","--auto-generate-certificates","--authentication-mode=basic","--token-ttl=0","--enable-skip-login","--enable-insecure-login"]}]'
+
+// patch op replace pod probe
+k patch pod/<pod-name> --type=json --patch='[{"op": "replace", "path": "/spec/containers/0/livenessProbe", "value": {"exec":{"command":["/bin/sh", "-c", "cat /opt/toolchain-base/bin/liveness_probe.sh"]}}}]'
+
+// patch merge pod probe
+k patch pod/<pod-name> --type=merge -p='{"spec": {"containers": [{"name": "container-name", "livenessProbe": {"httpGet": {"path": "/healthz", "port": 8080}, "initialDelaySeconds": 10, "periodSeconds": 5}}]}}'
 
 // patch op add service account to cluster role binding
 kubectl -n kubernetes-dashboard patch clusterrolebinding/basic-user --type='json' -p='[{"op":"add","path":"/subjects/-","value":{"kind":"ServiceAccount","name":"kubernetes-dashboard","namespace":"kubernetes-dashboard"}}]'
@@ -221,3 +231,9 @@ mv kubelogin kubectl-oidc_login
 // Windows
 setx /M path "%path%;C:\path\to\kubectl-oidc_login.exe"
 ```
+
+## K8s notes
+
+I think you mean my attempt to explain that Karpenter primarily provisiones the cluster nodes based on the sum of the resource requests for existing and new workloads. The cluster cannot scale out for already running workloads and without new resource requests.<br />
+
+One exception to that is that if a container allocates more resources and especially more memory than available on the node and if the pod is evicted, the pod is recreated by the controlling resource such as a deployment to meet the requirements of a replicaset, the cluster is potentially scaled out, and the replacing pod is scheduled on a new node, which is usually avoided or is actually unintentional and undesirable.
