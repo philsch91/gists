@@ -127,5 +127,6 @@ openssl pkcs12 -in <certificate.pfx> -info -nodes
 
 // show remote SSL certificate
 ```
+openssl s_client -connect hostname.domain.com:636 -showcerts -CApath /etc/ssl/certs/
 echo | openssl s_client -showcerts -servername <hostname> -connect <hostname>:443 2>/dev/null | openssl x509 -inform pem -noout -text
 ```
