@@ -121,6 +121,15 @@ ldapsearch -x -H ldaps://<ldap-host>:636 -D "CN=TU001,OU=Service_Accounts,OU=Acc
 getent hosts <hostname>
 ```
 
+## apt
+```
+apt list --upgradable
+apt-get -s|--simulate upgrade
+apt-get -u -V upgrade
+apt -qq|--quiet --installed list <package-name(*)>
+apt-get install <package-name>
+```
+
 ## update-ca-certificates
 ```
 # /usr/share/ca-certificates/
