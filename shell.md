@@ -1,23 +1,39 @@
-# Bash
+# Shell
 
-Documentation, Notes and Snippets for Bash
+Documentation, Notes and Snippets for Shell
 
 ## functions
 ```
 # option 1
-function set_default_gitconfig() {
-  arg1=$1
-  arg2=$2
-
-  return
-}
-# option 2
 set_default_gitconfig() {
   arg1=$1
-  arg2=$2
+  local arg2=$2
 
   return
 }
+
+# option 2
+function set_default_gitconfig() {
+  arg1=$1
+  local arg2=$2
+
+  return
+}
+```
+
+### declare (bash)
+
+```
+declare -r (=read-only) -x (=export) <variable-name>=<value> # declare read-only exported variable
+sudo gdb -ex 'call unbind_variable("<variable-name>")' --pid=$$ --batch # unset read-only variable
+```
+
+### typeset (zsh)
+
+```
+typeset -r (=read-only) -x (=export) <variable-name>=<value> # set read-only exported variable
+typeset +r <variable-name> # set read-only variable as read-write
+unset <variable-name>
 ```
 
 ### test
