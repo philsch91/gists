@@ -124,10 +124,11 @@ getent hosts <hostname>
 ## apt
 ```
 apt list --upgradable
-apt-get -s|--simulate upgrade
-apt-get -u -V upgrade
-apt -qq|--quiet --installed list <package-name(*)>
-apt-get install <package-name>
+apt-get [-s|--simulate] upgrade
+apt-get [-u|--show-upgraded] [-V|--verbose-versions] [[--assume-no]] upgrade # show upgraded version summary
+apt [-qq|--quiet] --installed list <package-name(*)>
+apt-get update # to fix 404 for install
+apt-get [-f|--fix-broken] [-m|--fix-missing] [[--no-cache]] install <package-name>
 ```
 
 ## update-ca-certificates
