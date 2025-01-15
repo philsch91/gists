@@ -111,6 +111,7 @@ grep -rnwl '/path/to/directory' -e 'searchstring'
 grep --include=\*.{c,h} -rnwl '/path/to/directory' -e 'searchstring'
 grep --exclude=\*.o -rnwl '/path/to/directory' -e 'searchstring'
 grep -ri -n|l [--include="*.txt *.php *.sh"] <search-string> .
+<command> | grep -e 'term1' -e 'term2\|term3' [-A 10] [-B 10] # term1 or term2 or term3
 ```
 
 ### find
