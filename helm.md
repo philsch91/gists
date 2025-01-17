@@ -10,9 +10,14 @@ helm version
 helm create <chart-name>
 ```
 
+## lint
+```
+helm lint
+```
+
 ## template
 ```
-helm template <chart-name>
+helm template <release-name> <repo-name>/<chart-name> | . --debug
 ```
 
 ## package

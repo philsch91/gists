@@ -22,6 +22,11 @@ kubectl config [--kubeconfig=config-demo] view --minify
 kubectl cluster-info
 ```
 
+## api-resources
+```
+kubectl api-resources | grep -i <resource-name>
+```
+
 ## get
 
 ```
