@@ -17,6 +17,8 @@ git config --global core.symlinks true
 git config --global core.editor "vim"
 
 git config --global pull.rebase true
+
+git config --global alias.go 'log --all --decorate --oneline --graph'
 git config --global alias.allog "log --all --decorate --oneline --graph"
 git config --global alias.lag "log --all --decorate --pretty=oneline --graph"
 

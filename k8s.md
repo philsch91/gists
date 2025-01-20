@@ -53,10 +53,43 @@ kubectl get pod/<pod-name>
 kubectl get pod/<pod-name> -o jsonpath='{.spec.containers[*].name}'
 ```
 
+### get configmap
+```
+kubectl get configmap
+kubectl get configmap/<configmap-name> [-o yaml]
+```
+
+### get secret
+```
+kubectl -n <namespace-name> get secret/<secret-name> -o json | jq -r '.data.password | @base64d'
+```
+
 ## describe
 ```
-// check for overcommitted resource limits (undercommitted nodes)
+// check for overcommitted resource limits (underprovisioned nodes)
 kubectl describe node/<node-name>
+```
+
+## run
+```
+kubectl run <pod-name> '--image=registry.domain.tld/<image-repository>/<image-name>:<image-tag>' '--overrides={"spec": {"imagePullSecrets": [{"name": "<image-pull-secret-name>"}]}}' [-it -- <command> <arg1> ... <argn>]
+
+kubectl run <pod-name> '--image=registry.domain.tld/<image-repository>/<image-name>:<image-tag>' '--overrides=
+{
+  "spec": {
+    "containers": [
+      {
+        "name": "<container-name>",
+        "image": "registry.domain.tld/<image-repository>/<image-name>:<image-tag>"
+      }
+    ],
+    "imagePullSecrets": [
+      {
+        "name": "<image-pull-secret-name>"
+      }
+    ]
+  }
+}' -it -- /bin/bash -il
 ```
 
 ## exec
@@ -122,16 +155,7 @@ kubectl -n <namespace> rollout status daemonset/<daemonset-name>
 kubectl scale --replicas=<count> deployment|rs|rc|statefulset/<name>
 ```
 
-## configmap
-```
-kubectl get configmap
-kubectl get configmap/<configmap-name> [-o yaml]
-```
 
-## secret
-```
-kubectl -n <namespace-name> get secret/<secret-name> -o json | jq -r '.data.password | @base64d'
-```
 
 ## create
 ```
@@ -237,8 +261,73 @@ mv kubelogin kubectl-oidc_login
 setx /M path "%path%;C:\path\to\kubectl-oidc_login.exe"
 ```
 
-## K8s notes
+## Notes
+
+### Autoscaling
 
 I think you mean my attempt to explain that Karpenter primarily provisiones the cluster nodes based on the sum of the resource requests for existing and new workloads. The cluster cannot scale out for already running workloads and without new resource requests.<br />
 
 One exception to that is that if a container allocates more resources and especially more memory than available on the node and if the pod is evicted, the pod is recreated by the controlling resource such as a deployment to meet the requirements of a replicaset, the cluster is potentially scaled out, and the replacing pod is scheduled on a new node, which is usually avoided or is actually unintentional and undesirable.
+
+### Sidecar containers
+
+- SidecarContainers feature >= v1.29<br />
+sidecar-container = init-container + (container-level) `restartPolicy: Always`
+
+### Pod QoS classes
+
+1. Guaranteed
+1. Burstable
+1. BestEffort
+
+```
+k get pod/<pod-name> -o=jsonpath='{.status.qosClass}'
+```
+
+For a Pod to be given a QoS class of `Guaranteed`:
+- Every Container in the Pod must have a memory limit and a memory request.
+- For every Container in the Pod, the memory limit must equal the memory request.
+- Every Container in the Pod must have a CPU limit and a CPU request.
+- For every Container in the Pod, the CPU limit must equal the CPU request.
+
+## Karpenter
+
+### NodePool
+
+It is recommended to create NodePools that are mutually exclusive. So no `Pod` should match multiple NodePools. If multiple NodePools are matched, Karpenter will use the `NodePool` with the highest weight.
+
+### Disruption
+
+You can block Karpenter from voluntarily choosing to disrupt certain pods by setting the `karpenter.sh/do-not-disrupt: "true"` annotation on the pod. This is useful for pods that you want to run from start to finish without disruption. By opting pods out of this disruption, you are telling Karpenter that it should not voluntarily remove a node containing this pod.
+
+#### Deployment
+```
+apiVersion: apps/v1
+kind: Deployment
+spec:
+  template:
+    metadata:
+      annotations:
+        karpenter.sh/do-not-disrupt: "true"
+```
+
+#### Node
+```
+apiVersion: v1
+kind: Node
+metadata:
+  annotations:
+    karpenter.sh/do-not-disrupt: "true"
+```
+
+#### NodePool
+```
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: default
+spec:
+  disruption:
+    budgets:
+      - nodes: "0"
+```
