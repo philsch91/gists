@@ -48,3 +48,15 @@ which wsl
 free # shows buff/cache section
 echo 3 | sudo tee /proc/sys/vm/drop_caches
 ```
+
+## Notes
+
+If all interfaces are down according to `ifconfig -a` or `ip link`, uncompress recursively all files and folders in `%TEMP%`.
+
+1. Terminate all WSL instances via `wsl --terminate <distro-name>` or shut down WSL via `wsl --shutdown`
+2. Start `cmd.exe`
+3. `cd %TEMP%` where %TEMP% = C:\Users\<username>\AppData\Local\Temp>
+4. `compact /U /S [/I]`
+
+Disable automatic NTFS compression
+1. `fsutil behavior set disablecompression 1`
