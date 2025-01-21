@@ -60,3 +60,8 @@ If all interfaces are down according to `ifconfig -a` or `ip link`, uncompress r
 
 Disable automatic NTFS compression
 1. `fsutil behavior set disablecompression 1`
+
+If there are problems with Docker on Windows.
+
+1. Restart `Docker Desktop Service (com.docker.service)` at `C:\Program Files\Docker\Docker\com.docker.service` registered via `services.msc` and returned by `Get-Service -Name "Docker Desktop Service"`
+2. Restart `C:\Program Files\Docker\Docker\Docker Desktop.exe` registered for Autostart via `msconfig`
