@@ -157,6 +157,11 @@ git merge -Xtheirs feature # ours (current): master, theirs: feature
 
 ## rebase
 ```
+# rebase local branch interactively
+git rebase -i HEAD~3
+# undo interactive rebase of local branch
+git reset --soft <remote>/<remote-branch-name>
+
 # rebase commits in (from) `release` on (to) `master`
 # assuming `release` is our current branch (git branch)
 
