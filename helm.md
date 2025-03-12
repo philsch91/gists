@@ -133,3 +133,8 @@ helm list -aq
 ```
 helm uninstall <name> -n <namespace> # formerly helm delete <name>
 ```
+
+## rollback
+```
+helm [-n <namespace>] rollback <release> <revision>
+```
