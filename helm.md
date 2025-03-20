@@ -17,7 +17,7 @@ helm lint
 
 ## template
 ```
-helm template <release-name> <repo-name>/<chart-name> | . --debug
+helm template [<release-name>] [<repo-name>/][<chart-name>] | [<chart-name>] .  [-f values.yaml -f values2.yaml] --debug
 ```
 
 ## package
