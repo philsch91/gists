@@ -128,6 +128,13 @@ helm list -a
 helm list -aq
 ```
 
+## get
+
+```
+helm [-n <namespace>] get all <release-name>
+helm [-n <namespace>] get manifest <release-name>
+```
+
 ## uninstall
 
 ```
