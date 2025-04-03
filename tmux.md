@@ -14,6 +14,12 @@ tmux kill-session -t <session-name> # kill named session
 #
 tmux -V # print version info
 tmux -f /dev/null list-keys # list (default) keybindings ignoring ~/.tmux-conf
+# create ~/.tmux.conf with default settings
+tmux show -g | cat > ~/.tmux.conf
+# reload ~/.tmux.conf
+tmux source-file ~/.tmux.conf
+# stop all sessions
+tmux kill-server
 ```
 
 ## tmux key bindings
@@ -50,6 +56,8 @@ Ctrl+b [ # enter scroll/copy mode
 Ctrl+b [ + Ctrl+Space to start selecting text and move cursor to end
 Ctrl+b [ + Ctrl+Space + Alt+W to copy selected text
 Ctrl+b Q # leave scroll mode
+# config
+Ctrl+b :source-file ~/.tmux.conf # reload ~/.tmux.conf
 ```
 
 ## tmux files
@@ -63,7 +71,8 @@ Ctrl+b Q # leave scroll mode
 set -g history-limit 50000
 set -g status-interval 1
 set -g status-left '#H#[default]'
-set -g status-right '#(cut -d ” ” -f 1-4 /proc/loadavg)#[default] #%Y-%m-%d %H:%M:%S#[default]'
+set -g status-right '#(cut -d " " -f 1-3 /proc/loadavg)#[default] #%Y-%m-%d %H:%M:%S '
+set -ag status-right '#(uptime | cut -d " " -f 4-5 | cut -d "," -f 1)'
 setw -g monitor-activity on
 set -g visual-activity on
 set -g escape-time 1
@@ -77,6 +86,7 @@ unbind -a -T copy-mode-vi
 #
 set(-option) -g <key-table-name> <keys>
 set -g prefix M-w # set Alt/Option+w instead of Ctrl+b
+set -g prefix C-a # set prefix to Ctrl+a instead of Ctrl+b
 set -g mode-keys vi # use copy-mode-vi
 #
 bind(-key) [-T <key-table-name>] <keys> <command>
