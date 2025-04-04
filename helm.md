@@ -145,3 +145,18 @@ helm uninstall <name> -n <namespace> # formerly helm delete <name>
 ```
 helm [-n <namespace>] rollback <release> <revision>
 ```
+
+## if
+```
+{{/*
+Helm uses the Go template language, and each condition within an if statement is evaluated independently, which means that the second condition will be evaluated regardless of the first.
+In Helm, when using conditions in templates, even if the first condition is false, the second condition is still parsed and evaluated.
+*/}}
+{{- if and .Values.auth.proxy .Values.auth.proxy.url }}{{/* not working */}}
+{{- if and .Values.auth.proxy (default false .Values.auth.proxy.url) }}{{/* not working */}}
+{{- if (.Values.auth.proxy).url }}{{/* working */}}
+"proxy-url": "{{ .Values.auth.proxy.url }}",
+{{- else if and (.Values.auth.proxy).enabled (.Values.general.proxy).proxyURL (.Values.general.proxy).proxyPort }}
+"proxy-url": "http://{{ .Values.general.proxy.proxyURL }}:{{ .Values.general.proxy.proxyPort }}",
+{{- end }}
+```
