@@ -1,5 +1,18 @@
 # macOS
 
+## nvram
+
+```
+# To prevent startup when opening the lid or connecting to power
+sudo nvram BootPreference=%00
+# To prevent startup only when opening the lid
+sudo nvram BootPreference=%01
+# To prevent startup only when connecting to power
+sudo nvram BootPreference=%02
+# Reenable automatic startup when opening the lid or connecting to power
+sudo nvram -d BootPreference
+```
+
 ## BSD Programs and Commands
 
 Get file encoding
