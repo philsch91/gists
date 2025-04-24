@@ -23,11 +23,39 @@ F1 > Network Proxy Test: Show OS Certificates
 
 `<dir>/.vscode/settings.json`
 
+## VS Code Settings
+
+```
+{
+    "files.eol": "\n",
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": false,
+    "editor.tabSize": 4,
+    "editor.indentSize": 4,
+    "editor.indentSize.alt": "tabSize",
+    "editor.suggestSelection": "first",
+    "editor.renderControlCharacters": false,
+    "editor.selectionHighlight": false,
+    "editor.occurrencesHighlight": "off",
+    "editor.occurrencesHighlight.alt": "singleFile|multiFile",
+    "workbench.colorTheme": "Flatland Monokai"
+}
+```
+
 ## vscode-java
 
 ```
 {
-    "java.autobuild.enabled": false
+    "java.jdt.ls.vmargs": "",
+    "java.autobuild.enabled": false,
+    "java.semanticHighlighting.enabled": true,
+    "java.configuration.checkProjectSettingsExclusions": false
 }
 ```
 
