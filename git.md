@@ -15,6 +15,7 @@ git config --global --add filter.lfs.process "git-lfs filter-process"
 git config --global --add filter.lfs.required true
 git config --global core.symlinks true
 git config --global core.editor "vim"
+git config --global core.excludesfile ~/.gitignore
 
 git config --global pull.rebase true
 
