@@ -61,6 +61,7 @@ kubectl get configmap/<configmap-name> [-o yaml]
 
 ### get secret
 ```
+kubectl -n <namespace-name> get secret/<secret-name> -o jsonpath="{.data['tls\.key']}" | base64 -d | less
 kubectl -n <namespace-name> get secret/<secret-name> -o json | jq -r '.data.password | @base64d'
 ```
 
