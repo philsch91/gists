@@ -65,6 +65,11 @@ kubectl -n <namespace-name> get secret/<secret-name> -o jsonpath="{.data['tls\.k
 kubectl -n <namespace-name> get secret/<secret-name> -o json | jq -r '.data.password | @base64d'
 ```
 
+### get events
+```
+kubectl get events [-n <namespace>|-A] [--sort-by='.lastTimestamp'|--watch] | less # --sort-by will be ignored if --watch is passed
+```
+
 ## describe
 ```
 // check for overcommitted resource limits (underprovisioned nodes)
@@ -155,8 +160,6 @@ kubectl -n <namespace> rollout status daemonset/<daemonset-name>
 ```
 kubectl scale --replicas=<count> deployment|rs|rc|statefulset/<name>
 ```
-
-
 
 ## create
 ```
