@@ -27,6 +27,39 @@ unset AWS_SESSION_TOKEN
 aws ec2 describe-nat-gateways --output json | jq -r '.NatGateways[].NatGatewayAddresses[].PrivateIp'
 ```
 
+### VPC endpoint (VPCE) creation
+```
+# 1. get (private internal EKS worker) subnets
+# 2. search dedicated security groups
+aws ec2 describe-security-groups
+# 3. create security group named with service or subnet tags
+# sg_in-tcp-443_abs-intake-b
+aws ec2 create-security-group
+# 4. create security group rules for subnets
+# named with common subnet name, like sgr_in-tcp-443_subnet_private-internal_86
+# 5. add security group rules to security group
+aws ec2 authorize-security-group-ingress
+# 6. search shared vpc endpoint
+aws ec2 describe-vpc-endpoints
+# 7. create vpc endpoint for subnets and security groups
+aws ec2 create-vpc-endpoint
+
+## Security Group
+aws ec2 describe-security-groups --filters '[{"Name": "group-name", "Values": ["<sg-name-1>","<sg-name-2>"]}, {"Name": "vpc-id", "Values": ["<vpc-id-1>","<vpc-id-2>"]}, {"Name": "ip-permission.cidr", "Values": ["<subnet-cidr>"]}]' --region <region-code>
+
+### returns GroupId for security group ID
+aws ec2 create-security-group --group-name sg-<id> --description 'Inbound TCP 443' --vpc-id vpc-<id> --tag-specifications '[{"ResourceType": "security-group", "Tags": [{"Key": "Name", "Value": "sg-<id>"},{"Key": "Owner", "Value": "<owner>"}]}]' --region <region-code> --dry-run
+
+### pass GroupId for security group ID via --group-id
+aws ec2 authorize-security-group-ingress --group-id sg-<id> [--group-name <group-id>] --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 443, "ToPort": 443, "IpRanges": [{"CidrIp": "192.168.1.0/24"},{"CidrIp": "192.168.2.0/24"}], "UserIdGroupPairs": [{"GroupId": "sg-<id>"}]}]' --region <region-code> --dry-run
+
+## VPCE
+aws ec2 describe-vpc-endpoints --filters '[{"Name": "group-name", "Values": ["<sg-name-1>","<sg-name-2>"]}, {"Name": "vpc-id", "Values": ["<vpc-id-1>","<vpc-id-2>"]}, {"Name": "ip-permission.cidr", "Values": ["<subnet-cidr>"]}, {"Name": "ip-permission.from-port", "Values": ["443"]}]' --region <region-code>
+
+### pass GroupId for security group ID via --security-group-ids
+aws ec2 create-vpc-endpoint --vpc-id vpc-<id> --service-name com.amazonaws.<region-code>.secretsmanager --vpc-endpoint-type Interface --subnet-ids subnet-1 subnet-2 subnet-3 --security-group-ids sg-1 sg-2 sg-3 --tag-specifications '[{"ResourceType": "vpc-endpoint", "Tags": [{"Key": "Name", "Value": "vpce_ecr_dkr"},{"Key": "Owner", "Value": "<owner>"}]}]' --region <region-code> --dry-run
+```
+
 ## EKS
 ```
 aws eks describe-cluster --name <cluster-name> | jq -r '.cluster.resourcesVpcConfig.publicAccessCidrs'
