@@ -4,7 +4,8 @@ Documentation, Notes and Snippets for Git
 
 ## config
 ```
-git config --global --list
+git config --global -l|--list
+git config -l --show-origin
 git config --global --add user.name $user
 git config --global --add user.email $email
 git config --global --add credential.helper "store --file $HOME/.git-credentials"
@@ -14,6 +15,7 @@ git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"
 git config --global --add filter.lfs.process "git-lfs filter-process"
 git config --global --add filter.lfs.required true
 git config --global core.symlinks true
+git config --global core.filemode false
 git config --global core.editor "vim"
 git config --global core.excludesfile ~/.gitignore
 
