@@ -4,6 +4,7 @@
 ```
 # manage zellij sessions
 zellij ls|list-sessions
+zellij attach <session-name>
 zellij --debug attach --create foo
 #
 zellij --version
