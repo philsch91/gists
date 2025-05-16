@@ -99,3 +99,11 @@ upload: test.txt to s3://bucket-name/test.txt
 # read/get (copy)
 aws s3 cp <S3-URL> - | less
 ```
+
+## SSM
+```
+### returns Name for parameter
+aws ssm describe-parameters --parameter-filters "Key=Name,Option=Contains,Values=<name>"
+aws ssm describe-parameters --parameter-filters "Key=Name,Option=Contains,Values=s3-state-bucket"
+aws ssm get-parameter --name <name> --with-decryption --query Parameter.Value
+```
