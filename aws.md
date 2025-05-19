@@ -13,7 +13,7 @@ export AWS_ACCESS_KEY_ID=abcd
 export AWS_SECRET_ACCESS_KEY=abcd
 export AWS_SESSION_TOKEN=abcd
 
-aws sts get-caller-identity
+aws sts get-caller-identity [--debug]
 
 unset AWS_ACCESS_KEY_ID
 unset AWS_SECRET_ACCESS_KEY
