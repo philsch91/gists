@@ -17,7 +17,7 @@ helm lint
 
 ## template
 ```
-helm template [<release-name>] [<repo-name>/][<chart-name>] | [<chart-name>] .  [-f values.yaml -f values2.yaml] --debug
+helm template <release-name> [[<repo-name>/]<chart-name> | .] [-f values.yaml -f values2.yaml] -n <namespace> --debug
 ```
 
 ## package
@@ -91,10 +91,9 @@ helm dependency update
 
 ## install
 ```
-helm install <release-name> \
-  <repo-name>/<chart-name> | . (=local chart with subchart dependencies) \
+helm install <release-name> [<repo-name>/]<chart-name> | . (=local chart with subchart dependencies) \
   --name=<application-name> \
-  -n <namespace-name> | --namespace <namespace-name> \
+  -n <namespace> | --namespace <namespace> \
   --create-namespace \
   -f [<dir>/]values.yaml \
   [--set clusterName=<cluster-name> \]
@@ -109,9 +108,8 @@ helm install <release-name> \
 
 ## upgrade
 ```
-helm upgrade -i <release-name> \
-  <repo-name>/<chart-name> | . (=local chart with subchart dependencies) \
-  -n <namespace-name> | --namespace <namespace-name> \
+helm upgrade -i <release-name> [<repo-name>/]<chart-name> | . (=local chart with subchart dependencies) \
+  -n <namespace> | --namespace <namespace> \
   --create-namespace \
   -f [<dir>/]values.yaml \
   [--set ingress.enabled=true \]
