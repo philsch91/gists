@@ -3,6 +3,7 @@
 ## gpg
 ```
 gpg --generate-key
+gpg --list-secret-keys
 gpg --list-keys
 gpg --export -a philipp@example.at [<id>] >/tmp/public.key
 gpg --import /tmp/public.key # prints key name
