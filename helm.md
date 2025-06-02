@@ -17,7 +17,7 @@ helm lint
 
 ## template
 ```
-helm template <release-name> [[<repo-name>/]<chart-name> | .] [-f values.yaml -f values2.yaml] -n <namespace> --debug
+helm template <release-name> [[<repo-name>/]<chart-name> | .] [-f values.yaml -f values2.yaml] -n <namespace> [--post-renderer ./path/to/executable|hook.sh(kubectl kustomize <kustomization_dir>) \] --debug
 ```
 
 ## package
@@ -101,6 +101,7 @@ helm install <release-name> [<repo-name>/]<chart-name> | . (=local chart with su
   [--set "ingress.hosts[0].host=<app.domain.tld>,ingress.hosts[0].paths[0].path=/" \]
   [--set image.pullPolicy=Always \]
   [--set installCRDs=true \]
+  [--post-renderer ./path/to/executable|hook.sh(kubectl kustomize <kustomization_dir>) \]
   --timeout=10m \
   --debug \
   [--wait --dry-run[=<server|client>] | --atomic]
@@ -114,6 +115,7 @@ helm upgrade -i <release-name> [<repo-name>/]<chart-name> | . (=local chart with
   -f [<dir>/]values.yaml \
   [--set ingress.enabled=true \]
   [--set "ingress.hosts[0].host=<app.domain.tld>,ingress.hosts[0].paths[0].path=/" \]
+  [--post-renderer ./path/to/executable|hook.sh(kubectl kustomize <kustomization_dir>) \]
   --timeout=10m \
   --debug \
   [--wait --dry-run=<server|client> | --atomic]
@@ -157,4 +159,21 @@ In Helm, when using conditions in templates, even if the first condition is fals
 {{- else if and (.Values.auth.proxy).enabled (.Values.general.proxy).proxyURL (.Values.general.proxy).proxyPort }}
 "proxy-url": "http://{{ .Values.general.proxy.proxyURL }}:{{ .Values.general.proxy.proxyPort }}",
 {{- end }}
+```
+
+## Post Rendering
+
+### hook.sh
+```
+#!/bin/bash
+# hook.sh
+cat <&0 > <kustomization_dir>/all.yaml
+kubectl kustomize <kustomization_dir>
+```
+
+## Release Storage Backends
+```
+export HELM_DRIVER=<secret|configmap|sql> # Helm v3 default = secret
+export HELM_DRIVER_SQL_CONNECTION_STRING=postgresql://helm-postgres:5432/helm?user=helm&password=changeme
+kubectl get secret --all-namespaces -l "owner=helm"
 ```

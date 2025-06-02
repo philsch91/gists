@@ -171,6 +171,22 @@ kubectl create secret docker-registry <secretname> --docker-server=<host> \
 ```
 kubectl apply -f <file>
 cat file.yml | kubectl apply -f -
+kubectl apply -k|--kustomize <kustomization_dir>
+```
+
+## kustomize
+```
+kubectl kustomize <kustomization_dir(kustomization.yaml + all.yaml)> # view and return on STDOUT
+```
+
+### kustomization.yaml
+```yaml
+resources:
+  - all.yaml
+patchesStrategicMerge:
+  - deployment.yaml
+  - configmap.yaml
+  - secret.yaml
 ```
 
 ## patch
