@@ -5,9 +5,24 @@
 gpg --generate-key
 gpg --list-secret-keys
 gpg --list-keys
+pub <...>
+uid [<trust-level(unknown/ultimate)>] <name> <mail-id(key-id)>
+sub <...>
+
 gpg --export -a philipp@example.at [<id>] >/tmp/public.key
-gpg --import /tmp/public.key # prints key name
-gpg --edit-key <key-name>
+gpg --import /tmp/public.key # prints key id name
+
+gpg --edit-key <key-id-name> # add trust of public key
+gpg> trust
+1 = I don't know or won't say
+2 = I do NOT trust
+3 = I trust marginally
+4 = I trust fully
+5 = I trust ultimately
+m = back to the main menu
+Your decision? 5
+Do you really want to set this key to ultimate trust? (y/N) y
+gpg> quit
 ```
 
 ## pass init
