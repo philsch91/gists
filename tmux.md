@@ -47,7 +47,9 @@ Ctrl+b % # break current pane into two, left and right
 Ctrl+b q # show pane numbers
 Ctrl+b ! # break current pane into new window
 Ctrl+b o # switch to next pane
-Arrow # switch active pane
+Ctrl+b Arrow # switch active pane
+Ctrl+b } # swap current pane with the next one
+Ctrl+b { # swap current pane with the previous one
 Alt+Arrow # resize active pane
 Ctrl+b x # kill current pane
 Ctrl+b t # display time
