@@ -6,6 +6,9 @@ C:\Users\<username>\AppData\Local\Google\Chrome\User Data\Default\Sessions
 ls $HOME/.config/google-chrome/Default/Sessions
 ```
 
+- Session_* files are written when Chrome is properly closed (chrome://quit) and started, a window is closed, a tab is closed and opened and selected, a new URL is opened, and regularly
+- Tabs_* files are written when Chrome is properly closed (chrome://quit) and started, a window is closed, and sometimes a tab is closed and opened
+
 ## Installation
 ```
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
