@@ -60,6 +60,12 @@ aws ec2 describe-vpc-endpoints --filters '[{"Name": "group-name", "Values": ["<s
 aws ec2 create-vpc-endpoint --vpc-id vpc-<id> --service-name com.amazonaws.<region-code>.secretsmanager --vpc-endpoint-type Interface --subnet-ids subnet-1 subnet-2 subnet-3 --security-group-ids sg-1 sg-2 sg-3 --tag-specifications '[{"ResourceType": "vpc-endpoint", "Tags": [{"Key": "Name", "Value": "vpce_ecr_dkr"},{"Key": "Owner", "Value": "<owner>"}]}]' --region <region-code> --dry-run
 ```
 
+## ELB
+```
+LB_HOSTNAME=$(kubectl -n <namespace-with-ingress-nginx-controller-deployment> get service/ingress-nginx-controller -o json | jq -r '.status.loadBalancer.ingress[0].hostname')
+aws elb describe-load-balancers --load-balancer-names $LB_HOSTNAME | jq -r '.LoadBalancerDescriptions[].Subnets'
+```
+
 ## EKS
 ```
 aws eks describe-cluster --name <cluster-name> | jq -r '.cluster.resourcesVpcConfig.publicAccessCidrs'
