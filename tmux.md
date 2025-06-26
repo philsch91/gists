@@ -1,15 +1,23 @@
 # tmux
 
+## Server and Client
+```
+ls $TMUX_TMPDIR(default:/tmp)/tmux-<uid>/default
+# send signal 'USR1' to tmux server to recreate the socket
+pkill -USR1 tmux
+```
+
 ## tmux options
 ```
 # manage tmux sessions
-tmux [-f <config-file(tmux.conf)>] # start tmux server
+# start tmux server
+tmux [-f <config-file(tmux.conf)>] [-L <socket-name>] [-S <socket-path>] [command [flags]] # default command = new-session
 tmux at|attach # attach terminal to tmux session
-tmux ls # list running sessions
+tmux ls|list-sessions # list running sessions
 #
-tmux new -s <session-name> # start new session with name
-tmux at|attach -t <session-name> # (re)attach to existing session
-tmux has-session -t <session-name> # check for running session
+tmux new|new-session [-A(=attach-session)] -s <session-name> # create new or attach (-A) or switch session with name
+tmux attach|attach-session -t <session-name>|. [-c /path/to/new/working/dir/for/session/and/new/windows] # (re)attach to existing session
+tmux has|has-session -t <session-name> # check for running session
 tmux kill-session -t <session-name> # kill named session
 #
 tmux -V # print version info
@@ -20,6 +28,9 @@ tmux show -g | cat > ~/.tmux.conf
 tmux source-file ~/.tmux.conf
 # stop all sessions
 tmux kill-server
+tmux display-message "#{pane_current_path}"
+tmux display-message "#{session_path}"
+tmux command-prompt "attach -c %1" # change tmux working dir by typing and pressing enter inside a session
 ```
 
 ## tmux key bindings
@@ -67,6 +78,7 @@ Ctrl+b :source-file ~/.tmux.conf # reload ~/.tmux.conf
 - `~/.tmux.conf`<br />
 
 ## tmux directories
+- `$HOME/.tmux/plugins`<br />
 
 ## tmux.conf
 ```
@@ -126,4 +138,52 @@ set-environment -g DISPLAY :0.0
 bind C-c run "tmux show-buffer | xclip -i -selection primary" # Ctrl+b + Ctrl+c
 # X11 selection in tmux paste-buffer
 bind C-v run "tmux set-buffer -- \"$(xclip -o -selection primary)\"; tmux paste-buffer" # Ctrl+b Ctrl+v
+
+# Tmux Plugin Manager
+# 1. Clone TPM
+# git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+# 2. Add the list of plugins and `run '~/.tmux/plugins/tpm/tpm'` in this file
+# 3. Reload tmux env and config to source TPM if tmux is already running
+# tmux source ~/.tmux.conf
+# 4. Add plugin to the list of TPM plugins in this file
+# 5. Press `prefix + I` to fetch and source plugins
+
+# List of plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+
+# Other examples:
+# https://github.com/tmux-plugins/tmux-resurrect
+set -g @plugin 'tmux-plugins/tmux-resurrect' # persistent sessions
+# https://github.com/tmux-plugins/tmux-continuum
+set -g @plugin 'tmux-plugins/tmux-continuum' # save sessions automatically
+# set -g @plugin 'github_username/plugin_name'
+# set -g @plugin 'github_username/plugin_name#branch'
+# set -g @plugin 'git@github.com:user/plugin'
+# set -g @plugin 'git@bitbucket.com:user/plugin'
+
+# set tmux-resurrect
+set -g @resurrect-capture-pane-contents 'on' # let resurrect capture contents of your panes
+#set -g @resurrect-dir '~/.tmux/resurrect'
+# set tmux-continuum
+set -g @continuum-boot 'on'
+set -g @continuum-restore 'on' # enable continuum
+set -g @continuum-save-interval '5' # save every 5 minutes
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
 ```
+
+## tmux-resurrect
+
+```
+find $HOME -type f -name "tmux_resurrect_*.txt"
+tmux_resurrect_<YYYYMMDD>T<HHMMSS>.txt
+```
+
+### tmux-resurrect files and directories
+
+- `ls -l /home/<user>/.tmux/resurrect`
+- `ls -l /home/<user>/.tmux/resurrect/last`
+- `ls -l /home/<user>/.local/share/tmux/resurrect`
+- `ls -l /home/<user>/.local/share/tmux/resurrect/last`
