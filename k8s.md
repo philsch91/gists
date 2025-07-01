@@ -70,6 +70,13 @@ kubectl -n <namespace-name> get secret/<secret-name> -o json | jq -r '.data.pass
 kubectl get events [-n <namespace>|-A] [--sort-by='.lastTimestamp'|--watch] | less # --sort-by will be ignored if --watch is passed
 ```
 
+### get crd
+```
+kubectl get crd <crd-name>|-A [-o yaml|json]
+kubectl get crd/nodepools.karpenter.sh -o json | jq -r '.spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.disruption.required'
+kubectl get crd/nodepools.karpenter.sh -o json | jq -r '.spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.disruption.default'
+```
+
 ## describe
 ```
 // check for overcommitted resource limits (underprovisioned nodes)
