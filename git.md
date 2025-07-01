@@ -58,6 +58,13 @@ git diff --check
 git diff --exit-code
 ```
 
+## remote
+```
+git remote show origin
+# show and get remote HEAD (default) branch
+git remote show origin | sed -n '/HEAD branch/s/.*: //p'
+```
+
 ## push
 ```
 // push local branch <local-branch-name> named as <remote-branch-name> to remote repo
