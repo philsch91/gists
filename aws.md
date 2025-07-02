@@ -1,6 +1,8 @@
 # AWS Notes
 
 ## IAM
+
+### configure
 ```
 aws configure --profile <profile-name>
 less .aws/credentials
@@ -18,6 +20,28 @@ aws sts get-caller-identity [--debug]
 unset AWS_ACCESS_KEY_ID
 unset AWS_SECRET_ACCESS_KEY
 unset AWS_SESSION_TOKEN
+```
+
+### configure sso
+```
+aws configure sso-session
+
+export AWS_CONFIGURE_SSO_DEFAULT_SSO_START_URL="https://domain.awsapps.com/start"
+export AWS_CONFIGURE_SSO_DEFAULT_SSO_REGION="eu-central-1"
+
+aws configure set profile.$1.sso_start_url $AWS_CONFIGURE_SSO_DEFAULT_SSO_START_URL
+aws configure set profile.$1.sso_region $AWS_CONFIGURE_SSO_DEFAULT_SSO_REGION
+
+aws configure get profile.$1.sso_start_url
+aws configure get profile.$1.sso_region
+
+aws configure sso --profile $1
+```
+
+## SSO
+```
+aws configure export-credentials --profile default | jq -r '.SecretAccessKey|.SessionToken'
+aws sso list-accounts --access-token <access-token>
 ```
 
 ## EC2
