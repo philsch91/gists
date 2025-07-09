@@ -141,3 +141,8 @@ cp -v root_ca.crt /usr/local/share/ca-certificates/
 sudo update-ca-certificates # updates certificates in /etc/ssl/certs/ca-certificates.crt
 openssl s_client -connect foo.whatever.com:443 -CApath /etc/ssl/certs
 ```
+
+## pwgen
+```
+pwgen -y|--symbols -s|--secure [<pw-length>|32] [<pw-count>|1] # generate one random password with a length of 32 characters including symbols
+```
