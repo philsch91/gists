@@ -42,6 +42,13 @@ aws configure sso --profile $1
 ```
 aws configure export-credentials --profile default | jq -r '.SecretAccessKey|.SessionToken'
 aws sso list-accounts --access-token <access-token>
+aws sso login --profile <profile-name>
+# `aws sso login` does not set the AWS_PROFILE var
+# and use the sso_role_name of the profile
+# as per `aws sts get-caller-identity`
+1. aws sso login --profile <profile-name>
+2. export AWS_PROFILE=<profile-name>
+3. aws sts get-caller-identity
 ```
 
 ## EC2
