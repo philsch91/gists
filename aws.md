@@ -17,6 +17,8 @@ export AWS_SESSION_TOKEN=abcd
 
 aws sts get-caller-identity [--debug]
 
+# TODO: check `eval "$(aws configure export-credentials --profile $profile_name --format env)"`
+
 unset AWS_ACCESS_KEY_ID
 unset AWS_SECRET_ACCESS_KEY
 unset AWS_SESSION_TOKEN
@@ -38,17 +40,24 @@ aws configure get profile.$1.sso_region
 aws configure sso --profile $1
 ```
 
-## SSO
+## sso
 ```
+# TODO: review export-credentials
 aws configure export-credentials --profile default | jq -r '.SecretAccessKey|.SessionToken'
 aws sso list-accounts --access-token <access-token>
 aws sso login --profile <profile-name>
+#
+1. aws sso login --profile <profile-name>
 # `aws sso login` does not set the AWS_PROFILE var
 # and use the sso_role_name of the profile
 # as per `aws sts get-caller-identity`
-1. aws sso login --profile <profile-name>
 2. export AWS_PROFILE=<profile-name>
 3. aws sts get-caller-identity
+4. aws sts assume-role --role-arn <role-arn>
+# missing: a command to auto-export credentials like `eval "$(aws configure export-credentials --profile <profile-name> --format env)"`
+5. export AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN
+6. aws sts get-caller-identity
+7. aws configure export-credentials
 ```
 
 ## EC2
