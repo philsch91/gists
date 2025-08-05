@@ -20,6 +20,14 @@ which google-chrome-stable
 google-chrome [--profile-directory=Default]
 ```
 
+```
+sudo touch /etc/default/google-chrome
+ls -lh /etc/default/google-chrome
+cat /etc/default/google-chrome
+repo_add_once="false"
+repo_reenable_on_distupgrade="true"
+```
+
 ## libnss
 ```
 ls /usr/lib/x86_64-linux-gnu/nss
