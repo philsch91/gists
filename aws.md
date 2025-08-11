@@ -110,6 +110,13 @@ aws elb describe-load-balancers --load-balancer-names $LB_HOSTNAME | jq -r '.Loa
 ```
 aws eks describe-cluster --name <cluster-name> | jq -r '.cluster.resourcesVpcConfig.publicAccessCidrs'
 
+String identityProviderConfigJson=$(aws eks list-identity-provider-configs --cluster-name <cluster-name>)
+LinkedHashMap identityProviderConfig = readJSON(text: identityProviderConfigJson, returnPojo: true)
+if (identityProviderConfig["identityProviderConfigs"].size() == 0) {
+	export jsonClient='{"identityProviderConfigName": "saml-org-com", "issuerUrl": "https://saml.org.com/oauth/", "clientId": "<client-id>", "usernameClaim": "email", "usernamePrefix": "oidc:", "groupsClaim": "groups", "groupsPrefix": "oidc:"}'
+    aws eks associate-identity-provider-config --cluster-name <cluster-name> --oidc="${jsonClient}"
+}
+
 aws eks list-nodegroups --cluster <cluster-name>
 
 # drain node (instance) first
