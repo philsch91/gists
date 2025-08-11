@@ -109,6 +109,8 @@ aws elb describe-load-balancers --load-balancer-names $LB_HOSTNAME | jq -r '.Loa
 ## EKS
 ```
 aws eks describe-cluster --name <cluster-name> | jq -r '.cluster.resourcesVpcConfig.publicAccessCidrs'
+aws eks describe-cluster --name <cluster-name> | jq -r .cluster.certificateAuthority.data | base64 -d
+aws eks describe-cluster --name <cluster-name> | jq -r .cluster.endpoint
 
 String identityProviderConfigJson=$(aws eks list-identity-provider-configs --cluster-name <cluster-name>)
 LinkedHashMap identityProviderConfig = readJSON(text: identityProviderConfigJson, returnPojo: true)
