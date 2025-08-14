@@ -59,6 +59,7 @@ dependencies:
 
 ```
 # export HELM_EXPERIMENTAL_OCI=1 (version < 3.8.0)
+export HELM_REGISTRY_CONFIG="" # "~/.config/helm/registry/config.json"
 helm registry login container.registry.io -u <user-name> -p <password>
 helm registry logout container.registry.io
 ```
