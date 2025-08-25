@@ -112,12 +112,18 @@ aws eks describe-cluster --name <cluster-name> | jq -r '.cluster.resourcesVpcCon
 aws eks describe-cluster --name <cluster-name> | jq -r .cluster.certificateAuthority.data | base64 -d
 aws eks describe-cluster --name <cluster-name> | jq -r .cluster.endpoint
 
-String identityProviderConfigJson=$(aws eks list-identity-provider-configs --cluster-name <cluster-name>)
+aws eks list-identity-provider-configs --cluster-name <cluster-name>
+
+String identityProviderConfigJson=sh(script: "aws eks list-identity-provider-configs --cluster-name <cluster-name>", returnStdout: true)
 LinkedHashMap identityProviderConfig = readJSON(text: identityProviderConfigJson, returnPojo: true)
 if (identityProviderConfig["identityProviderConfigs"].size() == 0) {
-	export jsonClient='{"identityProviderConfigName": "saml-org-com", "issuerUrl": "https://saml.org.com/oauth/", "clientId": "<client-id>", "usernameClaim": "email", "usernamePrefix": "oidc:", "groupsClaim": "groups", "groupsPrefix": "oidc:"}'
-    aws eks associate-identity-provider-config --cluster-name <cluster-name> --oidc="${jsonClient}"
+    sh(script: """
+        export jsonClient='{"identityProviderConfigName": "saml-org-com", "issuerUrl": "https://saml.org.com/oauth/", "clientId": "<client-id>", "usernameClaim": "email", "usernamePrefix": "oidc:", "groupsClaim": "groups", "groupsPrefix": "oidc:"}'
+        aws eks associate-identity-provider-config --cluster-name <cluster-name> --oidc="\${jsonClient}"
+    """)
 }
+
+aws eks describe-identity-provider-config --cluster-name <cluster-name> --identity-provider-config='{"type":"oidc", "name":"saml-org-com"}'
 
 aws eks list-nodegroups --cluster <cluster-name>
 
