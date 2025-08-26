@@ -129,6 +129,15 @@ apt-get [-u|--show-upgraded] [-V|--verbose-versions] [[--assume-no]] upgrade # s
 apt [-qq|--quiet] --installed list <package-name(*)>
 apt-get update # to fix 404 for install
 apt-get [-f|--fix-broken] [-m|--fix-missing] [[--no-cache]] install <package-name>
+apt purge <package1> <packagen>
+```
+
+```
+echo "deb http://cz.archive.ubuntu.com/ubuntu mantic main" | sudo tee /etc/apt/sources.list.d/temporary-repository.list
+sudo apt update
+sudo apt install <package1> <packagen> # gcc-13 gcc-13-aarch64-linux-gnu
+sudo rm /etc/apt/sources.list.d/temporary-repository.list
+sudo apt update
 ```
 
 ## update-ca-certificates
@@ -145,4 +154,14 @@ openssl s_client -connect foo.whatever.com:443 -CApath /etc/ssl/certs
 ## pwgen
 ```
 pwgen -y|--symbols -s|--secure [<pw-length>|32] [<pw-count>|1] # generate one random password with a length of 32 characters including symbols
+```
+
+## update-alternatives
+```
+update-alternatives --config gcc
+update-alternatives --install <link-src> <link-name> <link-target> <link-priority>
+# link gcc to /etc/alternatives/gcc, which is a symlink to /usr/bin/gcc-10
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 60
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 70 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
+update-alternatives --remove gcc /usr/bin/gcc-13
 ```
