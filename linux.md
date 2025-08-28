@@ -1,5 +1,14 @@
 # Linux
 
+## Paths
+
+- /usr/local/sbin
+- /usr/sbin
+- /usr/local/bin
+- /usr/bin
+- executables in /usr/local/bin/ take precedence over /usr/bin/
+- ~/.local/bin
+
 ## Shell
 
 Default shell
@@ -142,12 +151,12 @@ sudo apt update
 
 ## update-ca-certificates
 ```
-# /usr/share/ca-certificates/
+# /usr/share/ca-certificates/ + /usr/sbin/update-ca-certificates
 cp -v root_ca.crt /usr/share/ca-certificates/<sub-dir>/
 sudo bash -c "if ! grep <sub-dir>/root_ca.crt /etc/ca-certificates.conf; then echo \"<sub-dir>/root_ca.crt\" >>/etc/ca-certificates.conf; fi;"
+sudo update-ca-certificates # updates certificates in /etc/ssl/certs/ca-certificates.crt
 # /usr/local/share/ca-certificates/
 cp -v root_ca.crt /usr/local/share/ca-certificates/
-sudo update-ca-certificates # updates certificates in /etc/ssl/certs/ca-certificates.crt
 openssl s_client -connect foo.whatever.com:443 -CApath /etc/ssl/certs
 ```
 
