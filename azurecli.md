@@ -67,6 +67,12 @@ az ad sp create-for-rbac --name <sp-name> --role AcrPush --scope /subscriptions/
 az ad sp create-for-rbac --name <sp-name> --role AcrPull --scope /subscriptions/<subscription>/resourceGroups/<rg-name>/providers/Microsoft.ContainerRegistry/registries/<registry-name>
 ```
 
+## ad group
+```
+az ad group list --filter "startswith(displayName,'<group-name-prefix>')"
+az ad group list --query "[?displayName=='<group-name>'].objectId" --output tsv
+az ad group member list --group <group-object-id> --query "[].displayName"
+```
 
 ```
 token=$(az account get-access-token --resource https://graph.microsoft.com | jq -r '.accessToken')
