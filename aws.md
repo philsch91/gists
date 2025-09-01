@@ -1,4 +1,22 @@
-# AWS Notes
+# AWS CLI
+
+## Installation
+```
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip -q awscliv2.zip
+sudo ./aws/install --update
+aws --version
+sudo rm -v awscliv2.zip
+sudo rm -rv aws
+```
+
+## Known Errors
+
+`ImportError: cannot import name 'DEFAULT_CIPHERS' from 'urllib3.util.ssl_' (/home/a4938/.local/lib/python3.8/site-packages/urllib3/util/ssl_.py)`
+
+```
+pip install 'urllib3<2'
+```
 
 ## IAM
 
