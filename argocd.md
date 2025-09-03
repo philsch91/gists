@@ -28,3 +28,14 @@ argocd cluster list
 argocd app list [| grep -i <search-string>]
 argocd app get argocd/<app-name> [--grpc-web]
 ```
+
+```
+helm repo add argo https://argoproj.github.io/argo-helm
+helm repo ls
+helm -n argocd upgrade -i bootstrap-apps-projects argo/argocd-apps --values values.projects.yaml
+```
+
+## References
+
+- https://github.com/argoproj/argo-helm/tree/main/charts/argocd-apps
+- https://github.com/argoproj/argo-cd/tree/master/docs/operator-manual
