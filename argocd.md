@@ -1,5 +1,19 @@
 # Argo CD
 
+## Installation
+```
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.1/manifests/install.yaml
+
+kubectl -n argocd get cm/argocd-cm
+k -n argocd get cm/argocd-cmd-params-cm
+k -n argocd get cm/argocd-gpg-keys-cm -o yaml | less
+k -n argocd get cm/argocd-notifications-cm
+k -n argocd get cm/argocd-rbac-cm -o yaml | less
+k -n argocd get cm/argocd-ssh-known-hosts-cm -o yaml | less
+k -n argocd get cm/argocd-tls-certs-cm -o yaml | less
+```
+
 ## version
 ```
 argocd version

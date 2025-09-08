@@ -134,13 +134,19 @@ helm list -aq
 ```
 helm [-n <namespace>] get all <release-name>
 helm [-n <namespace>] get manifest <release-name>
-helm [-n <namespace>] get values <release-name>
+helm [-n <namespace>] get values <release-name> [--revision <revision>]
 ```
 
 ## uninstall
 
 ```
 helm uninstall <name> -n <namespace> # formerly helm delete <name>
+```
+
+## history
+```
+helm -n <namespace> history <release>
+helm -n <namespace> get values <release> [--revision <revision>] [| grep -A 5 image]
 ```
 
 ## rollback
