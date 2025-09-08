@@ -47,6 +47,7 @@ argocd app get argocd/<app-name> [--grpc-web]
 helm repo add argo https://argoproj.github.io/argo-helm
 helm repo ls
 helm -n argocd upgrade -i bootstrap-apps-projects argo/argocd-apps --values values.projects.yaml
+helm -n argocd get all <argocd-application-release>
 ```
 
 ## References
