@@ -3,6 +3,7 @@
 ## repository
 ```
 ls $HOME/.m2/repository/
+ls -lah /home/<username>/.m2/repository/<groupId1>/<groupId2>/<groupId3>/*
 ```
 
 ## settings
@@ -37,6 +38,11 @@ mvn dependency:purge-local-repository -DmanualInclude=<groupId>:<artifactId>
 Copy the project dependencies from the repo to an output location defined via <outputDirectory>. The default is ${project.build.directory}/dependency.
 ```
 mvn dependency:copy-dependencies
+```
+
+### dependency:get
+```
+mvn dependency:get -Dartifact=<groupId>:<artifactId>:<version> -o -DrepoUrl=file:///home/<username>/.m2/repository
 ```
 
 ## help plugin

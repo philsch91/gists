@@ -43,6 +43,17 @@ argocd app list [| grep -i <search-string>]
 argocd app get argocd/<app-name> [--grpc-web]
 ```
 
+## repo
+```
+argocd repo list
+```
+
+## repo server
+```
+k -n argocd logs pod/argocd-repo-server-76fc47d78d-8tgxh
+```
+
+## App of Apps
 ```
 helm repo add argo https://argoproj.github.io/argo-helm
 helm repo ls
