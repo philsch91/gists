@@ -36,7 +36,7 @@ command 2>&1 >/dev/null
 ## ln
 ```
 # symlink (soft link)
-ln -s <destination-dir> <source-dir>
+ln -s <destination/target-dir/file> <link-name>
 ```
 
 ## find
@@ -173,4 +173,10 @@ update-alternatives --install <link-src> <link-name> <link-target> <link-priorit
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 60
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 70 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
 update-alternatives --remove gcc /usr/bin/gcc-13
+```
+
+## Wayland
+```
+echo $XDG_SESSION_TYPE
+echo $WAYLAND_DISPLAY
 ```
