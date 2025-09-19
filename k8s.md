@@ -268,7 +268,8 @@ kubectl -n <namespace> top pod <pod> --containers 2>/dev/null
 ## drain
 ```
 kubectl cordon <node-name>
-kubectl drain [--ignore-daemonsets] [--delete-emptydir-data] [--delete-local-data] [--disable-eviction] <node-name>
+// k8s >= 1.23: drain also cordons the node
+kubectl drain [--ignore-daemonsets] [--delete-emptydir-data | --delete-local-data (deprecated)] [--disable-eviction] <node-name>
 // power down or terminate node or delete VM backing the node if needed
 // resume pod scheduling
 kubectl uncordon <node-name>
@@ -357,4 +358,58 @@ spec:
   disruption:
     budgets:
       - nodes: "0"
+```
+
+### Uninstallation
+
+Karpenter adds a finalizer to nodes that it provisions to support graceful node termination. If Karpenter is uninstalled, these finalizers will cause the API Server to block deletion until the finalizers are removed.
+
+```
+// option 1
+kubectl edit node <node-name> // remove .metadata.finalizers[].karpenter.sh/termination
+// option 2
+kubectl get nodes -o jsonpath='{range .items[*].metadata}{@.name}:{@.finalizers}{"\n"}' | grep "karpenter.sh/termination" | cut -d ':' -f 1 | xargs kubectl patch node --type='json' -p='[{"op": "remove", "path": "/metadata/finalizers"}]'
+```
+
+```yaml
+apiVersion: v1
+kind: Node
+metadata:
+  annotations:
+    alpha.kubernetes.io/provided-node-ip: 44.113.232.235
+    csi.volume.kubernetes.io/nodeid: '{"ebs.csi.aws.com":"i-0f3318a08e37ad1d0","efs.csi.aws.com":"i-0f3318a08e37ad1d0"}'
+    karpenter.k8s.aws/ec2nodeclass-hash: "11711480047137636855"
+    karpenter.k8s.aws/ec2nodeclass-hash-version: v4
+    karpenter.sh/nodepool-hash: "11553600640820538794"
+    karpenter.sh/nodepool-hash-version: v3
+    node.alpha.kubernetes.io/ttl: "0"
+    volumes.kubernetes.io/controller-managed-attach-detach: "true"
+  finalizers:
+  - karpenter.sh/termination
+  labels:
+    karpenter.k8s.aws/ec2nodeclass: default
+    karpenter.k8s.aws/instance-category: c
+    karpenter.k8s.aws/instance-cpu: "8"
+    karpenter.k8s.aws/instance-cpu-manufacturer: amd
+    karpenter.k8s.aws/instance-cpu-sustained-clock-speed-mhz: "3600"
+    karpenter.k8s.aws/instance-ebs-bandwidth: "10000"
+    karpenter.k8s.aws/instance-encryption-in-transit-supported: "true"
+    karpenter.k8s.aws/instance-family: c6a
+    karpenter.k8s.aws/instance-generation: "6"
+    karpenter.k8s.aws/instance-hypervisor: nitro
+    karpenter.k8s.aws/instance-memory: "16384"
+    karpenter.k8s.aws/instance-network-bandwidth: "3125"
+    karpenter.k8s.aws/instance-size: 2xlarge
+    karpenter.sh/capacity-type: on-demand
+    karpenter.sh/initialized: "true"
+    karpenter.sh/registered: "true"
+    kubernetes.io/arch: amd64
+    kubernetes.io/hostname: ip-44-113-232-235.ap-southeast-1.compute.internal
+    kubernetes.io/os: linux
+    node.kubernetes.io/instance-type: c6a.2xlarge
+    topology.ebs.csi.aws.com/zone: ap-southeast-1b
+    topology.k8s.aws/zone-id: apse1-az2
+    topology.kubernetes.io/region: ap-southeast-1
+    topology.kubernetes.io/zone: ap-southeast-1b
+  name: ip-44-113-232-235.ap-southeast-1.compute.internal
 ```
