@@ -28,6 +28,11 @@ unzip -p target/<artifactId>-<version>.jar META-INF/MANIFEST.MF
 mvn [-X] [dependency:purge-local-repository] clean install <plugin>:<goal/mojo> [-U|--update-snapshots (not releases)] [-f|--file <pom.xml>] [-P <profile>] [-Dproperty1=value1] [-Djavax.net.ssl.trustStore=/path/to/cacerts] [-gs|--global-settings global-settings.xml] [-s|--settings settings.xml]
 ```
 
+## Manual uninstall
+```
+rm -rv /home/<username>/.m2/repository/<groupId1>/<groupId2>/<groupId3>/<artifactId>/<version>
+```
+
 ## dependency plugin
 
 ### purge-local-repository
