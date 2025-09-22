@@ -324,6 +324,94 @@ For a Pod to be given a QoS class of `Guaranteed`:
 
 It is recommended to create NodePools that are mutually exclusive. So no `Pod` should match multiple NodePools. If multiple NodePools are matched, Karpenter will use the `NodePool` with the highest weight.
 
+```
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  annotations:
+  name: windows-nodepool
+spec:
+  disruption:
+    budgets:
+    - nodes: 25%
+    consolidationPolicy: WhenEmptyOrUnderutilized
+    consolidateAfter: 10m
+  limits:
+    cpu: "500"
+    memory: 2000Gi
+  template:
+    metadata:
+      labels:
+        purpose: github-actions-windows
+    spec:
+      terminationGracePeriod: 5m
+      expireAfter: Never
+      taints:
+        - key: dedicated
+          value: github-actions-windows
+          effect: NoSchedule
+      nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
+        name: windows-nodeclass
+```
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kubectl.kubernetes.io/default-container: windows-nanoserver
+    kubectl.kubernetes.io/default-logs-container: windows-nanoserver
+  labels:
+    run: windows-nanoserver
+  name: windows-nanoserver
+  namespace: admin
+spec:
+  containers:
+  - image: mcr.microsoft.com/windows/nanoserver:ltsc2022
+    imagePullPolicy: IfNotPresent
+    name: windows-nanoserver
+    command:
+    - "ping"
+    args:
+    - "-t"
+    - "localhost"
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeSelector:
+    #purpose: github-actions-windows # must match .spec.template.metadata.labels[] of NodePool
+    kubernetes.io/os: windows
+    kubernetes.io/arch: amd64
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoSchedule
+    key: dedicated
+    operator: Equal
+    value: github-actions-windows
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - emptyDir: {}
+    name: test-volume
+```
+
 ### Disruption
 
 You can block Karpenter from voluntarily choosing to disrupt certain pods by setting the `karpenter.sh/do-not-disrupt: "true"` annotation on the pod. This is useful for pods that you want to run from start to finish without disruption. By opting pods out of this disruption, you are telling Karpenter that it should not voluntarily remove a node containing this pod.
