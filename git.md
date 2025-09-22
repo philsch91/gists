@@ -182,7 +182,7 @@ git rebase -Xours master # ours: master, theirs (current): release
 git rebase -Xtheirs master # ours: master, theirs (current): release
 ```
 
-## Git stash
+## stash
 1. `git stash (= git stash push)`
 1. `git stash list`
 1. `git stash apply stash@{<index>}`
@@ -192,6 +192,16 @@ git rebase -Xtheirs master # ours: master, theirs (current): release
 ```
 git worktree add <path (../<new-branch-name>)>
 git worktree add <path (../<dir-name>)> <branch>
+```
+
+## reset
+```
+# undo last commit, --hard = reset committed files to state of former commit, throw away uncommitted changes
+git reset --hard HEAD~1
+# undo last commit, reset committed files to state of former commit, keep uncommitted changes, reset index
+git reset HEAD~1
+# undo last commit, --soft = reset committed files to state of former commit, keep uncommitted changes and index
+git reset --soft HEAD~1
 ```
 
 ## Clean working copy
