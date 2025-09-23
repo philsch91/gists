@@ -51,12 +51,25 @@ mvn dependency:get -Dartifact=<groupId>:<artifactId>:<version> -o -DrepoUrl=file
 ```
 
 ## help plugin
+
+### help:effective-pom
+
 Display the effective POM as an XML for the current build, with the active profiles factored in. If verbose, a comment is added to each XML element describing the origin of the line.
 ```
 mvn help:effective-pom -Dverbose=true
 ```
 
+### help:effective-settings
+
 Display the calculated settings as an XML for the project, given any profile enhancement and the inheritance of the global settings into the user-level settings.
 ```
 mvn help:effective-settings
+```
+
+### help:evaluate
+```
+# Maven 3.9.x
+mvn help:evaluate -Dexpression=project.version -q -f path/to/pom.xml -DforceStdout
+# Maven 4.0.x
+mvn help:evaluate -Dexpression=project.version --raw-streams -q -f path/to/pom.xml -DforceStdout
 ```
