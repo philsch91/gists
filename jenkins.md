@@ -1,5 +1,18 @@
 # Jenkins
 
+## hudson.model.Job<JobT,RunT>
+`public abstract class Job<JobT extends Job<JobT,RunT>,RunT extends Run<JobT,RunT>> extends AbstractItem implements Loadable extends Actionable `
+
+(inofficially implements Saveable)
+
+## hudson.model.Run<JobT,RunT>
+`public abstract class Run<JobT extends Job<JobT,RunT>,RunT extends Run<JobT,RunT>> extends Actionable`
+
+(inofficially implements Saveable)
+
+## org.jenkinsci.plugins.workflow.job.WorkflowJob
+`org.jenkinsci.plugins.workflow.job.WorkflowJob extends Job<WorkflowJob,WorkflowRun>`
+
 ## Tasks
 
 ### Cancel tasks in the queue
