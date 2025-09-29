@@ -69,7 +69,13 @@ mvn help:effective-settings
 ### help:evaluate
 ```
 # Maven 3.9.x
-mvn help:evaluate -Dexpression=project.version -q -f path/to/pom.xml -DforceStdout
+mvn help:evaluate -Dexpression=project.version -q -DforceStdout [-f path/to/pom.xml]
 # Maven 4.0.x
-mvn help:evaluate -Dexpression=project.version --raw-streams -q -f path/to/pom.xml -DforceStdout
+mvn help:evaluate -Dexpression=project.version --raw-streams -q -DforceStdout [-f path/to/pom.xml]
+```
+
+## org.codehaus.mojo.versions-maven-plugin
+```
+mvn versions:help
+mvn versions:set-property -Dproperty=some-key -DnewVersion=some-value -DgenerateBackupPoms=false
 ```
