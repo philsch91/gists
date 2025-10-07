@@ -12,7 +12,7 @@ sudo rm -rv aws
 
 ## Known Errors
 
-`ImportError: cannot import name 'DEFAULT_CIPHERS' from 'urllib3.util.ssl_' (/home/a4938/.local/lib/python3.8/site-packages/urllib3/util/ssl_.py)`
+`ImportError: cannot import name 'DEFAULT_CIPHERS' from 'urllib3.util.ssl_' (/home/<user>/.local/lib/python3.8/site-packages/urllib3/util/ssl_.py)`
 
 ```
 pip install 'urllib3<2'
@@ -185,4 +185,9 @@ aws s3 cp <S3-URL> - | less
 aws ssm describe-parameters --parameter-filters "Key=Name,Option=Contains,Values=<name>"
 aws ssm describe-parameters --parameter-filters "Key=Name,Option=Contains,Values=s3-state-bucket"
 aws ssm get-parameter --name <name> --with-decryption --query Parameter.Value
+```
+
+## ECR
+```
+aws ecr get-login-password | docker login --username AWS --password-stdin <aws-account-id>.dkr.ecr.<aws-region>.amazonaws.com # updates $HOME/.docker/config.json
 ```
