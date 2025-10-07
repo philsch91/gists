@@ -180,3 +180,23 @@ update-alternatives --remove gcc /usr/bin/gcc-13
 echo $XDG_SESSION_TYPE
 echo $WAYLAND_DISPLAY
 ```
+
+## Docker
+```
+# add Docker gpg key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+# add Docker repository
+echo "deb [signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+# update repository
+sudo apt update
+# install Docker engine
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+# add user to docker group
+sudo usermod -aG docker $USER
+# check installation
+docker --version
+# start docker service
+sudo service docker start
+# stop docker service
+sudo service docker stop
+```
