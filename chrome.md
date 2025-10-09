@@ -17,7 +17,7 @@ sudo dpkg -i google-chrome-stable_current_amd64.deb
 sudo apt --fix-broken install
 which google-chrome
 which google-chrome-stable
-google-chrome [--profile-directory=Default]
+google-chrome [--profile-directory=Default] [--no-sandbox] [--disable-gpu] [--disable-software-rasterizer] [--disable-accelerated-video-decode]
 ```
 
 ```
