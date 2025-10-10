@@ -155,8 +155,10 @@ sudo apt update
 cp -v root_ca.crt /usr/share/ca-certificates/<sub-dir>/
 sudo bash -c "if ! grep <sub-dir>/root_ca.crt /etc/ca-certificates.conf; then echo \"<sub-dir>/root_ca.crt\" >>/etc/ca-certificates.conf; fi;"
 sudo update-ca-certificates # updates certificates in /etc/ssl/certs/ca-certificates.crt
-# /usr/local/share/ca-certificates/
+
+# /usr/local/share/ca-certificates/ + /usr/sbin/update-ca-certificates
 cp -v root_ca.crt /usr/local/share/ca-certificates/
+sudo update-ca-certificates # updates certificates in /etc/ssl/certs/ca-certificates.crt
 openssl s_client -connect foo.whatever.com:443 -CApath /etc/ssl/certs
 ```
 
