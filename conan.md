@@ -5,8 +5,9 @@ cd $HOME/dev
 python3 -m venv conan
 source conan/bin/activate
 pip install conan
-
-#
+pip show conan
+# Windows
+C:\Users\<user>\AppData\Roaming\Python\Python313\Scripts\conan.exe
 python3 -m pip install pip-system-certs
 ```
 
