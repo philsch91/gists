@@ -1,5 +1,14 @@
 # macOS
 
+## Paths
+
+- /usr/local/sbin
+- /usr/sbin
+- /usr/local/bin
+- /usr/bin
+- executables in /usr/local/bin/ take precedence over /usr/bin/
+- ~/.local/bin
+
 ## nvram
 
 ```
