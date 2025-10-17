@@ -190,4 +190,6 @@ aws ssm get-parameter --name <name> --with-decryption --query Parameter.Value
 ## ECR
 ```
 aws ecr get-login-password | docker login --username AWS --password-stdin <aws-account-id>.dkr.ecr.<aws-region>.amazonaws.com # updates $HOME/.docker/config.json
+aws ecr list-images --registry-id <aws-account-id> --repository-name <repo-name>
+aws ecr describe-images --registry-id <aws-account-id> --repository-name <repo-name>
 ```
