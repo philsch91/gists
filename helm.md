@@ -17,7 +17,7 @@ helm lint
 
 ## template
 ```
-helm template <release-name> [[<repo-name>/]<chart-name> | .] [-f values.yaml -f values2.yaml] -n <namespace> [--post-renderer ./path/to/executable|hook.sh(kubectl kustomize <kustomization_dir>) \] --debug
+helm template <release-name> [[<repo-name>/]<chart-name> | .] [-f values.yaml -f values2.yaml] -n <namespace> [--post-renderer ./path/to/executable|hook.sh(kubectl kustomize <kustomization_dir>) \] --debug [--kube-version v1.25.0]
 ```
 
 ## package
