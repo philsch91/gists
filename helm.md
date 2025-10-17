@@ -96,13 +96,14 @@ helm install <release-name> [<repo-name>/]<chart-name> | . (=local chart with su
   --name=<application-name> \
   -n <namespace> | --namespace <namespace> \
   --create-namespace \
-  -f [<dir>/]values.yaml \
+  -f | --values [<dir>/]values.yaml \
   [--set clusterName=<cluster-name> \]
   [--set ingress.enabled=true \]
   [--set "ingress.hosts[0].host=<app.domain.tld>,ingress.hosts[0].paths[0].path=/" \]
   [--set image.pullPolicy=Always \]
   [--set installCRDs=true \]
   [--post-renderer ./path/to/executable|hook.sh(kubectl kustomize <kustomization_dir>) \]
+  [--version <chart-version>]
   --timeout=10m \
   --debug \
   [--wait --dry-run[=<server|client>] | --atomic]
@@ -113,10 +114,11 @@ helm install <release-name> [<repo-name>/]<chart-name> | . (=local chart with su
 helm upgrade -i <release-name> [<repo-name>/]<chart-name> | . (=local chart with subchart dependencies) \
   -n <namespace> | --namespace <namespace> \
   --create-namespace \
-  -f [<dir>/]values.yaml \
+  -f | --values [<dir>/]values.yaml \
   [--set ingress.enabled=true \]
   [--set "ingress.hosts[0].host=<app.domain.tld>,ingress.hosts[0].paths[0].path=/" \]
   [--post-renderer ./path/to/executable|hook.sh(kubectl kustomize <kustomization_dir>) \]
+  [--version <chart-version>]
   --timeout=10m \
   --debug \
   [--wait --dry-run=<server|client> | --atomic]
