@@ -1,5 +1,10 @@
 # curl
 
+## proxy
+```
+curl -iSs https://host -x | --proxy <[protocol://]host[:port]>
+```
+
 ## cookie
 ```
 curl -ikSsL --cookie cookie.txt --cookie-jar cookie.txt
