@@ -193,3 +193,24 @@ aws ecr get-login-password | docker login --username AWS --password-stdin <aws-a
 aws ecr list-images --registry-id <aws-account-id> --repository-name <repo-name>
 aws ecr describe-images --registry-id <aws-account-id> --repository-name <repo-name>
 ```
+
+### ECR Public
+
+#### Docker Registry HTTP API V2
+```
+curl -iSs https://ecr-public.aws.com/docker/library/redis:7.2.11-alpine
+HTTP/2 401
+date: Wed, 22 Oct 2025 07:51:35 GMT
+content-type: application/json; charset=utf-8
+content-length: 58
+docker-distribution-api-version: registry/2.0
+www-authenticate: Bearer realm="https://ecr-public.aws.com/token/",service="public.ecr.aws",scope="aws"
+proxy-support: Session-Based-Authentication
+
+{"errors":[{"code":"DENIED","message":"Not Authorized"}]}
+```
+
+```
+TOKEN=$(curl -Ls -X GET "https://ecr-public.aws.com/token?service=public.ecr.aws&scope=repository:docker/library/redis:pull" | jq -r '.token')
+curl -iSs -H "Authorization: Bearer $TOKEN" https://ecr-public.aws.com/v2/docker/library/redis/manifests/7.2.11-alpine
+```
