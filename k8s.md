@@ -72,7 +72,8 @@ kubectl get events [-n <namespace>|-A] [--sort-by='.lastTimestamp'|--watch] | le
 
 ### get crd
 ```
-kubectl get crd <crd-name>|-A [-o yaml|json]
+kubectl get crd <crd-name-kind>.<crd-group>|-A [-o yaml|json]
+kubectl get crd/<crd-name> -o yaml | yq eval '.spec.group' -
 kubectl get crd/nodepools.karpenter.sh -o json | jq -r '.spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.disruption.required'
 kubectl get crd/nodepools.karpenter.sh -o json | jq -r '.spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.disruption.default'
 ```
