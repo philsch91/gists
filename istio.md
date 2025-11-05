@@ -127,7 +127,7 @@ source <(istioctl completion zsh)
 ```
 
 ```
-istioctl verify-install
+istioctl verify-install -i <istio-system-namespace>
 istioctl [-n <namespace>] admin log <pod-name>
 istioctl [-n <namespace>] proxy-status [type/]<name>[.<namespace>]
 istioctl proxy-config all|listeners -i <istio-system-namespace> [type/]<name>[.<namespace>] [--port 8080]
