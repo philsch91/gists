@@ -35,11 +35,11 @@ rm -rv /home/<username>/.m2/repository/<groupId1>/<groupId2>/<groupId3>/<artifac
 
 ## dependency plugin
 
-### purge-local-repository
+### dependency:purge-local-repository
 ```
 mvn dependency:purge-local-repository -DmanualInclude=<groupId>:<artifactId>
 ```
-### copy-dependencies
+### dependency:copy-dependencies
 Copy the project dependencies from the repo to an output location defined via <outputDirectory>. The default is ${project.build.directory}/dependency.
 ```
 mvn dependency:copy-dependencies
@@ -48,6 +48,13 @@ mvn dependency:copy-dependencies
 ### dependency:get
 ```
 mvn dependency:get -Dartifact=<groupId>:<artifactId>:<version> -o -DrepoUrl=file:///home/<username>/.m2/repository
+```
+
+### dependency:resolve-plugins
+
+Goal that resolves all project plugins and reports and their dependencies.
+```
+mvn dependency:resolve-plugins
 ```
 
 ## help plugin
