@@ -90,6 +90,22 @@ k -n argocd get appprojects
 k -n argocd get applications
 ```
 
+## Automated Sync
+
+An automated sync will only be performed if the application is out of sync. Applications in a synced or error state will not attempt automated sync.
+
+`.spec.syncPolicy.automated(.enabled: true)` in `Application.argoproj.io`
+```
+k -n argocd get cm/argocd-cm -o json | jq -r '.data["timeout.reconciliation"]'
+k -n argocd get sts/argocd-application-controller -o json | jq -r '.spec.template.spec.containers[].env[] | select(.name == "ARGOCD_RECONCILIATION_TIMEOUT")'
+```
+
+`.spec.syncPolicy.automated.selfHeal: true` in `Application.argoproj.io`
+```
+k -n argocd get cm/argocd-cmd-params-cm -o json | jq -r '.data["controller.self.heal.timeout.seconds"]'
+k -n argocd get sts/argocd-application-controller -o json | jq -r '.spec.template.spec.containers[].env[] | select(.name == "ARGOCD_APPLICATION_CONTROLLER_SELF_HEAL_TIMEOUT_SECONDS")'
+```
+
 ## References
 
 - https://github.com/argoproj/argo-helm/tree/main/charts/argo-cd
