@@ -49,6 +49,13 @@ free # shows buff/cache section
 echo 3 | sudo tee /proc/sys/vm/drop_caches
 ```
 
+## wslg
+```
+ls -lah /mnt/wslg
+cat /mnt/wslg/versions.txt
+cat /mnt/wslg/weston.log
+```
+
 ## Notes
 
 If all interfaces are down according to `ifconfig -a` or `ip link`, uncompress recursively all files and folders in `%TEMP%`.
