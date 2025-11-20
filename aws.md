@@ -190,8 +190,9 @@ aws ssm get-parameter --name <name> --with-decryption --query Parameter.Value
 ## ECR
 ```
 aws ecr get-login-password | docker login --username AWS --password-stdin <aws-account-id>.dkr.ecr.<aws-region>.amazonaws.com # updates $HOME/.docker/config.json
+aws ecr describe-repositories --registry-id <aws-account-id> | jq -r '.repositories[].repositoryName'
 aws ecr list-images --registry-id <aws-account-id> --repository-name <repo-name>
-aws ecr describe-images --registry-id <aws-account-id> --repository-name <repo-name>
+aws ecr describe-images --registry-id <aws-account-id> --repository-name <repo-name> [--query 'sort_by(imageDetails,& imagePushedAt)[*]' | --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]']
 ```
 
 ### ECR Public
