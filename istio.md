@@ -13,6 +13,26 @@ k -n <istio-system-namespace> get deployment/istio-ingressgateway -o yaml
 
 Nginx-ingress: Ingress
 
+## networking.istio.io/v1/ServiceEntry
+
+```
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: external-svc-https
+spec:
+  hosts:
+  - api.dropboxapi.com
+  - www.googleapis.com
+  - api.facebook.com
+  location: MESH_EXTERNAL
+  ports:
+  - number: 443
+    name: https
+    protocol: TLS
+  resolution: DNS
+```
+
 ## networking.istio.io/v1/VirtualService
 
 ```
@@ -53,26 +73,6 @@ spec:
     route:
     - destination:
         host: internal-egress-firewall.ns1.svc.cluster.local
-```
-
-## networking.istio.io/v1/ServiceEntry
-
-```
-apiVersion: networking.istio.io/v1
-kind: ServiceEntry
-metadata:
-  name: external-svc-https
-spec:
-  hosts:
-  - api.dropboxapi.com
-  - www.googleapis.com
-  - api.facebook.com
-  location: MESH_EXTERNAL
-  ports:
-  - number: 443
-    name: https
-    protocol: TLS
-  resolution: DNS
 ```
 
 ## networking.istio.io/v1/DestinationRule
