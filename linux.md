@@ -181,6 +181,7 @@ update-alternatives --remove gcc /usr/bin/gcc-13
 ```
 echo $XDG_SESSION_TYPE
 echo $WAYLAND_DISPLAY
+xlsclients # list applications running in a X11 session of the XServer of Xwayland
 ```
 
 ## Docker
