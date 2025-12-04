@@ -65,11 +65,17 @@ Expand-Archive -LiteralPath .\Ubuntu2404\Ubuntu_2404.0.5.0_x64.appx -Destination
 cp -rv Ubuntu2404-x64/install.tar.gz /mnt/c/Users/<username>/AppData/Local/WSL/images
 mv -v /mnt/c/Users/<username>/AppData/Local/WSL/images/install.tar.gz /mnt/c/Users/<username>/AppData/Local/WSL/images/ubuntu-2404.tar.gz
 
-# tar -xvzf /mnt/c/Users/<username>/AppData/Local/WSL/images/ubuntu-2404.tar.gz
-gzip -d /mnt/c/Users/<username>/AppData/Local/WSL/images/ubuntu-2404.tar.gz # creates /mnt/c/Users/<username>/AppData/Local/WSL/images/ubuntu-2404.tar
+# tar -xzvf /mnt/c/Users/<username>/AppData/Local/WSL/images/ubuntu-2404.tar.gz
+command gunzip -c /mnt/c/Users/<username>/AppData/Local/WSL/images/ubuntu-2404.tar.gz >/mnt/c/Users/<username>/AppData/Local/WSL/images/ubuntu-2404.tar
 
-wsl --import Ubuntu-24.04 C:\Users\<username>\AppData\Local\WSL\instances\Ubuntu24_04 C:\Users\<username>\AppData\Local\WSL\images\ubuntu-2404.tar --version 2
-wsl -d Ubuntu-24.04 -u root useradd --create-home --user-group --groups adm,dialout,cdrom,floppy,sudo,audio,dip,video,plugdev,netdev --password "<encrypted-password>" username
+wsl --import Ubuntu-24.04 C:\Users\<username>\AppData\Local\WSL\instances\Ubuntu-2404 C:\Users\<username>\AppData\Local\WSL\images\ubuntu-2404.tar --version 2
+
+wsl -d Ubuntu-24.04 -u root useradd -m|--create-home -U|--user-group -d|--home-dir /home/<username> -G|--groups adm,dialout,cdrom,floppy,sudo,audio,dip,video,plugdev,netdev -p|--password $(echo "<password>" | openssl passwd -1 -stdin) <username>
+cat /etc/passwd | grep <username>
+wsl --terminate Ubuntu-24.04
+
+wsl -d Ubuntu-24.04
+whoami
 ```
 
 ## apt
