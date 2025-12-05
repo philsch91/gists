@@ -132,12 +132,22 @@ getent hosts <hostname>
 
 ## apt
 ```
+## apt list
 apt list --upgradable
+apt list --installed [-qq|--quiet] <(*)package-name(*)>
+
+## apt update
+apt-get update # to fix 404 for install
+
+## apt upgrade
 apt-get [-s|--simulate] upgrade
 apt-get [-u|--show-upgraded] [-V|--verbose-versions] [[--assume-no]] upgrade # show upgraded version summary
-apt [-qq|--quiet] --installed list <package-name(*)>
-apt-get update # to fix 404 for install
+### apt list --installed [-qq|--quiet] <(*)package-name(*)>
+
+## apt install
 apt-get [-f|--fix-broken] [-m|--fix-missing] [[--no-cache]] install <package-name>
+
+## apt purge
 apt purge <package1> <packagen>
 ```
 
