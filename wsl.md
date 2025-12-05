@@ -70,12 +70,34 @@ command gunzip -c /mnt/c/Users/<username>/AppData/Local/WSL/images/ubuntu-2404.t
 
 wsl --import Ubuntu-24.04 C:\Users\<username>\AppData\Local\WSL\instances\Ubuntu-2404 C:\Users\<username>\AppData\Local\WSL\images\ubuntu-2404.tar --version 2
 
-wsl -d Ubuntu-24.04 -u root useradd -m|--create-home -U|--user-group -d|--home-dir /home/<username> -G|--groups adm,dialout,cdrom,floppy,sudo,audio,dip,video,plugdev,netdev -p|--password $(echo "<password>" | openssl passwd -1 -stdin) <username>
+# 1
+wsl -d Ubuntu-24.04 -u root
+# 2
+useradd -m|--create-home [-s|--shell /bin/bash] -U|--user-group -d|--home-dir /home/<username> -G|--groups adm,dialout,cdrom,floppy,sudo,audio,dip,video,plugdev,netdev [-p|--password $(echo "<password>" | openssl passwd -1 -stdin)] <username>
+# 3
+passwd <username>
+## or
+echo "<password>" | passwd <username> --stdin
+# 4
 cat /etc/passwd | grep <username>
+cat /etc/shadow | grep <username>
+cat /etc/pam.d/passwd | grep <username>
+# 5
+echo "[user]\ndefault=<username>\n" >>/etc/wsl.conf
+echo "[network]\ngenerateResolvConf=false" >>/etc/wsl.conf
+# 6
+exit
+## or in PowerShell
 wsl --terminate Ubuntu-24.04
-
+# 7
 wsl -d Ubuntu-24.04
 whoami
+# 8
+echo "nameserver 8.8.8.8" >>/etc/resolv.conf
+## or
+echo "nameserver 8.8.8.8" >>/run/systemd/resolve/stub-resolv.conf
+# 9
+sudo apt update && sudo apt upgrade
 ```
 
 ## apt
