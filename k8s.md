@@ -78,6 +78,13 @@ kubectl get crd/nodepools.karpenter.sh -o json | jq -r '.spec.versions[0].schema
 kubectl get crd/nodepools.karpenter.sh -o json | jq -r '.spec.versions[0].schema.openAPIV3Schema.properties.spec.properties.disruption.default'
 ```
 
+### get --raw
+```
+kubectl get --raw /apis/apps | jq -r .
+kubectl get --raw /apis/cert-manager.io | jq -r '.versions'
+kubectl get --raw /apis/external-secrets.io | jq -r '.preferredVersion'
+```
+
 ## describe
 ```
 // check for overcommitted resource limits (underprovisioned nodes)
