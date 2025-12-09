@@ -3,17 +3,23 @@
 -> VirtualService -> Gateway -> Service<br />
 <- VirtualService [<- DestinationRule] <- ServiceEntry
 
-## Deployments
+## Deployment.v1.apps
 
 ```
 k -n <istio-system-namespace> get deployment/istio-ingressgateway -o yaml
+k -n <istio-system-namespace> get deployment/istio-ingressgateway -o json | jq -r '.spec.template.spec.containers[].name'
 ```
 
-## networking.istio.io/v1/Gateway
+## Gateway.v1.networking.istio.io
 
-Nginx-ingress: Ingress
+Nginx-ingress equivalent: Ingress
 
-## networking.istio.io/v1/ServiceEntry
+```
+k [-n <istio-system-namespace>] get gateway.v1.networking.istio.io [-A]
+k -n <namespace> get gateway/<gateway-name> -o json | jq -r '.spec.servers[].tls.credentialName'
+```
+
+## ServiceEntry.v1.networking.istio.io
 
 ```
 apiVersion: networking.istio.io/v1
@@ -33,10 +39,11 @@ spec:
   resolution: DNS
 ```
 
-## networking.istio.io/v1/VirtualService
+## VirtualService.v1.networking.istio.io
 
 ```
-k [-n <namespace>] get virtualservice [-A]
+k [-n <namespace>] get VirtualService.v1.networking.istio.io [-A]
+k -n <namespace> get virtualservice/<virtualservice-name> -o json | jq -r '.spec.gateways'
 ```
 
 ```
@@ -75,7 +82,7 @@ spec:
         host: internal-egress-firewall.ns1.svc.cluster.local
 ```
 
-## networking.istio.io/v1/DestinationRule
+## DestinationRule.v1.networking.istio.io
 
 ```
 apiVersion: networking.istio.io/v1
