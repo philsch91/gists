@@ -94,10 +94,19 @@ wsl -d Ubuntu-24.04
 whoami
 # 8
 echo "nameserver 8.8.8.8" >>/etc/resolv.conf
+## if /etc/resolv.conf is a symlink to /run/systemd/resolve/stub-resolv.conf
+echo "DNS=8.8.8.8 1.1.1.1" >>/etc/systemd/resolved.conf
+echo "FallbackDNS=8.8.4.4" >>/etc/systemd/resolved.conf
 ## or
-echo "nameserver 8.8.8.8" >>/run/systemd/resolve/stub-resolv.conf
+sudo mkdir -pv /etc/systemd/resolved.conf.d/
+echo "[Resolve]" >>/etc/systemd/resolved.conf.d/resolved-01.conf
+echo "DNS=8.8.8.8 1.1.1.1" >>/etc/systemd/resolved.conf.d/resolved-01.conf
+echo "FallbackDNS=8.8.4.4" >>/etc/systemd/resolved.conf.d/resolved-01.conf
+sudo systemctl restart systemd-resolved
 # 9
 sudo apt update && sudo apt upgrade
+# 10
+chsh -s /bin/bash|/bin/zsh|/usr/bin/zsh
 ```
 
 ## apt
