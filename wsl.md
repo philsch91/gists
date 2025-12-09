@@ -83,29 +83,37 @@ cat /etc/passwd | grep <username>
 cat /etc/shadow | grep <username>
 cat /etc/pam.d/passwd | grep <username>
 # 5
+## user can execute on all hosts without a password all commands
+## explanation for user priviledge definition, use visudo
+echo "<username>    ALL = NOPASSWD: ALL" >>/etc/sudoers
+## or
+echo "<username>    ALL = NOPASSWD: ALL" >>/etc/sudoers.d/10-users
+## or
+sudo usermod -aG sudo <username>
+# 6
 echo "[user]\ndefault=<username>\n" >>/etc/wsl.conf
 echo "[network]\ngenerateResolvConf=false" >>/etc/wsl.conf
-# 6
+# 7
 exit
 ## or in PowerShell
 wsl --terminate Ubuntu-24.04
-# 7
+# 8
 wsl -d Ubuntu-24.04
 whoami
-# 8
+# 9
 echo "nameserver 8.8.8.8" >>/etc/resolv.conf
 ## if /etc/resolv.conf is a symlink to /run/systemd/resolve/stub-resolv.conf
 echo "DNS=8.8.8.8 1.1.1.1" >>/etc/systemd/resolved.conf
 echo "FallbackDNS=8.8.4.4" >>/etc/systemd/resolved.conf
 ## or
 sudo mkdir -pv /etc/systemd/resolved.conf.d/
-echo "[Resolve]" >>/etc/systemd/resolved.conf.d/resolved-01.conf
-echo "DNS=8.8.8.8 1.1.1.1" >>/etc/systemd/resolved.conf.d/resolved-01.conf
-echo "FallbackDNS=8.8.4.4" >>/etc/systemd/resolved.conf.d/resolved-01.conf
+echo "[Resolve]" >>/etc/systemd/resolved.conf.d/01-resolved.conf
+echo "DNS=8.8.8.8 1.1.1.1" >>/etc/systemd/resolved.conf.d/01-resolved.conf
+echo "FallbackDNS=8.8.4.4" >>/etc/systemd/resolved.conf.d/01-resolved.conf
 sudo systemctl restart systemd-resolved
-# 9
-sudo apt update && sudo apt upgrade
 # 10
+sudo apt update && sudo apt upgrade
+# 11
 chsh -s /bin/bash|/bin/zsh|/usr/bin/zsh
 ```
 
