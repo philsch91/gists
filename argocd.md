@@ -111,6 +111,10 @@ k -n argocd get cm/argocd-cmd-params-cm -o json | jq -r '.data["controller.self.
 k -n argocd get sts/argocd-application-controller -o json | jq -r '.spec.template.spec.containers[].env[] | select(.name == "ARGOCD_APPLICATION_CONTROLLER_SELF_HEAL_TIMEOUT_SECONDS")'
 ```
 
+## Notes
+
+Argo CD is using Helm only as a template mechanism. It runs `helm template` and then deploys the resulting manifests on the cluster instead of doing `helm install`. Resources can therefore not be viewed or verified with `helm ls`.
+
 ## References
 
 - https://github.com/argoproj/argo-helm/tree/main/charts/argo-cd
@@ -119,3 +123,4 @@ k -n argocd get sts/argocd-application-controller -o json | jq -r '.spec.templat
 - https://argo-cd.readthedocs.io/en/stable/operator-manual/
 - https://argo-cd.readthedocs.io/en/stable/operator-manual/upgrading/overview/
 - https://argo-cd.readthedocs.io/en/stable/operator-manual/disaster_recovery/
+- https://argo-cd.readthedocs.io/en/latest/faq/
