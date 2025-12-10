@@ -91,8 +91,9 @@ helm repo add argo https://argoproj.github.io/argo-helm
 helm repo ls
 helm -n argocd upgrade -i bootstrap-apps-projects argo/argocd-apps --values values.projects.yaml
 helm -n argocd get all <argocd-application-release>
-k -n argocd get appprojects
-k -n argocd get applications
+k -n argocd get appproject
+k -n argocd get application
+k -n argocd get application/artifactory-dev-cpp-ci-cd-bmp -o json | jq -r '.status.sync'
 ```
 
 ## Automated Sync
