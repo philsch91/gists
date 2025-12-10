@@ -87,7 +87,11 @@ helm pull oci://localhost:5000/helm-charts/chart --version <version | 0.1.0>
 
 ## dependency
 ```
+# generates Chart.lock
 helm dependency update
+# reconstruct chart dependencies and build out charts/ directory from Chart.lock file
+# If no Chart.lock file is found, 'helm dependency build' will mirror/call 'helm dependency update'
+helm dependency build
 ```
 
 ## install
