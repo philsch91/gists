@@ -5,6 +5,7 @@
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.1/manifests/install.yaml
 helm -n argocd install argocd oci://ghcr.io/argoproj/argo-helm/argo-cd --version <chart-version>
+helm -n argocd get values argocd [| less|>/tmp/argocd/values-argo-cd.yaml]
 
 kubectl -n argocd get cm/argocd-cm
 k -n argocd get cm/argocd-cmd-params-cm
@@ -62,6 +63,8 @@ argocd app get argocd/<app-name> [--grpc-web]
 ## repo
 ```
 argocd repo list
+argocd repo add https://charts.helm.sh/stable --type helm --name stable [--username <username> --password <password>]
+argocd repo add oci://helm-oci-registry.name.tld --type oci --name stable --username <username> --password <password> [--insecure-skip-server-verification]
 ```
 
 ## argocd-server
@@ -77,6 +80,8 @@ k -n argocd get deployment/argocd-redis -o yaml
 ## argocd-repo-server
 ```
 k -n argocd get deployment/argocd-repo-server -o yaml
+k -n argocd get cm/argocd-cmd-params-cm -o json | jq -r '.data["reposerver.disable.tls"]'
+k -n argocd get deployment/argocd-repo-server -o json | jq -r '.spec.template.spec.containers[].env[] | select(.name == "ARGOCD_REPO_SERVER_DISABLE_TLS")'
 k -n argocd logs pod/argocd-repo-server-76fc47d78d-8tgxh
 ```
 
