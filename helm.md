@@ -10,6 +10,35 @@ helm version
 helm create <chart-name>
 ```
 
+### Chart .gitignore
+
+```markdown
+# .gitignore Helm chart
+
+## Files
+*.zip
+*.tar.gz
+*.tar
+*.tgz
+*.bak
+*.swp
+*.swo
+*.DS_Store
+*.local
+
+### Helm files
+### prevent inclusion of files created and dependencies downloaded via 'helm dependency update'
+*.tgz
+Chart.lock
+
+## IDE
+.idea/
+.vscode/
+
+## Eclipse
+.project
+```
+
 ## lint
 ```
 helm lint
@@ -22,7 +51,8 @@ helm template <release-name> [[<repo-name>/]<chart-name> | .] [-f values.yaml -f
 
 ## package
 ```
-helm package <chart-name>
+# download and extract dependencies in /charts directory
+helm package <chart-name>|<directory>|.
 ```
 
 ## repo
@@ -87,7 +117,7 @@ helm pull oci://localhost:5000/helm-charts/chart --version <version | 0.1.0>
 
 ## dependency
 ```
-# generates Chart.lock
+# generate Chart.lock, create /charts directory and download dependencies
 helm dependency update
 # reconstruct chart dependencies and build out charts/ directory from Chart.lock file
 # If no Chart.lock file is found, 'helm dependency build' will mirror/call 'helm dependency update'
