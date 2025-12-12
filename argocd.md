@@ -116,6 +116,47 @@ k -n argocd get sts/argocd-application-controller -o json | jq -r '.spec.templat
 
 Argo CD is using Helm only as a template mechanism. It runs `helm template` and then deploys the resulting manifests on the cluster instead of doing `helm install`. Resources can therefore not be viewed or verified with `helm ls`.
 
+Define `Application`s with `.spec.syncPolicy.automated.prune: false` and `.spec.syncPolicy.automated.allowEmpty: false`, especially in combination with `stage: prod`, except `Application`s creating child `Application`s with the "App of Apps" approach.
+
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+  labels:
+  name: application
+  namespace: argocd
+spec:
+  destination:
+    namespace: app-namespace
+    server:
+  project: app-project
+  source:
+    repoURL:
+    targetRevision: main
+    path: apps/app/kustomization/overlays/stage
+    kustomize:
+      patches:
+      - patch: |-
+          - op: replace
+            path: /metadata/labels/label.name
+            value: label-value
+        target:
+          kind: Namespace
+          name: app-namespace
+  syncPolicy:
+    automated:
+      # enabled: true # true by default
+      selfHeal: true # false by default
+      # prune: false # false by default
+      # allowEmpty: false # false by default
+    syncOptions:
+    - ServerSideApply=true
+    - Prune=false
+    # - PrunePropagationPolicy=foreground
+    # - PruneLast=true
+```
+
 ## References
 
 - https://github.com/argoproj/argo-helm/tree/main/charts/argo-cd
