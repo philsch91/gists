@@ -213,6 +213,14 @@ git reset --soft HEAD~1
 1. `git clean -nd`
 1. `git clean -fd`
 
+## Delete empty directories
+
+Git only tracks files and not empty directories.
+
+1. `find . -type d -empty`
+2. `ls -lah <directory>`
+3. `rm -rv <directory>`
+
 ## Change last commit message
 ```
 // the last commit must not have been pushed
