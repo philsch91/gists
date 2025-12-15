@@ -45,3 +45,8 @@ source /path/to/new/virtual/environment/bin/activate
 echo $VIRTUAL_ENV
 deactivate
 ```
+
+## Execute
+```
+export PYTHONPATH="${PYTHONPATH}:~/dev/python-libs/"
+```
