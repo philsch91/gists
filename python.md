@@ -2,6 +2,18 @@
 
 ## Install
 ```
+sudo apt-get install python3
+## or
+sudo apt install python3.x
+python3 -V
+
+## optional
+sudo apt-get install python-is-python3
+sudo apt-get install python3-doc
+```
+
+### Install pip
+```
 mkdir -pv "${HOME}/.config/pip/"
 cat << EOF >${HOME}/.config/pip/pip.conf
 [global]
