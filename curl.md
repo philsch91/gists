@@ -19,3 +19,8 @@ curl -iSs --cacert certs.pem <url>
 ```
 curl -iSs --capath <path-to-pem-certs> <url>
 ```
+
+## tls
+```
+curl -iSs --tlsv1.2 --tls-max 1.2 <url>
+```
