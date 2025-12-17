@@ -24,3 +24,8 @@ curl -iSs --capath <path-to-pem-certs> <url>
 ```
 curl -iSs --tlsv1.2 --tls-max 1.2 <url>
 ```
+
+## data-binary
+```
+curl -L -u <username>:<password> -X POST <url> --data-binary "@path/to/file.json"
+```
