@@ -112,11 +112,17 @@ k -n argocd get cm/argocd-cmd-params-cm -o json | jq -r '.data["controller.self.
 k -n argocd get sts/argocd-application-controller -o json | jq -r '.spec.template.spec.containers[].env[] | select(.name == "ARGOCD_APPLICATION_CONTROLLER_SELF_HEAL_TIMEOUT_SECONDS")'
 ```
 
-## Notes
+## Argo CD + Helm
 
 Argo CD is using Helm only as a template mechanism. It runs `helm template` and then deploys the resulting manifests on the cluster instead of doing `helm install`. Resources can therefore not be viewed or verified with `helm ls`.
 
+## Application.v1alpha1.argoproj.io
+
 Define `Application`s with `.spec.syncPolicy.automated.prune: false` and `.spec.syncPolicy.automated.allowEmpty: false`, especially in combination with `stage: prod`, except `Application`s creating child `Application`s with the "App of Apps" approach.
+
+## Argo CD + Kustomize
+
+If the `kustomization.yaml` file exists at the location pointed to by `.spec.source.repoURL` and `.spec.source.path`, Argo CD will render the manifests using Kustomize.
 
 ```yaml
 apiVersion: argoproj.io/v1alpha1
@@ -135,7 +141,7 @@ spec:
     repoURL:
     targetRevision: main
     path: apps/app/kustomization/overlays/stage
-    kustomize:
+    kustomize: # optional
       patches:
       - patch: |-
           - op: replace
