@@ -7,10 +7,21 @@ roleRef:
   kind: ClusterRole
   name: view
 subjects:
-#- apiGroup: rbac.authorization.k8s.io
-#  kind: Group
-#  name: cluster-viewer
-#  namespace: default
+# all authenticated and unauthenticated users
+# - apiGroup: rbac.authorization.k8s.io
+#   kind: Group
+#   name: system:authenticated
+# - apiGroup: rbac.authorization.k8s.io
+#   kind: Group
+#   name: system:unauthenticated
+# all service accounts in default namespace
+# - apiGroup: rbac.authorization.k8s.io
+#   kind: Group
+#   name: system:serviceaccounts:default
+# specific service account
+# - apiGroup: rbac.authorization.k8s.io
+#   kind: User
+#   name: system:serviceaccount:default:cluster-viewer
 - kind: ServiceAccount
   name: cluster-viewer
   namespace: default
