@@ -147,6 +147,9 @@ apt-get [-u|--show-upgraded] [-V|--verbose-versions] [[--assume-no]] upgrade # s
 ## apt install
 apt-get [-f|--fix-broken] [-m|--fix-missing] [[--no-cache]] install <package-name>
 
+## apt remove
+apt-get remove <package-name>
+
 ## apt purge
 apt purge <package1> <packagen>
 ```
