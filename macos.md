@@ -144,6 +144,25 @@ sudo powermetrics --samplers cpu_power,smc -i1000 -n1 | egrep -i 'power|CPU die 
 
 ## Time Machine
 
+```
+tmutil destinationinfo
+tmutil startbackup
+tmutil stopbackup
+tmutil disablelocal
+tmutil enablelocal
+tmutil addexclusion -p ~/Downloads
+tmutil setdestination /Volume/<volume-name>
+tmutil removedestination
+tmutil listbackups
+tmutil delete /Volumes/<volume-name>/path/to/*.backupdb/<device-name>/<year>
+tmutil delete /Volumes/<volume-name>/Backups.backupdb/<backup-file>
+```
+
+```
+hdiutil create -size <1234>g -type <image-type> -fs <fs-type> -volname <volume-name> <file>
+hdiutil imageinfo <file>
+```
+
 ### Time Machine via SMB
 
 1. `hdiutil create -size 600g -type SPARSEBUNDLE -fs "HFS+J" -volname TimeMachine TimeMachine.sparsebundle`
