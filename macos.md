@@ -142,25 +142,30 @@ defaults write com.apple.finder CreateDesktop 0
 sudo powermetrics --samplers cpu_power,smc -i1000 -n1 | egrep -i 'power|CPU die temperature'
 ```
 
-## Time Machine
-
-```
-tmutil destinationinfo
-tmutil startbackup
-tmutil stopbackup
-tmutil disablelocal
-tmutil enablelocal
-tmutil addexclusion -p ~/Downloads
-tmutil setdestination /Volume/<volume-name>
-tmutil removedestination
-tmutil listbackups
-tmutil delete /Volumes/<volume-name>/path/to/*.backupdb/<device-name>/<year>
-tmutil delete /Volumes/<volume-name>/Backups.backupdb/<backup-file>
-```
+## hdiutil
 
 ```
 hdiutil create -size <1234>g -type <image-type> -fs <fs-type> -volname <volume-name> <file>
 hdiutil imageinfo <file>
+```
+
+## Time Machine tmutil
+
+```
+tmutil destinationinfo
+tmutil startbackup [-b(=foreground)]
+tmutil stopbackup
+tmutil disablelocal
+tmutil enablelocal
+tmutil enable # enable automatic backups
+tmutil disable # disable automatic backups
+tmutil addexclusion -p ~/Downloads
+tmutil setdestination /Volume/<volume-name>
+tmutil setdestination [-a(=append)] "<protocol://user[:password]@host/share>"
+tmutil removedestination
+tmutil listbackups
+tmutil delete /Volumes/<volume-name>/path/to/*.backupdb/<device-name>/<year>
+tmutil delete /Volumes/<volume-name>/Backups.backupdb/<backup-file>
 ```
 
 ### Time Machine via SMB
