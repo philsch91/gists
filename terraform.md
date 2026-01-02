@@ -62,6 +62,7 @@ terraform [-chdir=terraform/aws] init [-backend-config tf-backend.config]
 terraform fmt [-check] [-recursive] resource.tf
 terraform [-chdir=terraform/aws] plan [-destroy] [-var-file="testing.tfvars(.json)"] [-var 'name=value'] [-var 'listname=["a", "b", "c"]'] [-input=false] [-out terraform.tfplan] [-detailed-exitcode]
 terraform [-chdir=terraform/aws] apply [-destroy] [-var-file="testing.tfvars(.json)"] [-input=false] [terraform.tfplan]
+terraform [-chdir=terraform/aws] output [-no-color] -json
 ```
 
 ## init
