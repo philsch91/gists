@@ -112,6 +112,25 @@ k -n argocd get cm/argocd-cmd-params-cm -o json | jq -r '.data["controller.self.
 k -n argocd get sts/argocd-application-controller -o json | jq -r '.spec.template.spec.containers[].env[] | select(.name == "ARGOCD_APPLICATION_CONTROLLER_SELF_HEAL_TIMEOUT_SECONDS")'
 ```
 
+## Sync Options
+
+Most of the sync options are configured in the `Application` resource `spec.syncPolicy.syncOptions` attribute. Some sync options can be defined with the `argocd.argoproj.io/sync-options` annotation in a specific resource. Multiple sync options are configured with the `argocd.argoproj.io/sync-options` annotation by concatenation with a `,` in the annotation value, where white-spaces will be trimmed.
+
+### Disable `Prune`
+
+```
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    name: <namespace-name>
+  finalizers:
+  - suborg.org.com/finalizer
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false
+  name: <namespace-name>
+```
+
 ## Argo CD + Helm
 
 Argo CD uses Helm if a `Chart.yaml` file exists at the location pointed to by `.spec.source.repoURL` and `.spec.source.path`, but only as a template mechanism. It runs `helm template` and then deploys the resulting manifests on the cluster instead of doing `helm install`. Resources can therefore not be viewed or verified with `helm ls`.
