@@ -114,7 +114,7 @@ k -n argocd get sts/argocd-application-controller -o json | jq -r '.spec.templat
 
 ## Argo CD + Helm
 
-Argo CD is using Helm only as a template mechanism. It runs `helm template` and then deploys the resulting manifests on the cluster instead of doing `helm install`. Resources can therefore not be viewed or verified with `helm ls`.
+Argo CD uses Helm if a `Chart.yaml` file exists at the location pointed to by `.spec.source.repoURL` and `.spec.source.path`, but only as a template mechanism. It runs `helm template` and then deploys the resulting manifests on the cluster instead of doing `helm install`. Resources can therefore not be viewed or verified with `helm ls`.
 
 ## Application.v1alpha1.argoproj.io
 
@@ -162,6 +162,11 @@ spec:
     # - PrunePropagationPolicy=foreground
     # - PruneLast=true
 ```
+
+## Errors
+
+- Error: `Unable to save changes: application spec is invalid: InvalidSpecError: repository not accessible: repository not found`<br />
+  Solution: The deployment.apps/argocd-repo-server is not able to access (read) `.spec.source.repoURL`.
 
 ## References
 
