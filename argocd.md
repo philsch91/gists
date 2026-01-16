@@ -64,7 +64,16 @@ argocd app get argocd/<app-name> [--grpc-web]
 ```
 argocd repo list
 argocd repo add https://charts.helm.sh/stable --type helm --name stable [--username <username> --password <password>]
+# add a private HTTPS OCI repository named 'stable'
 argocd repo add oci://helm-oci-registry.name.tld --type oci --name stable --username <username> --password <password> [--insecure-skip-server-verification]
+# add a private HTTPS OCI Helm repository named 'stable'
+argocd repo add registry.name.tld/<repository>/<chart-repository> --type helm --name stable --username <username> --password <password> --enable-oci
+```
+
+## repocreds
+```
+## add credentials for accessing multiple repositories with the matching domain or pattern
+argocd repocreds add registry.name.tld --type helm --username <username> --password <password> --enable-oci
 ```
 
 ## argocd-server
