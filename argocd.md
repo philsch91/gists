@@ -27,6 +27,19 @@ argocd configure
 argocd logout
 ```
 
+## account
+```
+argocd account list
+argocd account get --account <username>
+# If users are managed as admin user, <current-user-password> should be the current admin password
+argocd account update-password \
+  --account <name> \
+  --current-password <current-user-password> \
+  --new-password <new-user-password>
+# Argo CD generates token for current user if flag --account is omitted
+argocd account generate-token --account <username>
+```
+
 ## login
 ```
 argocd login <argocd.hostname> --sso
@@ -44,6 +57,9 @@ argocd context
 argocd admin
 argocd admin export >/tmp/argocd-backup.yaml
 argocd admin import - < /tmp/argocd-backup.yaml
+# Reset initial admin password
+# kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+argocd admin initial-password reset
 ```
 
 ## cluster
