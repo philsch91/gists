@@ -1,5 +1,8 @@
 # helm
 
+Default configuration files location: `~/.config/helm`<br />
+Custom config files location: `export HELM_CONFIG_HOME=<directory>`
+
 ## version
 ```
 helm version
@@ -63,6 +66,9 @@ helm repo index <sub-folder-for-index-file/> --url <url-path-for-helm-chart-pack
 ```
 
 ### repo add
+
+Default config file: `~/.config/helm/repositories.yaml`
+
 ```
 helm repo add <repo-name> <repo-url | https://charts.external-secrets.io>
 helm repo update  // force refresh chart version
@@ -72,6 +78,7 @@ helm repo list
 ## registry
 
 Helm repos in OCI-based registries
+Default config file: `~/.config/helm/registry/config.json`, similar to `~/.docker/config.json`
 
 ```yaml
 apiVersion: v2
@@ -89,7 +96,7 @@ dependencies:
 
 ```
 # export HELM_EXPERIMENTAL_OCI=1 (version < 3.8.0)
-export HELM_REGISTRY_CONFIG="" # "~/.config/helm/registry/config.json"
+export HELM_REGISTRY_CONFIG="~/.config/helm/registry/config.json"
 helm registry login container.registry.io -u <user-name> -p <password>
 helm registry logout container.registry.io
 ```
