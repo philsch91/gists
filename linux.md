@@ -162,6 +162,23 @@ sudo rm /etc/apt/sources.list.d/temporary-repository.list
 sudo apt update
 ```
 
+## ca-certificates
+
+- /etc/ssl/cert.pem<br />
+Classic filename, file contains a list of CA certificates trusted for TLS server authentication usage, in the simple BEGIN/END CERTIFICATE file format, without distrust information. This file is a symbolic link that refers to the consolidated output created by the update-ca-trust command.
+
+- /etc/ssl/certs/<br />
+Classic directory, contains individual CA certificates trusted for TLS server authentication usage, in the simple BEGIN/END CERTIFICATE file format, without distrust information. Also includes the necessary hash symlinks expected by OpenSSL. The files are symbolic links that refer to the output created by the update-ca-trust command.
+
+- /etc/ssl/certs/ca-bundle.crt<br />
+Classic filename for compatibility with RHEL/Fedora, file contains a list of CA certificates trusted for TLS server authentication usage, in the simple BEGIN/END CERTIFICATE file format, without distrust information. This file is a symbolic link that refers to the consolidated output created by the update-ca-trust command.
+
+- /etc/ssl/certs/ca-certificates.crt<br />
+Classic filename for compatibility with Debian, file contains a list of CA certificates trusted for TLS server authentication usage, in the simple BEGIN/END CERTIFICATE file format, without distrust information. This file is a symbolic link that refers to the consolidated output created by the update-ca-trust command.
+
+- /etc/ssl/certs/java/cacerts<br />
+Classic filename, file contains a list of CA certificates trusted for TLS server authentication usage, in the Java keystore file format, without distrust information. This file is a symbolic link that refers to the consolidated output created by the update-ca-trust command.
+
 ## update-ca-certificates
 ```
 # /usr/share/ca-certificates/ + /usr/sbin/update-ca-certificates
@@ -173,6 +190,19 @@ sudo update-ca-certificates # updates certificates in /etc/ssl/certs/ca-certific
 cp -v root_ca.crt /usr/local/share/ca-certificates/
 sudo update-ca-certificates # updates certificates in /etc/ssl/certs/ca-certificates.crt
 openssl s_client -connect foo.whatever.com:443 -CApath /etc/ssl/certs
+```
+
+## update-ca-trust
+```
+ls -lah /etc/pki/tls/openssl.cnf
+ls -lah /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+
+/etc/ssl/openssl.cnf -> /etc/pki/tls/openssl.cnf
+/etc/ssl/cert.pem -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+/etc/ssl/certs/ca-bundle.crt -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+
+/etc/pki/tls/cert.pem -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+/etc/pki/tls/certs/ca-bundle.crt -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 ```
 
 ## pwgen
