@@ -84,8 +84,8 @@ SerialGC is automatically set in a container that can use <= 1 core
 
 #### Debug javax.net
 ```
--Djavax.net.debug=all
--Djavax.net.debug=ssl:session
+java com.example.MainClass -Djavax.net.debug=help
+java -jar application.jar -Djavax.net.debug=all|ssl[:session[:<ssl-option-2>[:<ssl-option-2-option-n>]]]
 ```
 
 #### Java Debug Wire Protocol (JDWP)
