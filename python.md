@@ -10,6 +10,22 @@ python3 -V
 ## optional
 sudo apt-get install python-is-python3
 sudo apt-get install python3-doc
+
+which python3
+/usr/bin/python3
+
+ls -la /usr/bin/python3
+/usr/bin/python3 -> python3.8
+
+which python3.8
+/usr/bin/python3.8
+
+ls -la /usr/bin/python3.8
+/usr/bin/python3.8
+
+## optional 2
+ln -s /usr/bin/python3.x /usr/bin/python3
+ln -s /usr/bin/python3 /usr/bin/python
 ```
 
 ### Install pip
@@ -24,7 +40,13 @@ trusted-host = pypi.python.org
 EOF
 
 sudo apt-get -y install python3-pip
+# invoke pip associated with the called Python version
+python -m pip install --upgrade pip
+# invoke pip executable
 pip install --upgrade pip
+
+## optional
+ln -s /usr/bin/pip3 /usr/bin/pip
 ```
 
 ## pip
@@ -54,4 +76,25 @@ deactivate
 ## Execute
 ```
 export PYTHONPATH="${PYTHONPATH}:~/dev/python-libs/"
+```
+
+## Errors
+
+error: externally-managed-environment
+```
+# option 1
+<command (python -m pip install --upgrade pip)> --break-system-packages
+
+# option 2
+mkdir -pv "${HOME}/.config/pip/"
+cat << EOF >${HOME}/.config/pip/pip.conf
+[global]
+break-system-packages = true
+EOF
+
+# option 3
+python3 -m pip config set global.break-system-packages true
+
+# option 4
+sudo mv /usr/lib/python3.x/EXTERNALLY-MANAGED /usr/lib/python3.x/EXTERNALLY-MANAGED.old
 ```
