@@ -7,6 +7,8 @@ source conan/bin/activate
 pip install conan
 pip show conan
 # Windows
+C:\dev\conan\bin\Activate.ps1
+where conan
 C:\Users\<user>\AppData\Roaming\Python\Python313\Scripts\conan.exe
 python3 -m pip install pip-system-certs
 ```
@@ -15,6 +17,11 @@ python3 -m pip install pip-system-certs
 
 - $HOME/.conan2/global.conf
 - $HOME/.conan2/remotes.json
+
+## version
+```
+conan version
+```
 
 ## config
 ```
@@ -40,6 +47,7 @@ core.net.http:cacert_path={{conan_home_folder}}\cacert.pem
 conan remote list
 conan remote add artifactory https://<artifactory-base-url>/artifactory/api/conan/artifactory
 conan remote login artifactory <username> -p <password>
+conan remote update <remote-name> --url="<remote-url>"
 ```
 
 ## install
