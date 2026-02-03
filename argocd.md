@@ -5,18 +5,38 @@
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v3.1.1/manifests/install.yaml
 helm -n argocd install argocd oci://ghcr.io/argoproj/argo-helm/argo-cd --version <chart-version>
-helm -n argocd get values argocd [| less|>/tmp/argocd/values-argo-cd.yaml]
 
-kubectl -n argocd get cm/argocd-cm
+# helm
+helm -n argocd get values argocd [| less|>/tmp/argocd/values-argo-cd-<version>.yaml]
+
+## resources definitions in output of `helm get all` are correctly ordered compared to `argocd admin export`
+helm -n argocd get all argocd >/tmp/argocd/argo-cd-<version>.yaml
+awk '/argocd-cm/,/---/ {print; if ($0 ~ /---/) exit}' /tmp/argocd/argo-cd-8.6.4.yaml | less
+awk '/argocd-cmd-params-cm/,/---/ {print; if ($0 ~ /---/) exit}' /tmp/argocd/argo-cd-8.6.4.yaml | less
+awk '/argocd-rbac-cm/,/---/ {print; if ($0 ~ /---/) exit}' /tmp/argocd/argo-cd-8.6.4.yaml | less
+
+# kubectl
+kubectl -n argocd get cm/argocd-cm [-o yaml | less]
 k -n argocd get cm/argocd-cmd-params-cm
-k -n argocd get cm/argocd-gpg-keys-cm -o yaml | less
+k -n argocd get cm/argocd-gpg-keys-cm
 k -n argocd get cm/argocd-notifications-cm
-k -n argocd get cm/argocd-rbac-cm -o yaml | less
-k -n argocd get cm/argocd-ssh-known-hosts-cm -o yaml | less
-k -n argocd get cm/argocd-tls-certs-cm -o yaml | less
+k -n argocd get cm/argocd-rbac-cm
+k -n argocd get cm/argocd-ssh-known-hosts-cm
+k -n argocd get cm/argocd-tls-certs-cm
 
 for cm in $(k -n argocd get cm | grep -i argocd | awk '{print $1}'); do k -n argocd get cm/${cm} -o yaml >/tmp/argocd/${cm}.yaml; done
+
 for scr in $(k -n argocd get secret | grep -i argocd | awk '{print $1}'); do k -n argocd get secret/${scr} -o yaml >/tmp/argocd/${scr}.yaml; done
+
+for cluster_secret in $(k -n argocd get secret -l argocd.argoproj.io/secret-type=cluster | tail -n +2 | awk '{print $1}'); do cluster_values=$(k -n argocd get secret/$cluster_secret -o jsonpath='{.data.name}{"\t"}{.data.server}{"\t"}{.data.config}'); echo "Name: $(echo $cluster_values | awk '{print $1}' | base64 -d)"; echo "Server: $(echo $cluster_values | awk '{print $2}' | base64 -d)"; echo "Config: $(echo $cluster_values | awk '{print $3}' | base64 -d)"; done
+```
+
+## Upgrade
+```
+k -n argocd get ingress/argocd-server -o yaml >/tmp/argocd/argocd-server-ingress.yaml
+helm -n argocd ls | grep argo-cd
+helm -n argocd upgrade argocd oci://ghcr.io/argoproj/argo-helm/argo-cd --version <chart-version(8.6.4)> --values values-8.6.4.yaml --wait --dry-run="server"
+helm -n argocd upgrade argocd oci://ghcr.io/argoproj/argo-helm/argo-cd --version <chart-version(8.6.4)> --values values-8.6.4.yaml --atomic
 ```
 
 ## version
@@ -55,8 +75,8 @@ argocd context
 ## admin
 ```
 argocd admin
-argocd admin export >/tmp/argocd-backup.yaml
-argocd admin import - < /tmp/argocd-backup.yaml
+argocd admin export >/tmp/argocd-admin-export.yaml
+argocd admin import - < /tmp/argocd-admin-export.yaml
 # Reset initial admin password
 # kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 argocd admin initial-password reset
