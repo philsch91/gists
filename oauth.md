@@ -1,5 +1,8 @@
 # OAuth
 
+## OpenID well-known endpoints
+- https://auth-service-hostname/.well-known/openid-configuration
+
 ## Authorization Code Grant Flow
 
 Token request:
