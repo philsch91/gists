@@ -2,29 +2,61 @@
 
 Documentation, Notes and Snippets for Git
 
+- keep commits clean by separating files and commits, and committing specific files avoiding commits with unrelated changes
+- use `git add --patch` instead of `git add --all` if possible
+- keep branches short
+- squash commits
+
+## variables
+```
+# $(prefix) = environment variable git was compiled with, usually /usr/local
+export GIT_CONFIG_NOSYSTEM=1
+export GIT_CONFIG_SYSTEM="$(prefix)/etc/gitconfig"
+export GIT_CONFIG_GLOBAL="$HOME/.gitconfig"
+```
+
+## files
+```
+# system config file
+$(prefix)/etc/gitconfig # = /usr/local/etc/gitconfig
+# global config files
+$XDG_CONFIG_HOME/git/config # = $HOME/.config/git/config
+~/.gitconfig
+# repository config file
+$GIT_DIR/config # = .git/config
+```
+
 ## config
 ```
-git config --global -l|--list
-git config -l --show-origin
+git config [--global] -l|--list|list [--show-origin]
+git config --global edit (=-e|--edit)
+git config --global set <name> <value>
+git config --global set --append (=--add) <name> <value>
+# config user
 git config --global --add user.name $user
 git config --global --add user.email $email
+# config credential
 git config --global --add credential.helper "store --file $HOME/.git-credentials"
+# config http
 git config --global --add http.https://github.com.proxy http://<proxy-host>:<proxy-port>
+# config filter
 git config --global --add filter.lfs.clean "git-lfs clean -- %f"
 git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"
 git config --global --add filter.lfs.process "git-lfs filter-process"
 git config --global --add filter.lfs.required true
+# config core
 git config --global core.symlinks true
 git config --global core.filemode false
 git config --global core.editor "vim"
 git config --global core.excludesfile ~/.gitignore
-
+# config pull
 git config --global pull.rebase true
-
-git config --global alias.go 'log --all --decorate --oneline --graph'
+# config push
+git config --global push.autoSetupRemote true
+# config alias
 git config --global alias.allog "log --all --decorate --oneline --graph"
 git config --global alias.lag "log --all --decorate --pretty=oneline --graph"
-
+# config core.autocrlf
 // Set core.autocrlf to false to not change the line endings at all
 git config --global core.autocrlf false
 // Set core.autocrlf to input to convert CRLF to LF on commit but not on checkout
@@ -32,7 +64,7 @@ git config --global core.autocrlf input
 // Set core.autocrlf to true to ensure line endings in files on checkout are converted from LF to CRLF for Windows
 // For compatibility, line endings are converted to LF (Unix) style on commit
 git config --global core.autocrlf true
-
+# config core.safecrlf
 // Set core.safecrlf to true (default) or warn to verify if the conversion is reversible for the current setting of core.autocrlf
 // Set core.safecrlf to true (default) to reject irreversible conversations
 git config --global core.safecrlf true
