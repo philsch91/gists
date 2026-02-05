@@ -29,3 +29,8 @@ curl -iSs --tlsv1.2 --tls-max 1.2 <url>
 ```
 curl -L -u <username>:<password> -X POST <url> --data-binary "@path/to/file.json"
 ```
+
+## time
+```
+curl -iSs <url> --connect-timeout 3.14 --max-time 5.5
+```
