@@ -29,6 +29,9 @@ for cm in $(k -n argocd get cm | grep -i argocd | awk '{print $1}'); do k -n arg
 for scr in $(k -n argocd get secret | grep -i argocd | awk '{print $1}'); do k -n argocd get secret/${scr} -o yaml >/tmp/argocd/${scr}.yaml; done
 
 for cluster_secret in $(k -n argocd get secret -l argocd.argoproj.io/secret-type=cluster | tail -n +2 | awk '{print $1}'); do cluster_values=$(k -n argocd get secret/$cluster_secret -o jsonpath='{.data.name}{"\t"}{.data.server}{"\t"}{.data.config}'); echo "Name: $(echo $cluster_values | awk '{print $1}' | base64 -d)"; echo "Server: $(echo $cluster_values | awk '{print $2}' | base64 -d)"; echo "Config: $(echo $cluster_values | awk '{print $3}' | base64 -d)"; done
+
+# argocd repocreds add registry.name.tld --username <username> --password <password> --type helm --enable-oci
+for argo_repo_cred_secret in $(k -n argocd get secret -l argocd.argoproj.io/secret-type=repo-creds | tail -n +2 | awk '{print $1}'); do repo_cred_values=$(k -n argocd get secret/$argo_repo_cred_secret -o jsonpath='{.data.url}{"\t"}{.data.username}{"\t"}{.data.password}{"\t"}{.data.type}{"\t"}{.data.enableOCI}'); echo "URL: $(echo $repo_cred_values | awk '{print $1}' | base64 -d)"; echo "Username: $(echo $repo_cred_values | awk '{print $2}' | base64 -d)"; echo "Password: $(echo $repo_cred_values | awk '{print $3}' | base64 -d)"; echo "Type: $(echo $repo_cred_values | awk '{print $4}' | base64 -d)"; echo "EnableOCI: $(echo $repo_cred_values | awk '{print $5}' | base64 -d)"; done
 ```
 
 ## Upgrade
@@ -109,7 +112,7 @@ argocd repo add registry.name.tld/<repository>/<chart-repository> --type helm --
 ## repocreds
 ```
 ## add credentials for accessing multiple repositories with the matching domain or pattern
-argocd repocreds add registry.name.tld --type helm --username <username> --password <password> --enable-oci
+argocd repocreds add registry.name.tld --username <username> --password <password> --type helm --enable-oci
 ```
 
 ## argocd-server
