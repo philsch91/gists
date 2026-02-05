@@ -11,13 +11,16 @@
 
 ## Shell
 
-Default shell
+
 ```
+# default shell
 echo $SHELL
-```
-Current shell
-```
+# current shell
 ps -o comm= $$
+type -a <name>
+command -v|-V <name>
+# search PATH for executable files matching the given filename
+which <filename>
 ```
 
 ### Redirections
