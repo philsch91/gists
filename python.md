@@ -53,7 +53,7 @@ ln -s /usr/bin/pip3 /usr/bin/pip
 ```
 pip list
 pip install 'urllib3<2'
-pip install -r requirements.txt
+pip install [--no-cache-dir] -r requirements.txt
 pip install numpy config --global http.sslVerify false
 pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org --upgrade setuptools
 pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org --upgrade pipwin
