@@ -1,5 +1,10 @@
 # Kubernetes Gists
 
+## version
+```
+kubectl version
+```
+
 ## config
 ```
 kubectl config current-context
