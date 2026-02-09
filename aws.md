@@ -2,12 +2,14 @@
 
 ## Installation
 ```
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip -q awscliv2.zip
-sudo ./aws/install --update
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+mkdir -pv /tmp/awscliv2
+unzip /tmp/awscliv2.zip -d /tmp/awscliv2
+sudo /tmp/awscliv2/aws/install --update
+which aws # /usr/local/bin/aws
 aws --version
-sudo rm -v awscliv2.zip
-sudo rm -rv aws
+sudo rm -v /tmp/awscliv2.zip
+sudo rm -rv /tmp/awscliv2
 ```
 
 ## Known Errors
