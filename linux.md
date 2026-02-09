@@ -131,6 +131,7 @@ ldapsearch -x -H ldaps://<ldap-host>:636 -D "CN=TU001,OU=Service_Accounts,OU=Acc
 ## getent
 ```
 getent hosts <hostname>
+getent group <groupname>
 ```
 
 ## apt
@@ -239,9 +240,11 @@ echo "deb [signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://dow
 # update repository
 sudo apt update
 # install Docker engine
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin [docker-compose]
 # add user to docker group
 sudo usermod -aG docker $USER
+# check members of the docker group
+grep docker /etc/group
 # check installation
 docker --version
 # start docker service
