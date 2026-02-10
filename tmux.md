@@ -71,6 +71,10 @@ Ctrl+b [ + Ctrl+Space + Alt+W to copy selected text
 Ctrl+b Q # leave scroll mode
 # config
 Ctrl+b :source-file ~/.tmux.conf # reload ~/.tmux.conf
+Ctrl+b :list-keys -T copy-mode-vi # list key bindings in copy-mode-vi table
+# show value of mode-keys option
+tmux show-options -gw mode-keys
+Ctrl+b :show-options -gw mode-keys
 ```
 
 ## tmux files
