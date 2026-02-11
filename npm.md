@@ -19,6 +19,18 @@ sudo npm install npm@latest -g
 sudo npm update npm -g
 ```
 
+## Run
+```
+npm run ng -- version
+npm run ng -- serve
+```
+
+## npx
+```
+npx ng version
+npx ng serve
+```
+
 ## nvm
 ```
 command -v nvm
