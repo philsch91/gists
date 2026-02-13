@@ -312,9 +312,13 @@ I think you mean my attempt to explain that Karpenter primarily provisiones the 
 One exception to that is that if a container allocates more resources and especially more memory than available on the node and if the pod is evicted, the pod is recreated by the controlling resource such as a deployment to meet the requirements of a replicaset, the cluster is potentially scaled out, and the replacing pod is scheduled on a new node, which is usually avoided or is actually unintentional and undesirable.
 
 ### Sidecar containers
-
 - SidecarContainers feature >= v1.29<br />
-sidecar-container = init-container + (container-level) `restartPolicy: Always`
+sidecar-container = init-container + container-level restart policy = `.spec.initContainers[].image/.name/.command/.volumeMounts/.readinessProbe/.livenessProbe/.startupProbe` + `.spec.initContainers[].restartPolicy: Always`
+
+### Init containers
+- Init containers = entries under `.spec.initContainers` in PodSpec
+- Respect `.spec.restartPolicy: Always|OnFailure|Never`
+- Init containers that exit with an error (not exit 0) are restarted if `.spec.restartPolicy: Always|OnFailure`
 
 ### Pod QoS classes
 
