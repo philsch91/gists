@@ -1,5 +1,10 @@
 # Docker
 
+## info
+```
+docker info [| grep -i registry]
+```
+
 ## login
 ```
 docker login <docker-registry-uri> -u <user-name> -p <password> [--password-stdin]
