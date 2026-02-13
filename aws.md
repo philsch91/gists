@@ -165,6 +165,11 @@ eksctl delete nodegroup --cluster=<clusterName> --name=<nodegroupName>
 eksctl delete nodegroup --cluster=<clusterName> --name=<nodegroupName> --disable-eviction
 ```
 
+### EKS + EC2 Windows
+```
+k -n kube-system get cm/amazon-vpc-cni -o jsonpath='{.data.enable-windows-ipam}'
+```
+
 ## S3
 ```
 aws s3 ls s3://<bucket-name>
