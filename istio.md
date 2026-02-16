@@ -1,6 +1,6 @@
 # Istio
 
--> VirtualService -> Gateway -> Service<br />
+-> Gateway -> VirtualService -> Service<br />
 <- VirtualService [<- DestinationRule] <- ServiceEntry
 
 ## Deployment.v1.apps
@@ -134,10 +134,11 @@ source <(istioctl completion zsh)
 ```
 
 ```
+istioctl version -i <istio-system-namespace>
 istioctl verify-install -i <istio-system-namespace>
 istioctl [-n <namespace>] admin log <pod-name>
 istioctl [-n <namespace>] proxy-status [type/]<name>[.<namespace>]
-istioctl proxy-config all|listeners -i <istio-system-namespace> [type/]<name>[.<namespace>] [--port 8080]
+istioctl proxy-config all|listeners|route -i <istio-system-namespace> [type/]<name>[.<namespace>] [--port 8080]
 ```
 
 ### analyze
