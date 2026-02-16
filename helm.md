@@ -212,6 +212,28 @@ In Helm, when using conditions in templates, even if the first condition is fals
 {{- end }}
 ```
 
+## index
+
+### index and splitList
+```
+{{- $serviceHostname := "" -}}
+{{- $gatewayName := "" -}}
+
+{{- $services := index .Values "sub-chart" "service" -}}
+{{- range $service := $services -}}
+  {{- if eq $service.name "mongodb" -}}
+    {{- $serviceHostname = default "" (first $service.hosts) -}}
+    {{- $gatewayFullname := default "" (first $service.overrideGateway) -}}
+    {{- if $gatewayFullname -}}
+      {{- $gatewayNameParts := splitList "/" $gatewayFullname -}}
+      {{- if eq (len $gatewayNameParts) 2 -}}
+        {{- $gatewayName = index $gatewayNameParts 1 -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+```
+
 ## Post Rendering
 
 ### hook.sh
