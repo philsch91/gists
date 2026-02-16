@@ -197,6 +197,21 @@ helm -n <namespace> get values <release> [--revision <revision>] [| grep -A 5 im
 helm [-n <namespace>] rollback <release> <revision>
 ```
 
+## root context
+```
+# save root context in variable $root
+{{- $root := . -}}
+
+# pass root context $ into include function
+{{- define "function" -}}
+{{- $ := index . 0 }}
+{{- $arg := index . 1 }}
+{{- range $path, $_ := $.Files.Glob $arg }}
+{{- end }}
+
+{{- include "function" (list $ "common/**.json") }}
+```
+
 ## if
 ```
 {{/*
