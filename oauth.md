@@ -110,3 +110,38 @@ Get token request:
     "grant_type": "password"
 }
 ```
+
+## Token types
+
+### id_token
+- JWT format (non-opaque, encoded)
+- Valid id_token = authenticated user
+- Provides information about the session
+- Contains claims for additional information for a client or app
+- Contains claims about the identity of the user or resource owner
+- scope = space separated string of identifiers specifying access privileges
+- claims = key-value pair
+- claims are grouped under scope
+- id_token can be exchanged for an access_token from the token endpoint of an OAuth authorization server [RFC draft](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-token-exchange-12)
+
+### access_token
+- Bearer format (opaque)
+- Valid access_token = resource access without further authentication
+- Establish access to resource
+- Optional JWT format [RFC draft](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-access-token-jwt-00)
+
+```
+{
+    "iss": "https://authorization-server.example.com/",
+    "sub": " 5ba552d67",
+    "aud":   "https://rs.example.com/",
+    "exp": 1544645174,
+    "client_id": "s6BhdRkqt3_",
+    "scope": "openid profile reademail"
+   }
+```
+
+### refresh_token
+- Opaque format
+- long lived
+- Valid refresh_token = obtain new access_token
