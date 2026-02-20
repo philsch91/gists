@@ -336,6 +336,37 @@ For a Pod to be given a QoS class of `Guaranteed`:
 - Every Container in the Pod must have a CPU limit and a CPU request.
 - For every Container in the Pod, the CPU limit must equal the CPU request.
 
+## Ingress Nginx Controller
+
+### Default certificate in ingress-nginx-controller
+```
+k -n <namespace> get deployment/ingress-nginx-controller -o jsonpath='{.spec.template.spec.containers[0].args}' | grep -i "\-\-default-ssl-certificate"
+```
+
+### Certificate in Ingress resource
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tls-nginx-ingress
+spec:
+  tls:
+  - hosts:
+      - https-example.foo.com
+    secretName: ingress-tls-secret
+  rules:
+  - host: https-example.foo.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix # ImplementationSpecific
+        backend:
+          service:
+            name: service1
+            port:
+              number: 80
+```
+
 ## Karpenter
 
 ### NodePool
