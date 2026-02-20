@@ -336,6 +336,13 @@ For a Pod to be given a QoS class of `Guaranteed`:
 - Every Container in the Pod must have a CPU limit and a CPU request.
 - For every Container in the Pod, the CPU limit must equal the CPU request.
 
+### Pod rescheduling
+```
+kubectl cordon <node-name>
+kubectl delete pod <pod-name>
+kubectl uncordon <node-name>
+```
+
 ## Ingress Nginx Controller
 
 ### Default certificate in ingress-nginx-controller
