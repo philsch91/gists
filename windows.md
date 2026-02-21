@@ -13,6 +13,13 @@ Get-LocalUser -Name 'username' | Select-Object *
 RDP login with Microsoft account if USERDOMAIN=AzureAD<br />
 User account: AzureAD\<user@domain.tld>
 
+## netsh
+```
+netsh mbn show interface
+netsh mbn show radio interface="Mobilfunk"
+Get-PnpDevice -Class Net | ForEach-Object { $id = $_.InstanceId; $regPath = "HKLM:\SYSTEM\CurrentControlSet\Enum\$($id)\Device Parameters"; echo "RegPath: $($RegPath)"; Get-ItemProperty -Path $regPath -Name DeviceSelectiveSuspended -ErrorAction SilentlyContinue }
+```
+
 ## WSL
 
 List running wsl processes
