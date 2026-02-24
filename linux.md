@@ -141,6 +141,7 @@ apt list --upgradable
 apt list --installed [-qq|--quiet] <(*)package-name(*)>
 
 ## apt update
+### updates package cache
 apt-get update # to fix 404 for install
 
 ## apt upgrade
@@ -149,7 +150,7 @@ apt-get [-u|--show-upgraded] [-V|--verbose-versions] [[--assume-no]] upgrade # s
 ### apt list --installed [-qq|--quiet] <(*)package-name(*)>
 
 ## apt install
-apt-get [-f|--fix-broken] [-m|--fix-missing] [[--no-cache]] install <package-name>
+apt-get [-f|--fix-broken] [-m|--fix-missing] [[--no-cache]] install <package-name>|./<file-name>.deb
 
 ## apt remove
 apt-get remove <package-name>
