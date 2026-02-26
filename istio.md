@@ -6,6 +6,12 @@
 ## Deployment.v1.apps
 
 ```
+# nodePort = node port
+# port = load balancer port
+# targetPort = container port
+k -n <istio-system-ns> get service -l app=istio-ingressgateway,istio=prod-ingressgateway -o jsonpath='{.items[*].spec.type}{"\t"}{.items[*].spec.ports}'
+k -n <istio-system-ns> get deployment -l app=istio-ingressgateway,istio=prod-ingressgateway -o jsonpath='{.items[*].spec.template.spec.containers[0].ports[*].containerPort}'
+
 k -n <istio-system-namespace> get deployment/istio-ingressgateway -o yaml
 k -n <istio-system-namespace> get deployment/istio-ingressgateway -o json | jq -r '.spec.template.spec.containers[].name'
 ```
