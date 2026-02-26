@@ -167,6 +167,55 @@ sudo rm /etc/apt/sources.list.d/temporary-repository.list
 sudo apt update
 ```
 
+## pacman
+
+Settings: `/etc/pacman.conf`.<br />
+Packages are stored in `/var/cache/pacman/pkg/`.<br />
+
+```
+## query local packages (DB/repo)
+pacman -Qs <string> [... <stringn>]
+pacman -Qqe > pkglist.txt
+
+## search remote DB/repo
+pacman -Ss <string> [... <stringn>]
+
+## display
+### local
+pacman -Qii <package>
+### remote
+pacman -Si <package>
+
+## install (=sync remote DB/repo)
+### -p (=print)
+pacman -S [-p] --needed <package> [...<package_n>]
+pacman -S --needed - < pkglist.txt
+## reinstall
+pacman -S <package>
+
+## sysupgrade
+### -S (Sync), -y (refresh), -u (sysupgrade), -p (print)
+### never run pacman -Sy and avoid a refresh (-y) without an upgrade (-u)
+pacman -Syu
+
+## uninstall
+### -R (Remove) -s (remove dependencies not required by other packages) -c (recursive) -n (prevent .pacsave file creation)
+pacman -Rs <package>
+
+## clean package cache
+### delete cached versions of installed and uninstalled packages, except for the most recent three versions
+paccache -r
+### delete and retain <n> past versions
+paccache -rk<n>
+
+systemctl enable pacman-filesdb-refresh.timer
+```
+
+## yay
+```
+yay -Syu
+```
+
 ## ca-certificates
 
 - /etc/ssl/cert.pem<br />
