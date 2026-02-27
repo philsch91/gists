@@ -167,6 +167,13 @@ sudo rm /etc/apt/sources.list.d/temporary-repository.list
 sudo apt update
 ```
 
+## dpkg
+```
+## query
+### -s (status)
+dpkg -s <package> [... <package-n>]
+```
+
 ## pacman
 
 Settings: `/etc/pacman.conf`.<br />
@@ -174,11 +181,11 @@ Packages are stored in `/var/cache/pacman/pkg/`.<br />
 
 ```
 ## query local packages (DB/repo)
-pacman -Qs <string> [... <stringn>]
+pacman -Qs <string> [... <string-n>]
 pacman -Qqe > pkglist.txt
 
 ## search remote DB/repo
-pacman -Ss <string> [... <stringn>]
+pacman -Ss <string> [... <string-n>]
 
 ## display
 ### local
@@ -188,7 +195,7 @@ pacman -Si <package>
 
 ## install (=sync remote DB/repo)
 ### -p (=print)
-pacman -S [-p] --needed <package> [...<package_n>]
+pacman -S [-p] --needed <package> [...<package-n>]
 pacman -S --needed - < pkglist.txt
 ## reinstall
 pacman -S <package>
@@ -264,6 +271,18 @@ ls -lah /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 pwgen -y|--symbols -s|--secure [<pw-length>|32] [<pw-count>|1] # generate one random password with a length of 32 characters including symbols
 ```
 
+## pkill
+```
+pgrep -af </path/to/program>
+# pgrep -af /usr/bin/code
+# -0 (SIGNULL) -15 (SIGTERM) -9 (SIGKILL) -f (file)
+pkill -0 -f </path/to/program> && echo "Process found and signal sent"
+# pkill -0 -f /usr/bin/code && echo "Process found and signal sent"
+pkill -15|-9 -f </path/to/program> && echo "Process found and signal sent"
+# pkill -9 -f /usr/bin/code && echo "Process found and signal sent"
+ps -ef | grep </path/to/programm> | grep -v grep
+```
+
 ## update-alternatives
 ```
 update-alternatives --config gcc
@@ -279,6 +298,52 @@ update-alternatives --remove gcc /usr/bin/gcc-13
 echo $XDG_SESSION_TYPE
 echo $WAYLAND_DISPLAY
 xlsclients # list applications running in a X11 session of the XServer of Xwayland
+```
+
+## Gnome
+```
+ps aux | grep gnome-keyring-daemon | grep -v grep
+```
+
+## KDE
+```
+ps aux | grep kwalletd | grep -v grep
+```
+
+## busctl
+```
+busctl --user tree org.freedesktop.secrets
+```
+
+## secret-tool
+
+### secret-tool install
+```
+# Ubuntu
+dpkg -s libsecret-1-0 gnome-keyring
+sudo apt update && sudo apt install libsecret-1-0 gnome-keyring
+sudo apt install libsecret-tools
+
+# Arch
+pacman -Qii libsecret gnome-keyring
+pacman -S libsecret gnome-keyring
+
+echo $DBUS_SESSION_BUS_ADDRESS
+echo $XDG_CURRENT_DESKTOP
+```
+
+```
+## lookup
+secret-tool lookup name test
+## store
+secret-tool store --label="Test" drive main
+```
+
+## Seahorse
+
+### Seahorse install
+```
+sudo pacman -S seahorse
 ```
 
 ## Docker
