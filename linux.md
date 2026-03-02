@@ -139,6 +139,8 @@ getent group <groupname>
 ## apt list
 apt list --upgradable
 apt list --installed [-qq|--quiet] <(*)package-name(*)>
+apt list --installed gcc*
+apt list --installed make*
 
 ## apt update
 ### updates package cache
@@ -291,6 +293,40 @@ update-alternatives --install <link-src> <link-name> <link-target> <link-priorit
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 60
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 70 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
 update-alternatives --remove gcc /usr/bin/gcc-13
+```
+
+## gcc
+```
+which gcc | xargs file
+ls -lah /usr/bin/gcc*
+# lrwxrwxrwx 1 root root  6 Jan 31  2024 /usr/bin/gcc -> gcc-13
+# lrwxrwxrwx 1 root root 23 Dec 18 21:59 /usr/bin/gcc-13 -> x86_64-linux-gnu-gcc-13
+# lrwxrwxrwx 1 root root  9 Jan 31  2024 /usr/bin/gcc-ar -> gcc-ar-13
+# lrwxrwxrwx 1 root root 26 Dec 18 21:59 /usr/bin/gcc-ar-13 -> x86_64-linux-gnu-gcc-ar-13
+# lrwxrwxrwx 1 root root  9 Jan 31  2024 /usr/bin/gcc-nm -> gcc-nm-13
+# lrwxrwxrwx 1 root root 26 Dec 18 21:59 /usr/bin/gcc-nm-13 -> x86_64-linux-gnu-gcc-nm-13
+# lrwxrwxrwx 1 root root 13 Jan 31  2024 /usr/bin/gcc-ranlib -> gcc-ranlib-13
+# lrwxrwxrwx 1 root root 30 Dec 18 21:59 /usr/bin/gcc-ranlib-13 -> x86_64-linux-gnu-gcc-ranlib-13
+
+ls -lah /usr/bin/x86_64-linux-gnu-gcc*
+# lrwxrwxrwx 1 root root    23 Jan 31  2024 /usr/bin/x86_64-linux-gnu-gcc -> x86_64-linux-gnu-gcc-13
+# -rwxr-xr-x 1 root root 1000K Dec 18 21:59 /usr/bin/x86_64-linux-gnu-gcc-13
+# lrwxrwxrwx 1 root root    26 Jan 31  2024 /usr/bin/x86_64-linux-gnu-gcc-ar -> x86_64-linux-gnu-gcc-ar-13
+# -rwxr-xr-x 1 root root   27K Dec 18 21:59 /usr/bin/x86_64-linux-gnu-gcc-ar-13
+# lrwxrwxrwx 1 root root    26 Jan 31  2024 /usr/bin/x86_64-linux-gnu-gcc-nm -> x86_64-linux-gnu-gcc-nm-13
+# -rwxr-xr-x 1 root root   27K Dec 18 21:59 /usr/bin/x86_64-linux-gnu-gcc-nm-13
+# lrwxrwxrwx 1 root root    30 Jan 31  2024 /usr/bin/x86_64-linux-gnu-gcc-ranlib -> x86_64-linux-gnu-gcc-ranlib-13
+# -rwxr-xr-x 1 root root   27K Dec 18 21:59 /usr/bin/x86_64-linux-gnu-gcc-ranlib-13
+
+file /usr/bin/x86_64-linux-gnu-gcc-13
+# /usr/bin/x86_64-linux-gnu-gcc-13: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=9ac130c81c026cf6204ff71a70b526667a09122f, for GNU/Linux 3.2.0, stripped
+```
+
+## make
+```
+which make | xargs file
+# /usr/bin/make: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=dd791a7b726a553a077eb0dc5944da16b79ab723, for GNU/Linux 3.2.0, stripped
+make --version
 ```
 
 ## Wayland
