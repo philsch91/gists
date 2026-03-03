@@ -15,7 +15,7 @@ WSL Distribution Default Installation Dir: `%USERPROFILE%\AppData\Local\Packages
 
 ## wsl
 ```
-wsl --install [-d <distribution-name>]
+wsl --install [--no-distribution | -d <distribution-name>]
 wsl --install --web-download -d <distribution-name> # --web-download = Download the update from the internet instead of the Microsoft Store.
 wsl --status
 wsl --version
