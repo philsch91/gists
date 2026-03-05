@@ -1,6 +1,6 @@
 # Istio
 
--> Gateway -> VirtualService -> Service<br />
+-> Gateway -> VirtualService [-> DestinationRule] -> Service<br />
 <- VirtualService [<- DestinationRule] <- ServiceEntry
 
 ## Deployment.v1.apps
@@ -16,7 +16,17 @@ k -n <istio-system-namespace> get deployment/istio-ingressgateway -o yaml
 k -n <istio-system-namespace> get deployment/istio-ingressgateway -o json | jq -r '.spec.template.spec.containers[].name'
 ```
 
+## IstioOperator.v1alpha1.install.istio.io
+
+- `IstioOperator` creates Ingress-Gateway deployment and service
+- `Service` of Ingress-Gateway deployment opens port on load balancer
+- `VirtualService` opens listener in Envoy proxy
+
 ## Gateway.v1.networking.istio.io
+
+- Gateway defined with `.spec.servers[].tls.mode: SIMPLE` is (only) compatible with VirtualService defined with `.spec.tcp[].match[].port`
+- Gateway defined with `tls.mode: SIMPLE`: SNI routing (redirection) based on `.spec.hosts` and `.spec.tcp` of VirtualService
+- Gateway defined with `.spec.servers[].tls.mode: PASSTHROUGH` is compatible with VirtualService defined with `.spec.tls[].match[].sniHosts[]`
 
 Nginx-ingress equivalent: Ingress
 
