@@ -258,14 +258,19 @@ openssl s_client -connect foo.whatever.com:443 -CApath /etc/ssl/certs
 ## update-ca-trust
 ```
 ls -lah /etc/pki/tls/openssl.cnf
+/etc/ssl/openssl.cnf -> /etc/pki/tls/openssl.cnf
+
 ls -lah /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 
-/etc/ssl/openssl.cnf -> /etc/pki/tls/openssl.cnf
 /etc/ssl/cert.pem -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 /etc/ssl/certs/ca-bundle.crt -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 
 /etc/pki/tls/cert.pem -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 /etc/pki/tls/certs/ca-bundle.crt -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+
+# /usr/bin/update-ca-trust
+cp -v *.crt /etc/pki/ca-trust/source/anchors/
+update-ca-trust
 ```
 
 ## pwgen
