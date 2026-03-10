@@ -52,17 +52,19 @@ conan remote update <remote-name> --url="<remote-url>"
 
 ## install
 ```
-conan install . -of build.debug -pr:a 29 -o tests=True -b missing -r artifactory
+conan install . -of build.release -o tests=True -r artifactory -pr:a gcc13-cpp20-rel [-b missing | --build=missing] [--cli-args="VERBOSE=1"]
+conan install . -of build.win.math.debug -o tests=True -r artifactory -pr:a vs17-cpp20-dbg [-b missing]
 ```
 
 ## build
 ```
-conan build . -of build.win.math.debug -pr:a vs17-cpp20-dbg -o tests=True -r artifactory [-c tools.cmake.cmaketoolchain:generator="Ninja"] [--lockfile .\conan.lock]
+conan build . -of build.release -o tests=True -r artifactory -pr:a gcc13-cpp20-rel [--lockfile .\conan.lock]
+conan build . -of build.win.math.debug -o tests=True -r artifactory -pr:a vs17-cpp20-dbg [-c tools.cmake.cmaketoolchain:generator="Ninja"] [--lockfile .\conan.lock]
 ```
 
 ## Profiles
 ```
-cat $HOME/.conan2/profiles/29
+cat $HOME/.conan2/profiles/gcc13-cpp20-rel
 
 [settings]
 os=Linux
@@ -71,7 +73,16 @@ compiler=gcc
 compiler.version=13
 compiler.cppstd=gnu20
 compiler.libcxx=libstdc++11
-build_type=Debug
+build_type=Release
+[options]
+#with_mongodb=False
+[conf]
+#tools.build:jobs=1
+#tools.build:exelinkflags=['-lresolv']
+#tools.build:sharedlinkflags=['-lresolv']
+#tools.cmake.cmaketoolchain:user_toolchain=["/tmp/resolv.cmake"]
+##tools.cmake.cmaketoolchain:generator_init_variables={"CMAKE_VERBOSE_MAKEFILE": "ON"}
+#tools.cmake.cmaketoolchain:extra_variables={"CMAKE_VERBOSE_MAKEFILE": "ON"}
 ```
 
 ```
@@ -88,4 +99,16 @@ compiler.runtime=static
 compiler.runtime_type=Debug
 build_type=Debug
 [options]
+```
+
+## CMake
+```
+cat /tmp/resolv.cmake
+# resolv.cmake
+
+#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lresolv")
+#set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lresolv")
+#set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -lresolv")
+
+link_libraries(resolv)
 ```
