@@ -16,6 +16,34 @@ k -n <istio-system-namespace> get deployment/istio-ingressgateway -o yaml
 k -n <istio-system-namespace> get deployment/istio-ingressgateway -o json | jq -r '.spec.template.spec.containers[].name'
 ```
 
+### Deployment logs
+```
+k -n <istio-system-ns> logs -f -l app=istio-ingressgateway,istio=nprod-trans-gw-ingressgateway [| grep -iE "cert|secret|tls|ssl"]
+k -n <istio-system-ns> logs -f -l app.kubernetes.io/name=istiod
+```
+
+### Deployment exe
+```
+# curl
+k -n <istio-system-ns> exec -it $(kubectl -n <istio-system-ns> get pod -l istio=ingressgateway -o jsonpath='{.items[0].metadata.name}') -c istio-proxy -- curl "http://localhost:15000/certs"
+k -n <istio-system-ns> exec -it $(kubectl -n <istio-system-ns> get pod -l istio=ingressgateway -o jsonpath='{.items[0].metadata.name}') -c istio-proxy -- curl -s "http://localhost:15000/config_dump?include_eds" | grep -C 10 "9093"
+k -n <istio-system-ns> exec -it $(kubectl -n <istio-system-ns> get pod -l istio=ingressgateway -o jsonpath='{.items[0].metadata.name}') -c istio-proxy -- curl -s "http://localhost:15000/config_dump?include_eds" | grep -A 50 "0.0.0.0_9093" | grep -E "tls_context|common_tls_context|secret_name"
+kubectl -n <istio-system-ns> exec -it $(kubectl -n <istio-system-ns> get pod -l istio=ingressgateway -o jsonpath='{.items[0].metadata.name}') -c istio-proxy -- curl "http://localhost:15000/listeners"
+0.0.0.0_15090::0.0.0.0:15090
+0.0.0.0_15021::0.0.0.0:15021
+0.0.0.0_30552::0.0.0.0:30552
+0.0.0.0_5440::0.0.0.0:5440
+0.0.0.0_27020::0.0.0.0:27020
+0.0.0.0_5432::0.0.0.0:5432
+# openssl
+k exec -n <istio-system-ns> -it $(kubectl -n <istio-system-ns> get pod -l istio=ingressgateway -o jsonpath='{.items[0].metadata.name}') -c istio-proxy -- openssl x509 -in /etc/istio/ingressgateway-certs/tls.crt -text -noout
+```
+
+## Service
+```
+echo "test" | nc "$(kubectl -n <istio-system-ns> get svc/istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')" 443
+```
+
 ## IstioOperator.v1alpha1.install.istio.io
 
 - `IstioOperator` creates Ingress-Gateway deployment and service
@@ -154,7 +182,10 @@ istioctl version -i <istio-system-namespace>
 istioctl verify-install -i <istio-system-namespace>
 istioctl [-n <namespace>] admin log <pod-name>
 istioctl [-n <namespace>] proxy-status [type/]<name>[.<namespace>]
-istioctl proxy-config all|listeners|route -i <istio-system-namespace> [type/]<name>[.<namespace>] [--port 8080]
+istioctl proxy-config all|listeners|route|log -i <istio-system-namespace> [type/]<name>[.<namespace>] [--port 8080]
+istioctl proxy-config listener <ingress-pod-name> -n <namespace> --port 9093 -o json
+istioctl proxy-config route <ingress-pod-name> -n <namespace> --port 9093
+istioctl proxy-config log <ingress-pod-name> -n <namespace> --level conn_handler:debug,filter:debug
 ```
 
 ### analyze
