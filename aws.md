@@ -186,6 +186,9 @@ upload: test.txt to s3://bucket-name/test.txt
 
 # read/get (copy)
 aws s3 cp <S3-URL> - | less
+
+# get replication status
+aws s3api head-object --bucket <bucket-name> --key <object-path> --query "ReplicationStatus"
 ```
 
 ## SSM
@@ -223,4 +226,9 @@ proxy-support: Session-Based-Authentication
 ```
 TOKEN=$(curl -Ls -X GET "https://ecr-public.aws.com/token?service=public.ecr.aws&scope=repository:docker/library/redis:pull" | jq -r '.token')
 curl -iSs -H "Authorization: Bearer $TOKEN" https://ecr-public.aws.com/v2/docker/library/redis/manifests/7.2.11-alpine
+```
+
+## CloudTrail
+```
+aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,AttributeValue=ReplicateObject --query "Events[?ReadOnly=='false']"
 ```
