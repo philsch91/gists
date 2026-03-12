@@ -15,4 +15,5 @@ dotnet nuget locals all [(-l|--list)|(-c|--clear)]
 dotnet build [<project-name (CompanyName.ProductName.ProjectName.csproj)>] [-c|--configuration <CONFIGURATION|Debug|Release>] [-o|--output <output-directory>]
 dotnet publish [<project-name (CompanyName.ProductName.ProjectName.csproj)>] [-c|--configuration <CONFIGURATION|Debug|Release>] [-o|--output <output-directory>]
 dotnet run [-c|--configuration <CONFIGURATION|Debug|Release>] [arg1...argn]
+dnx --info
 ```
