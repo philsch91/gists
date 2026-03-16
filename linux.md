@@ -141,6 +141,8 @@ apt list --upgradable
 apt list --installed [-qq|--quiet] <(*)package-name(*)>
 apt list --installed gcc*
 apt list --installed make*
+apt list --installed "cmake*"
+apt list --installed "*pip*"
 
 ## apt update
 ### updates package cache
@@ -161,12 +163,23 @@ apt-get remove <package-name>
 apt purge <package1> <packagen>
 ```
 
+## apt install gcc
 ```
 echo "deb http://cz.archive.ubuntu.com/ubuntu mantic main" | sudo tee /etc/apt/sources.list.d/temporary-repository.list
 sudo apt update
 sudo apt install <package1> <packagen> # gcc-13 gcc-13-aarch64-linux-gnu
 sudo rm /etc/apt/sources.list.d/temporary-repository.list
 sudo apt update
+```
+
+## apt install python3-pip
+```
+sudo apt install python3-pip
+```
+
+## apt install cmake
+```
+sudo apt install cmake
 ```
 
 ## dpkg
