@@ -51,6 +51,8 @@ ln -s /usr/bin/pip3 /usr/bin/pip
 
 ## pip
 ```
+pip --version
+python -m pip --version
 pip list
 pip install 'urllib3<2'
 pip install [--no-cache-dir] -r requirements.txt
@@ -67,6 +69,8 @@ cd $HOME/dev
 python3 -m venv (/path/to/new/)virtualenvironment
 source (/path/to/new/)virtualenvironment/bin/activate
 echo $VIRTUAL_ENV
+# install pip in virtual environment without affecting system (OS) Python
+python -m ensurepip --default-pip
 ...
 pip install -r requirements.txt
 ...
