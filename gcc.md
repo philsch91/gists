@@ -1,5 +1,6 @@
 # gcc
 
+## Installation
 ```
 sudo apt update
 sudo apt install software-properties-common
@@ -7,4 +8,9 @@ sudo add-apt-repository [-y] ppa:ubuntu-toolchain-r/test # sudo add-apt-reposito
 sudo apt update
 sudo apt install gcc-13 g++-13 # sudo apt install build-essential
 sudo apt purge gcc-13 g++-13
+```
+
+```
+gcc --version
+make --version
 ```
