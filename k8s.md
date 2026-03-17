@@ -343,6 +343,20 @@ kubectl delete pod <pod-name>
 kubectl uncordon <node-name>
 ```
 
+## kube-state-metrics
+```
+kubectl -n <namespace> logs deployment/prometheus-kube-state-metrics | less
+kubectl -n <namespace> get deployment/prometheus-kube-state-metrics -o jsonpath='{.spec.template.spec.serviceAccountName}'
+kubectl auth can-i list persistentvolumeclaims --as=system:serviceaccount:<namespace>:prometheus-kube-state-metrics --all-namespaces
+
+# get metrics
+## option 1
+kubectl -n <namespace> exec -it $(kubectl -n <namespace> get pod -l app.kubernetes.io/name=kube-state-metrics -o jsonpath='{.items[0].metadata.name}') -c kube-state-metrics -- curl -s http://localhost:8080/metrics
+## option 2
+kubectl -n <namespace> port-forward deployment/prometheus-kube-state-metrics 8080:8080
+curl -s http://localhost:8080/metrics >>/tmp/ksm_metrics.txt
+```
+
 ## Ingress Nginx Controller
 
 ### Default certificate in ingress-nginx-controller
