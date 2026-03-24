@@ -11,7 +11,6 @@
 
 ## Shell
 
-
 ```
 # default shell
 echo $SHELL
@@ -429,4 +428,12 @@ echo "deb http://download.opensuse.org/repositories/home:/alvistack/xUbuntu_20.0
 curl -fsSL https://download.opensuse.org/repositories/home:alvistack/xUbuntu_20.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_alvistack.gpg > /dev/null
 sudo apt update
 sudo apt install skopeo
+```
+
+## sysctl
+
+### fs.inotify
+```
+cat /proc/sys/fs/inotify/max_user_watches # returns 524288
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 ```
