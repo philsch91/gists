@@ -22,7 +22,7 @@ sudo npm update npm -g
 ## Run
 ```
 npm run ng -- version
-npm run ng -- serve
+npm run ng -- serve [--poll=2000]
 ```
 
 ## npx
