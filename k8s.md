@@ -254,18 +254,19 @@ kubectl -n <namespace> cp /local/path/<file-name> <pod-name>:/<container>/<path>
 
 ## auth
 ```
-// current namespace
+## current namespace
 kubectl auth can-i '*' '*'
 kubectl auth can-i list deployments.extensions
-kubectl auth can-i get pods [--as system:<serviceaccount-name>:namespace:<namespace-name>]
+kubectl auth can-i get pods [--as system:serviceaccount:<namespace>:<serviceaccount-name>]
 
-// any namespace
-kubectl auth can-i create deployments [--as <user>] --all-namespaces
+## all namespaces
+kubectl auth can-i create deployments [--as=system:serviceaccount:<namespace>:<serviceaccount-name>] --all-namespaces
+kubectl auth can-i get persistentvolumeclaims [--as <user>] --all-namespaces
 
-// specific namespace
-kubectl auth can-i create pods [--as <user>] --namespace default
-kubectl auth can-i list secrets [--as <user>] --namespace default
-kubectl auth can-i create deployments [--as system:serviceaccount:<namespace-name>:<serviceaccount-name>] --namespace default
+## specific namespace
+kubectl auth can-i create pods [--as system:serviceaccount:<namespace>:<serviceaccount-name>] --namespace <namespace>
+kubectl auth can-i list secrets [--as <user>] --namespace <namespace>
+kubectl auth can-i create deployments [--as <user>] --namespace <namespace>
 ```
 
 ## customresourcedefinition
