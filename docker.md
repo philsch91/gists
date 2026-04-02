@@ -11,6 +11,17 @@
 - /etc/systemd/system/docker.service.d/http-proxy.conf
 - /home/<username>/.docker/config.json
 - /root/.docker/config.json
+- /etc/docker/daemon.json
+
+### /etc/docker/daemon.json
+```
+echo '{"max-concurrent-uploads": 3, "mtu": 1400}' | sudo tee /etc/docker/daemon.json
+/etc/init.d/docker restart
+docker info | grep -i "Concurrent"
+docker info --format '{{json .}}' | grep -i "MaxConcurrentUploads"
+docker info --format '{{.MaxConcurrentUploads}}'
+docker network inspect bridge | grep -i mtu
+```
 
 ## info
 ```
