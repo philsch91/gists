@@ -23,10 +23,34 @@ F1 > Network Proxy Test: Test Connection
 F1 > Network Proxy Test: Show OS Certificates
 ```
 
-- vscjava.vscode-java-pack
-- ms-vscode.cpptools-extension-pack
+### AI extensions
 - github.copilot-chat
+### Java + CPP extensions
+- vscjava.vscode-java-pack
+- vscjava.vscode-gradle
+- madhavd1.javadoc-tools
+- ms-vscode.cpptools-extension-pack
+- ms-vscode.makefile-tools
+### Python extensions
+- ms-python.python
+- ms-python.vscode-pylance
+- ms-python.debugpy
+- ms-python.vscode-python-envs
+### PowerShell extensions
+- ms-vscode.powershell
+- ms-vscode-remote.remote-wsl
+### Kubernetes extensions
+- ms-kubernetes-tools.vscode-kubernetes-tools
+### File format extensions
+- redhat.vscode-yaml
+- redhat.vscode-xml
+### Additional extensions
 - cschlosser.doxdocgen
+- marlon407.code-groovy
+- yzhang.markdown-all-in-one
+- cliffordfajardo.hightlight-selections-vscode
+- gerane.theme-flatlandmonokai
+- humao.rest-client
 
 ## User Settings
 
