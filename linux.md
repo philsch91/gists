@@ -127,6 +127,13 @@ systemctl show --property=Environment docker
 systemctl cat docker
 ```
 
+## ip
+```
+ip addr show eth0 | grep mtu
+# 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+sudo ip link set dev eth0 mtu <new-max-transmission-unit-in-bytes (e.g. 1400)>
+```
+
 ## netcat
 
 Check network connectivity
