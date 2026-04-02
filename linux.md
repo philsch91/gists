@@ -85,6 +85,13 @@ systemctl start <service>
 systemctl stop <service>
 ```
 
+### restart
+```
+rm /etc/systemd/system/docker.service.d/http-proxy.conf
+systemctl daemon-reload
+systemctl restart docker
+```
+
 ### List unit files
 ```
 systemctl list-unit-files --type=service --state=enabled,running,generated
@@ -107,6 +114,17 @@ systemctl list-units --type=service --state=active
 ```
 systemctl enable <service>
 systemctl disable <service>
+```
+
+### show
+```
+systemctl show -p FragmentPath docker
+systemctl show --property=Environment docker
+```
+
+### cat
+```
+systemctl cat docker
 ```
 
 ## netcat
