@@ -1,5 +1,17 @@
 # Docker
 
+## Files
+
+- /etc/environment
+- /etc/default/docker
+- /var/log/docker.log
+- /etc/init.d/docker
+- /lib/systemd/system/docker.service
+- /usr/lib/systemd/system/docker.service
+- /etc/systemd/system/docker.service.d/http-proxy.conf
+- /home/<username>/.docker/config.json
+- /root/.docker/config.json
+
 ## info
 ```
 docker info [| grep -i registry]
@@ -12,7 +24,7 @@ docker login <docker-registry-uri> -u <user-name> -p <password> [--password-stdi
 
 ## build
 ```
-docker build -f <dockerfile-path> -t <image-name>:<image-tag> <build-context-path>|.
+docker build -f <dockerfile-path> -t <image-name>:<image-tag> [--build-arg http_proxy= --build-arg https_proxy=] <build-context-path>|.
 ```
 
 ## run
