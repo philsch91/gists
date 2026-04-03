@@ -87,9 +87,21 @@ systemctl stop <service>
 
 ### restart
 ```
-rm /etc/systemd/system/docker.service.d/http-proxy.conf
+systemctl restart docker
+```
+
+### daemon-reload (drop-in)
+```
+# add
+mkdir -pv /etc/systemd/system/docker.service.d
+echo -e "[Service]\nExecStart=\nExecStart=/usr/bin/dockerd -H fd:// --max-concurrent-uploads=1 --mtu=1000" | sudo tee /etc/systemd/system/docker.service.d/override.conf
 systemctl daemon-reload
 systemctl restart docker
+# disable
+mv -v /etc/systemd/system/docker.service.d/override.conf /etc/systemd/system/docker.service.d/override.conf.bkp
+# remove
+rm -v /etc/systemd/system/docker.service.d/http-proxy.conf
+rm -v /etc/systemd/system/docker.service.d/override.conf
 ```
 
 ### List unit files
