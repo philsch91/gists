@@ -37,6 +37,7 @@ kubectl -n <istio-system-ns> exec -it $(kubectl -n <istio-system-ns> get pod -l 
 0.0.0.0_5432::0.0.0.0:5432
 # openssl
 k exec -n <istio-system-ns> -it $(kubectl -n <istio-system-ns> get pod -l istio=ingressgateway -o jsonpath='{.items[0].metadata.name}') -c istio-proxy -- openssl x509 -in /etc/istio/ingressgateway-certs/tls.crt -text -noout
+k exec -n <istio-system-ns> -it $(kubectl -n <istio-system-ns> get pod -l istio=ingressgateway -o jsonpath='{.items[0].metadata.name}') -c istio-proxy -- curl -s localhost:15000/stats
 ```
 
 ## Service
