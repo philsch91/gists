@@ -179,6 +179,7 @@ apt list --installed gcc*
 apt list --installed make*
 apt list --installed "cmake*"
 apt list --installed "*pip*"
+apt list --installed "code*"
 
 ## apt update
 ### updates package cache
@@ -216,6 +217,11 @@ sudo apt install python3-pip
 ## apt install cmake
 ```
 sudo apt install cmake
+```
+
+## apt install (upgrade) code
+```
+apt install code
 ```
 
 ## dpkg
