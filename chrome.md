@@ -1,5 +1,11 @@
 # Google Chrome
 
+## Files
+```
+ls -lah /opt/google/chrome/
+ls -lah /home/<username>/.config/google-chrome/
+```
+
 ## Sessions and Tabs
 ```
 C:\Users\<username>\AppData\Local\Google\Chrome\User Data\Default\Sessions
