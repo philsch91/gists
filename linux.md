@@ -171,6 +171,20 @@ getent group <groupname>
 ```
 
 ## apt
+
+## apt files
+```
+/etc/apt/sources.list
+/etc/apt/sources.list.d/azure-cli.list
+/etc/apt/sources.list.d/docker.list
+/etc/apt/sources.list.d/google-chrome.list
+/etc/apt/sources.list.d/kubernetes.list
+/etc/apt/sources.list.d/vscode.list
+# deb822 files
+/etc/apt/sources.list.d/ubuntu.sources
+/etc/apt/sources.list.d/vscode.sources
+```
+
 ```
 ## apt list
 apt list --upgradable
@@ -180,6 +194,7 @@ apt list --installed make*
 apt list --installed "cmake*"
 apt list --installed "*pip*"
 apt list --installed "code*"
+apt list --installed "*chrome*"
 
 ## apt update
 ### updates package cache
@@ -192,6 +207,20 @@ apt-get [-u|--show-upgraded] [-V|--verbose-versions] [[--assume-no]] upgrade # s
 
 ## apt install
 apt-get [-f|--fix-broken] [-m|--fix-missing] [[--no-cache]] install <package-name>|./<file-name>.deb
+
+cat /etc/apt/sources.list.d/google-chrome.list
+# deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main
+
+cat /etc/apt/sources.list.d/vscode.list
+# deb [arch=amd64,arm64,armhf] https://packages.microsoft.com/repos/code stable main
+
+cat /etc/apt/sources.list.d/vscode.sources
+# Types: deb
+# URIs: https://packages.microsoft.com/repos/code
+# Suites: stable
+# Components: main
+# Architectures: amd64
+# Signed-By: /usr/share/keyrings/microsoft.gpg
 
 ## apt remove
 apt-get remove <package-name>
@@ -219,9 +248,14 @@ sudo apt install python3-pip
 sudo apt install cmake
 ```
 
-## apt install (upgrade) code
+## apt install (upgrade) code (vscode)
 ```
 apt install code
+```
+
+## apt install (upgrade) google-chrome-stable
+```
+apt install code google-chrome-stable
 ```
 
 ## dpkg
