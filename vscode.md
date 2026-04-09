@@ -1,5 +1,11 @@
 # Visual Studio Code
 
+## Files
+```
+ls -lah /usr/share/code/
+ls -lah /home/<username>/.config/Code/
+```
+
 ```
 # environment variables
 echo $DBUS_SESSION_BUS_ADDRESS
