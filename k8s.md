@@ -165,7 +165,7 @@ kubectl get pod/<pod-name>-debug -o json | kubectl patch --type=json -f - -p='[{
 
 ## logs
 ```
-kubectl logs [-f] --tail 100 [-p] <pod | type/name> [-c <container>]
+kubectl logs [-f] --tail 100 [-p] <pod | type/name> [-c <container>] [-t|--timestamps]
 kubectl logs [-f] --since=2h -l app=nginx --all-containers=true
 ```
 
