@@ -59,7 +59,7 @@ Login request:
 ## Client Credential Grant Flow
 
 No token and login request process (user interaction). Service to service authorization.
-Only get token request.
+Only get token request. Can be used to test OIDC client ID and secret.
 
 Get token request:
 ```
@@ -79,7 +79,9 @@ curl --location -X POST 'https://auth-service.tld/oauth/token' \
     --data-urlencode 'client_secret=<client_secret>' \
     --data-urlencode 'grant_type=client_credentials'
 
-// or 
+// or
+curl -iSs -X POST "https://auth-service.tld/oauth/token?client_id=<client-id>&client_secret=<client-secret>&grant_type=client_credentials" -H "Content-Type: application/x-www-form-urlencoded"
+// or
 // Microfocus Access Manager
 curl -ikSs -X POST -H 'Content-Length: 0' --proxy "proxy.subdomain.tld:8888" -v "https://auth-service.tld/nidp/oauth/nam/token?client_id=<client-id>&client_secret=<client-secret>&grant_type=client_credentials"
 ```
