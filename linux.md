@@ -42,7 +42,6 @@ ln -s <destination/target-dir/file> <link-name>
 ```
 
 ## find
-
 ```
 # find and ignore permission denied errors
 find / -name "filename*" 2>/dev/null
@@ -53,9 +52,55 @@ find . -type f -print0 | xargs -0 grep <regex>
 ```
 
 ## sed
-
 ```
 grep -rl [-I] <old-string> . [--exclude-dir=.git] | xargs sed -i 's/<old-string>/<new-string>/g'
+```
+
+## useradd
+```
+# user `passwd <username>` instead of -p
+useradd -m|--create-home [-s|--shell /bin/bash] -U|--user-group -d|--home-dir /home/<username> -G|--groups adm,dialout,cdrom,floppy,sudo,audio,dip,video,plugdev,netdev [-p|--password $(echo "<password>" | openssl passwd -1 -stdin)] <username>
+```
+
+## usermod
+```
+# append (a) group (G)
+sudo usermod -aG sudo <username>
+```
+
+## passwd
+
+- /etc/shadow
+
+```
+# set password for <username>
+passwd <username>
+# set password for root
+sudo passwd root
+# get account status (P = usable password, L = locked, NP = no password)
+sudo passwd -S root
+```
+
+## sudo
+
+- /etc/sudoers
+- /etc/sudoers.d/
+
+```
+# adapt timestamp timeout
+# Defaults        env_reset, timestamp_timeout=30
+# 30 = 30 min, 0 = every time, -1 = unlimited for session
+sudo visudo
+# list, check if user is allowed to run sudo
+sudo -l [-U <username>]
+# validate
+sudo -v
+sudo -nv 2>/dev/null && echo "Session active" || echo "Password required"
+sudo sudo -V | grep "Path to authentication timestamp dir"
+sudo ls -l /run/sudo/ts
+groups [<username>] | grep "sudo"
+# delete timestamp
+sudo -k
 ```
 
 ## SysV
@@ -263,6 +308,8 @@ apt install code google-chrome-stable
 ## query
 ### -s (status)
 dpkg -s <package> [... <package-n>]
+### -S (search)
+dpkg -S <file>
 ```
 
 ## pacman
