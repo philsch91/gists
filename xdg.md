@@ -9,15 +9,13 @@ XDG_CURRENT_DESKTOP=GNOME
 XDG_RUNTIME_DIR=/mnt/wslg/runtime-dir
 XDG_RUNTIME_DIR=/run/user/1001
 XDG_DATA_DIRS=/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
-```
-
-```
-env | grep -i xdg
 sudo update-alternatives --config x-www-browser
 ```
 
-## xdg-open
+## xdg-open with xdg-utils
 ```
+apt list --installed "xdg-utils"
+apt install xdg-utils
 which xdg-open # /usr/bin/xdg-open # = default
 xdg-open https://www.example.com
 ```
