@@ -300,7 +300,7 @@ apt install code
 
 ## apt install (upgrade) google-chrome-stable
 ```
-apt install code google-chrome-stable
+apt install google-chrome-stable
 ```
 
 ## dpkg
