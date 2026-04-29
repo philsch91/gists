@@ -5,6 +5,7 @@ which claude
 claude --version
 claude --resume
 claude --continue
+claude --max-steps 50
 ```
 
 ## Files
@@ -13,6 +14,7 @@ claude --continue
 - `~/.claude/settings.json`
 - `~/.claude/projects/<project-path>/<session-id>.jsonl`
 - `$(pwd)/CLAUDE.md`
+- `$(pwd)/.claude/settings.json`
 - `$(pwd)/.claude/settings.local.json`
 - `$(pwd)/CLAUDE.local.md`
 
