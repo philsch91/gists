@@ -8,6 +8,7 @@
 - /usr/bin
 - executables in /usr/local/bin/ take precedence over /usr/bin/
 - ~/.local/bin
+- ~/.local/share/<app>
 
 ## nvram
 
