@@ -8,6 +8,7 @@
 - /usr/bin
 - executables in /usr/local/bin/ take precedence over /usr/bin/
 - ~/.local/bin
+- ~/.local/share/<app>
 
 ## Shell
 
@@ -154,6 +155,7 @@ rm -v /etc/systemd/system/docker.service.d/override.conf
 systemctl list-unit-files --type=service --state=enabled,running,generated
 systemctl list-unit-files | grep -i enabled
 systemctl list-unit-files | grep -i running
+systemctl --user list-units --type=service --state=active 2>/dev/null | grep -i tmux
 ```
 
 ### List units
@@ -171,6 +173,7 @@ systemctl list-units --type=service --state=active
 ```
 systemctl enable <service>
 systemctl disable <service>
+systemctl --user disable tmux.service
 ```
 
 ### show
@@ -182,6 +185,7 @@ systemctl show --property=Environment docker
 ### cat
 ```
 systemctl cat docker
+systemctl --user cat tmux.service
 ```
 
 ## ip
