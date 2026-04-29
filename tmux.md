@@ -5,6 +5,10 @@
 ls $TMUX_TMPDIR(default:/tmp)/tmux-<uid>/default
 # send signal 'USR1' to tmux server to recreate the socket
 pkill -USR1 tmux
+# tmux and systemd
+systemctl --user cat tmux.service
+cat ~/.config/systemd/user/tmux.service
+systemctl --user disable tmux.service
 ```
 
 ## tmux options
@@ -80,6 +84,7 @@ Ctrl+b :show-options -gw mode-keys
 ## tmux files
 - `/etc/tmux.conf`<br />
 - `~/.tmux.conf`<br />
+- `~/.config/systemd/user/tmux.service`<br />
 
 ## tmux directories
 - `$HOME/.tmux/plugins`<br />
