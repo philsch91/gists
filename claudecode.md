@@ -3,11 +3,18 @@
 ```
 which claude
 claude --version
+claude --resume
+claude --continue
 ```
 
 ## Files
 
-- ~/.claude/settings.json
+- `~/.claude.json`
+- `~/.claude/settings.json`
+- `~/.claude/projects/<project-path>/<session-id>.jsonl`
+- `$(pwd)/CLAUDE.md`
+- `$(pwd)/.claude/settings.local.json`
+- `$(pwd)/CLAUDE.local.md`
 
 ## Commands
 ```
@@ -15,6 +22,7 @@ claude --version
 /status
 /update-config # updates ~/.claude/settings.json
 /setup-bedrock
+/resume
 /effort
 /stats
 /skills
@@ -23,4 +31,12 @@ claude --version
 /model
 /usage
 /btw
+/exit
+```
+
+## .gitignore
+```
+.claude/settings.local.json
+CLAUDE.local.md
+.env
 ```
