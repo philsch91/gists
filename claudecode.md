@@ -104,6 +104,7 @@ project/
 │   └── prompts/
 ├── docs/
 │   ├── architecture.md
+│   ├── specification.md
 │   ├── decisions/
 │   └── runbooks/
 └── src/
@@ -115,20 +116,27 @@ project/
 /status
 /update-config # updates ~/.claude/settings.json
 /setup-bedrock
-/memory # verify if CLAUDE.md and CLAUDE.local.md files are loaded
+/edit .claude/settings.json
+## resume
 /resume
-/effort
-/stats
-/mcp [disable <server>]
-# skills
-/skills
-# hooks
-/plugin [disable <plugin-name>]
-/tasks
-/agents # create agents interactively
-/claude-api
-/model
+/memory # verify if CLAUDE.md and CLAUDE.local.md files are loaded
+## usage
 /usage
+/stats
+## mcp
+/mcp [disable <server>]
+## skills
+/skills
+## hooks
+/plugin [disable <plugin-name>]
+## agents
+/agents # create agents interactively
+## tasks
+/tasks
+/claude-api
+## settings
+/effort
+/model
 /btw
 /exit
 ```
