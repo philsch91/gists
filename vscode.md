@@ -30,7 +30,7 @@ F1 > Network Proxy Test: Show OS Certificates
 ```
 
 ### AI extensions
-- github.copilot-chat
+- github.copilot-chat # formerly github.copilot
 ### Java + CPP extensions
 - vscjava.vscode-java-pack
 - vscjava.vscode-gradle
