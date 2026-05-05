@@ -120,6 +120,7 @@ project/
 ## resume
 /resume
 /memory # verify if CLAUDE.md and CLAUDE.local.md files are loaded
+/batch <"commands" | -f tasks.md> ## tasks.md: # Tasks\n- [ ] Task1\n- [ ] Task2
 ## usage
 /usage
 /stats
