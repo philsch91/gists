@@ -124,7 +124,7 @@ sudo apt-get install rcconf
 
 ## systemd
 
-### Start and stop services
+### status, start and stop
 ```
 systemctl status <service>
 systemctl start <service>
@@ -150,29 +150,29 @@ rm -v /etc/systemd/system/docker.service.d/http-proxy.conf
 rm -v /etc/systemd/system/docker.service.d/override.conf
 ```
 
-### List unit files
+### list-unit-files
 ```
-systemctl list-unit-files --type=service --state=enabled,running,generated
+systemctl [--user] list-unit-files --type=service --state=enabled,running,generated
 systemctl list-unit-files | grep -i enabled
 systemctl list-unit-files | grep -i running
+systemctl --user list-unit-files --type=service | grep -i tmux
+```
+
+### list-units
+```
+# systemd services in `state=active` and `sub=running`
+systemctl [--user] list-units --type=service --state=running
+# systemd services in `state=active` and `sub` either `running` or `exited`
+systemctl list-units --type=service --state=active
+##
 systemctl --user list-units --type=service --state=active 2>/dev/null | grep -i tmux
 ```
 
-### List units
-
-systemd services in `state=active` and `sub=running`
-```
-systemctl list-units --type=service --state=running
-```
-systemd services in `state=active` and `sub` either `running` or `exited`
-```
-systemctl list-units --type=service --state=active
-```
-
-### Enable and disable services
+### enable and disable
 ```
 systemctl enable <service>
 systemctl disable <service>
+# remove /home/<user>/.config/systemd/user/default.target.wants/tmux.service
 systemctl --user disable tmux.service
 ```
 
