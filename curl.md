@@ -2,7 +2,7 @@
 
 ## proxy
 ```
-curl -iSs https://host -x | --proxy <[protocol://]host[:port]>
+curl -iSs https://host -x | --proxy <[protocol://]host[:port]> [--noproxy "*|subdomain.domain.tld"]
 ```
 
 ## cookie
