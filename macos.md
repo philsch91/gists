@@ -10,6 +10,28 @@
 - ~/.local/bin
 - ~/.local/share/<app>
 
+### `/Users/<username>`
+```
+# /Users/<username>/.vscode
+find /Users/<username> -type d -iname ".*" 2>/dev/null | grep -i vscode
+```
+
+### `~/Library`
+```
+find /Users/<username>/Library/ -type d -iname "Visual Studio" 2>/dev/null
+find /Users/<username>/Library/ -type f -iname "Visual Studio" 2>/dev/null
+
+find /Users/<username>/Library/ -type d -iname "VisualStudio" 2>/dev/null
+find /Users/<username>/Library/ -type f -iname "VisualStudio" 2>/dev/null
+
+find /Users/<username>/Library/ -type d -iname "Xamarin" 2>/dev/null
+find /Users/<username>/Library/ -type f -iname "Xamarin" 2>/dev/null
+
+# /Users/<username>/Library/Application Support/Code
+find /Users/<username>/Library/ -type d -iname "code" 2>/dev/null
+find /Users/<username>/Library/ -type f -iname "code" 2>/dev/null
+```
+
 ## nvram
 
 ```
