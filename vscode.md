@@ -3,6 +3,10 @@
 ## Files
 ```
 ls -lah /usr/share/code/
+ls -lah /usr/local/bin/code
+ls -lah $(which code)
+ls -lah /usr/local/bin/codium
+ls -lah $(which codium)
 ls -lah /home/<username>/.config/Code/
 ```
 
@@ -59,10 +63,17 @@ F1 > Network Proxy Test: Show OS Certificates
 - humao.rest-client
 
 ## User Settings
-
-- Windows: `/c/Users/<username>/AppData/Roaming/Code/User/settings.json`<br />
-- Linux: `$HOME/.config/Code/User/settings.json`<br />
-- macOS: `$HOME/Library/Application Support/Code/User/settings.json`<br />
+```
+# Linux
+$HOME/.config/Code/User/settings.json
+$HOME/.config/VSCodium/User/settings.json
+# macOS
+$HOME/Library/Application\ Support/Code/User/settings.json
+$HOME/Library/Application\ Support/VSCodium/User/settings.json
+# Windows
+/c/Users/<username>/AppData/Roaming/Code/User/settings.json
+/c/Users/<username>/AppData/Roaming/VSCodium/User/settings.json
+```
 
 ## Workspace Settings
 
@@ -72,6 +83,7 @@ F1 > Network Proxy Test: Show OS Certificates
 
 ```
 {
+    "update.mode": "none",
     "files.eol": "\n",
     "files.exclude": {
         "**/.classpath": true,
