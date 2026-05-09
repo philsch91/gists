@@ -25,7 +25,7 @@ code --list-extensions --show-versions --ignore-certificate-errors
 code --ignore-certificate-errors [--password-store="gnome-libsecret|kwallet5|basic"] --verbose --vmodule="*/components/os_crypt/*=1" . > /tmp/vscode-output.log 2>&1 &
 ```
 
-## Extensions
+## VSX Extensions
 ```
 F1 > <extension-name> : <command>
 F1 > Extensions: Install VSIX...
@@ -35,6 +35,7 @@ F1 > Network Proxy Test: Show OS Certificates
 
 ### AI extensions
 - github.copilot-chat # formerly github.copilot
+- continue.continue # https://open-vsx.org/extension/Continue/continue
 ### Java + CPP extensions
 - vscjava.vscode-java-pack
 - vscjava.vscode-gradle
