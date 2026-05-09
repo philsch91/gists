@@ -5,3 +5,9 @@
 brew install --cask visual-studio-code
 brew install --cask vscodium
 ```
+
+## brew reinstall
+```
+brew reinstall --cask visual-studio-code
+brew install --cask vscodium
+```
