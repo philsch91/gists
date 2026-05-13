@@ -7,6 +7,18 @@ claude --resume
 claude --continue
 claude --max-steps 50
 claude --add-dir ../shared-config
+claude mcp add <name> --scope user|project|local(=dir-specific) --transport stdio|http|sse ...
+claude mcp add <name> --transport stdio --env ENV_VAR_NAME=ENV_VAR_VALUE -- <command> | npx -y mcp-server
+claude mcp add <name> --transport http http://127.0.0.1:3845/mcp
+
+claude mcp add <python-fastmcp-server> --scope user --transport sse http://127.0.0.1:8000/sse | --transport http http://localhost:8000/mcp --env ENV_VAR_1=ENV_VAR_VALUE --env ENV_VAR_2=ENV_VAR_VALUE -- uv run --with fastmcp [--with requests --with pandas] fastmcp run fastmcp-server.py
+
+claude mcp add <python-fastmcp-server> --scope user [--transport stdio] --env ENV_VAR_1=ENV_VAR_VALUE --env ENV_VAR_2=ENV_VAR_VALUE -- uv run [python] fastmcp-server.py
+
+claude mcp add <python-fastmcp-server> --scope user [--transport stdio] --env ENV_VAR_1=ENV_VAR_VALUE --env ENV_VAR_2=ENV_VAR_VALUE -- python3 fastmcp-server.py
+
+claude mcp list
+claude mcp remove <confluence-mcp-server>
 ```
 
 ## Environment variables
@@ -22,7 +34,7 @@ export CLAUDE_CODE_DISABLE_AUTO_MEMORY=1
 
 - `/etc/claude-code/CLAUDE.md` or `/Library/Application Support/ClaudeCode/CLAUDE.md` or `C:\Program Files\ClaudeCode\CLAUDE.md`
 - `~/.claude/CLAUDE.md` # personal preferences
-- `~/.claude.json`
+- `~/.claude.json` (mcp --scope user (.mcpServers) |local (.projects.<fs-path>.mcpServers))
 - `~/.claude/settings.json`
 - `~/.claude/settings.local.json` # local specifics
 - `~/.claude/projects/<project-path>/<session-id>.jsonl`
@@ -34,6 +46,7 @@ export CLAUDE_CODE_DISABLE_AUTO_MEMORY=1
 - `$(pwd)/.claude/settings.json`
 - `$(pwd)/.claude/settings.local.json`
 - `$(pwd)/.claude/agents/`
+- `$(pwd)/.mcp.json` (mcp --scope project)
 
 ### CLAUDE.md
 
