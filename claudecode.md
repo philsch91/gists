@@ -11,14 +11,17 @@ claude mcp add <name> --scope user|project|local(=dir-specific) --transport stdi
 claude mcp add <name> --transport stdio --env ENV_VAR_NAME=ENV_VAR_VALUE -- <command> | npx -y mcp-server
 claude mcp add <name> --transport http http://127.0.0.1:3845/mcp
 
+# uv run fastmcp run
 claude mcp add <python-fastmcp-server> --scope user --transport sse http://127.0.0.1:8000/sse | --transport http http://localhost:8000/mcp --env ENV_VAR_1=ENV_VAR_VALUE --env ENV_VAR_2=ENV_VAR_VALUE -- uv run --with fastmcp [--with requests --with pandas] fastmcp run fastmcp-server.py
 
+# uv run
 claude mcp add <python-fastmcp-server> --scope user [--transport stdio] --env ENV_VAR_1=ENV_VAR_VALUE --env ENV_VAR_2=ENV_VAR_VALUE -- uv run [python] fastmcp-server.py
 
+# python
 claude mcp add <python-fastmcp-server> --scope user [--transport stdio] --env ENV_VAR_1=ENV_VAR_VALUE --env ENV_VAR_2=ENV_VAR_VALUE -- python3 fastmcp-server.py
 
 claude mcp list
-claude mcp remove <confluence-mcp-server>
+claude mcp remove <mcp-server>
 ```
 
 ## Environment variables
