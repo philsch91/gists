@@ -132,6 +132,31 @@ macOS system daemons
 - /System/Library/LaunchAgents/
 macOS user daemons
 
+## pmset
+```
+# -b=battery, -a=ac+battery
+
+# set 0 minutes before (disable) sleep
+pmset [-b|-a] sleep 0
+# set 5 minutes before (re-enable) sleep
+pmset [-b|-a] sleep 5
+
+# pmset sleep not needed for pmset disablesleep
+# disable sleep, also when the lid is closed
+pmset [-b|-a] disablesleep 1
+# re-enable sleep
+pmset [-b|-a] disablesleep 0
+```
+
+## caffeinate
+```
+# create assertion to prevent display sleep and screen saver
+caffeinate -d -t 3600
+# create assertion to declare active user (prevent system idle sleep) and to prevent display idle sleep
+# If timeout is not specified with '-t x', the assertion is created with default timeout of 5 seconds
+caffeinate -u -t 3600
+```
+
 ## Softwareupdate
 
 ```
