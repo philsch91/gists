@@ -45,6 +45,15 @@ sudo nvram BootPreference=%02
 sudo nvram -d BootPreference
 ```
 
+## sudo
+
+- /private/etc/sudoers
+- /private/etc/sudoers.d/
+
+```
+sudo zsh -c 'echo "<username> ALL=(ALL) NOPASSWD: /usr/bin/pmset" > /private/etc/sudoers.d/10-pmset'
+```
+
 ## BSD Programs and Commands
 
 Get file encoding
