@@ -22,6 +22,12 @@ pip install 'urllib3<2'
 
 ## IAM
 
+```
+aws iam get-role --role-name AWSServiceRoleForEC2Spot
+aws iam list-roles --query "Roles[?starts_with(Path, '/aws-service-role/')].RoleName"
+aws iam create-service-linked-role --aws-service-name spot.amazonaws.com
+```
+
 ### configure
 ```
 aws configure --profile <profile-name>
@@ -147,7 +153,11 @@ if (identityProviderConfig["identityProviderConfigs"].size() == 0) {
     """)
 }
 
+## eks list-nodegroups
 aws eks list-nodegroups --cluster <cluster-name>
+
+## eks update-cluster-config
+aws eks update-cluster-config --name <cluster-name> --logging '{"clusterLogging":[{"types":["audit"],"enabled":true},{"types":["api","authenticator","controllerManager","scheduler"],"enabled":false}]}' [--profile <profile-name>] [--region <region>]
 
 # drain node (instance) first
 aws autoscaling terminate-instance-in-auto-scaling-group --instance-id <instance-id> --should-decrement-desired-capacity [--region <region>]
@@ -226,6 +236,11 @@ proxy-support: Session-Based-Authentication
 ```
 TOKEN=$(curl -Ls -X GET "https://ecr-public.aws.com/token?service=public.ecr.aws&scope=repository:docker/library/redis:pull" | jq -r '.token')
 curl -iSs -H "Authorization: Bearer $TOKEN" https://ecr-public.aws.com/v2/docker/library/redis/manifests/7.2.11-alpine
+```
+
+## CloudWatch
+```
+aws logs put-retention-policy --log-group-name /aws/eks/<cluster-name>/cluster --retention-in-days 14 [--profile <profile-name>] [--region eu-central-1]
 ```
 
 ## CloudTrail
