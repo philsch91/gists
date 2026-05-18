@@ -158,6 +158,11 @@ project/
 /exit
 ```
 
+## Projects
+```
+ls -lt ~/.claude/projects/$(pwd | sed 's/[^a-zA-Z0-9]/-/g')/*.jsonl
+```
+
 ## Hooks
 ```
 cat ~/.claude/settings.json | jq '.hooks'
