@@ -241,6 +241,7 @@ apt list --installed [-qq|--quiet] <(*)package-name(*)>
 apt list --installed gcc*
 apt list --installed make*
 apt list --installed "cmake*"
+apt list --installed "*openjdk*"
 apt list --installed "*pip*"
 apt list --installed "code*"
 apt list --installed "*chrome*"
@@ -305,6 +306,11 @@ apt install code
 ## apt install (upgrade) google-chrome-stable
 ```
 apt install google-chrome-stable
+```
+
+## apt install (upgrade) openjdk-21-jdk
+```
+apt install openjdk-21-jdk
 ```
 
 ## dpkg
@@ -438,6 +444,9 @@ update-alternatives --install <link-src> <link-name> <link-target> <link-priorit
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 60
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 70 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
 update-alternatives --remove gcc /usr/bin/gcc-13
+
+update-java-alternatives --list
+update-java-alternatives --set /path/to/java/version # /usr/lib/jvm/java-1.21.0-openjdk-amd64
 ```
 
 ## gcc
