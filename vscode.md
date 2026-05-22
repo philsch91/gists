@@ -29,6 +29,9 @@ code --ignore-certificate-errors [--password-store="gnome-libsecret|kwallet5|bas
 ```
 F1 > <extension-name> : <command>
 F1 > Extensions: Install VSIX...
+F1 > Preferences: Open User Settings Settings
+F1 > Preferences: Open User Settings Settings (JSON)
+F1 > Developer: Reload Window
 F1 > Network Proxy Test: Test Connection
 F1 > Network Proxy Test: Show OS Certificates
 ```
@@ -166,17 +169,36 @@ $HOME/Library/Application\ Support/VSCodium/User/settings.json
 
 ## vscode-java
 
+### vscode-java settings
 ```
 {
+    "java.jdt.ls.java.home": "/usr/lib/jvm/java-21-openjdk-amd64",
     "java.jdt.ls.vmargs": "",
     "java.autobuild.enabled": false,
     "java.semanticHighlighting.enabled": true,
-    "java.configuration.checkProjectSettingsExclusions": false
+    "java.configuration.checkProjectSettingsExclusions": false,
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.configuration.updateBuildConfiguration_alt": "interactive",
+    "java.configuration.maven.userSettings": "/home/a4938/.m2/settings.xml",
+    "java.maven.downloadSources": true,
+    "maven.executable.path": "/usr/bin/mvn",
+    "java.project.sourcePaths": [
+        "src/main/java",
+        "/tmp/<artifact>-generated-sources/protobuf/java",
+        "/tmp/<artifact>-generated-sources/protobuf/grpc-java"
+    ]
 }
 ```
 
-## vscode-dotnet-runtime
+### vscode-java commands
+```
+Java: Clean Java Language Server Workspace
+Java: Import Java Projects into Workspace
+Java: Update Project Source Attachment
+Java: Update Project Configuration
+```
 
+## vscode-dotnet-runtime
 ```
 {
     "dotnetAcquisitionExtension.existingDotnetPath": [
