@@ -71,12 +71,7 @@ wc -w $(pwd)/CLAUDE.local.md
 #### CLAUDE.md example
 ```
 # CLAUDE.md
-See @README for project overview and @package.json for available npm commands for this project.
-
-#### CLAUDE.md prompts
-```
-- Always use pnpm, not npm and add this to CLAUDE.md
-```
+See @README.md for project overview and @package.json for available npm commands for this project.
 
 ## Agents
 @AGENTS.md
@@ -86,16 +81,25 @@ See @README for project overview and @package.json for available npm commands fo
 - @~/.claude/CLAUDE.md
 ```
 
+#### CLAUDE.md prompts
+```
+- Always use pnpm, not npm and add this to CLAUDE.md
+```
+
 ## Project Structure
 ```
 project/
 ├── .claude/
-│   ├── CLAUDE.md           # Main project instructions
+│   ├── CLAUDE.md # Main project instructions
 │   ├── settings.json
+│   ├── memory/
+│   |   ├── MEMORY.md # memory index with a list of links and descriptions to memory files
+│   |   ├── project-docs-filenames.md # memory file with name, description, metadata.node_type: memory, metadata.type: project, metadata.originSessionId: xyz
+│   |   └── user-environment.md # memory file
 │   ├── rules/
-│   |   ├── code-style.md   # Code style guidelines
-│   |   ├── testing.md      # Testing conventions
-│   |   └── security.md     # Security requirements
+│   |   ├── code-style.md # Code style guidelines
+│   |   ├── testing.md # Testing conventions
+│   |   └── security.md # Security requirements
 │   ├── skills/
 │   |   ├── code-review
 |   |       └── SKILL.md
