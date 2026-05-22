@@ -64,6 +64,8 @@ conan build . -of build.win.math.debug -o tests=True -r artifactory -pr:a vs17-c
 
 ## Profiles
 ```
+conan profile detect
+
 cat $HOME/.conan2/profiles/gcc13-cpp20-rel
 
 [settings]
@@ -83,9 +85,7 @@ build_type=Release
 #tools.cmake.cmaketoolchain:user_toolchain=["/tmp/resolv.cmake"]
 ##tools.cmake.cmaketoolchain:generator_init_variables={"CMAKE_VERBOSE_MAKEFILE": "ON"}
 #tools.cmake.cmaketoolchain:extra_variables={"CMAKE_VERBOSE_MAKEFILE": "ON"}
-```
 
-```
 cat $HOME/.conan2/profiles/vs17-cpp20-dbg
 
 [settings]
