@@ -35,6 +35,11 @@ rm -rv /home/<username>/.m2/repository/<groupId1>/<groupId2>/<groupId3>/<artifac
 
 ## dependency plugin
 
+### mvn dependency:sources
+```
+mvn dependency:sources [-f /path/to/pom.xml]
+```
+
 ### dependency:purge-local-repository
 ```
 mvn dependency:purge-local-repository -DmanualInclude=<groupId>:<artifactId>
