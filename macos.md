@@ -45,6 +45,24 @@ sudo nvram BootPreference=%02
 sudo nvram -d BootPreference
 ```
 
+## scutil
+```
+scutil --get ComputerName
+scutil --get LocalHostName
+scutil --get HostName
+scutil --set ComputerName "<computer-name>"
+scutil --set LocalHostName "<local-hostname>"
+scutil --set HostName "<hostname>"
+```
+
+## chpass (chsh, chfn)
+```
+# read and display list of built-in shell paths
+cat /etc/shells
+# change user shell
+chsh -s /bin/zsh | /bin/bash
+```
+
 ## sudo
 
 - /private/etc/sudoers
