@@ -220,8 +220,37 @@ sudo powermetrics --samplers cpu_power,smc -i1000 -n1 | egrep -i 'power|CPU die 
 ## hdiutil
 
 ```
+hdiutil info
 hdiutil create -size <1234>g -type <image-type> -fs <fs-type> -volname <volume-name> <file>
 hdiutil imageinfo <file>
+# attach
+## ls /Volumes
+## attach -nomount -readonly
+hdiutil attach -noverify -nomount -readonly /Volumes/<volume-name>/<file-name>.sparsebundle
+## attach -readonly -shadow
+hdiutil attach -noverify -readonly -verbose -shadow /tmp/tm-backup.shadow | ~/Desktop/tm-backup.shadow /Volumes/<volume-name>/<file-name>.sparsebundle
+## attach -nomount -readwrite -noautofsck = no filesystem check
+hdiutil attach -noverify -nomount -readwrite -noautofsck /Volumes/<volume-name>/<file-name>.sparsebundle
+```
+
+## fsck_hfs
+```
+## /dev/rdisk4s2 from `hdiutil attach` or `hdiutil info`
+# -d=debug
+fsck_hfs -d -f -y /dev/rdisk4s2
+```
+
+## diskutil
+```
+## /dev/disk4s2 from `hdiutil attach` or `hdiutil info`
+diskutil mount readOnly /dev/disk4s2
+```
+
+## mount
+```
+## /dev/disk4s2 from `hdiutil attach` or `hdiutil info`
+sudo mkdir [-v] /Volumes/TimeMachineForce
+sudo mount -t hfs -o rdonly /dev/disk4s2 /Volumes/TimeMachineForce
 ```
 
 ## Time Machine tmutil
