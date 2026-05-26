@@ -181,12 +181,13 @@ $HOME/Library/Application\ Support/VSCodium/User/settings.json
     "java.configuration.updateBuildConfiguration_alt": "interactive",
     "java.configuration.maven.userSettings": "/home/a4938/.m2/settings.xml",
     "java.maven.downloadSources": true,
-    "maven.executable.path": "/usr/bin/mvn",
+    "java.compile.nullAnalysis.mode": "automatic",
     "java.project.sourcePaths": [
         "src/main/java",
         "/tmp/<artifact>-generated-sources/protobuf/java",
         "/tmp/<artifact>-generated-sources/protobuf/grpc-java"
-    ]
+    ],
+    "maven.executable.path": "/usr/bin/mvn"
 }
 ```
 
