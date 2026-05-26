@@ -12,6 +12,11 @@ ${M2_HOME}/conf/settings.xml # global settings
 ${HOME}/.m2/settings.xml # user settings
 ```
 
+## phases
+```
+validate -> generate-sources -> process-resources -> compile -> test -> package -> verify -> install -> deploy
+```
+
 ## compile
 ```
 mvn clean compile
@@ -19,6 +24,7 @@ mvn clean compile
 
 ## package
 ```
+# runs phases up to package, including generate-sources -> compile -> package
 mvn clean [compile] package
 unzip -p target/<artifactId>-<version>.jar META-INF/MANIFEST.MF
 ```
