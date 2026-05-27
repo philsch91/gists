@@ -26,11 +26,14 @@ claude mcp remove <mcp-server>
 
 ## Environment variables
 ```
+echo $CLAUDE_ENV_FILE
 # recommended
 export CLAUDE_CODE_NEW_INIT=1
 # optional
 export CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1
 export CLAUDE_CODE_DISABLE_AUTO_MEMORY=1
+export CLAUDE_CONFIG_DIR="~/.claude.json"
+export CLAUDE_CODE_SHELL="/bin/bash" # /bin/zsh
 ```
 
 ## Files
@@ -149,6 +152,8 @@ project/
 ## skills
 /skills
 ## hooks
+/hooks
+## plugins
 /plugin [disable <plugin-name>]
 ## agents
 /agents # create agents interactively
@@ -164,14 +169,26 @@ project/
 
 ## Projects
 ```
-ls -lt ~/.claude/projects/$(pwd | sed 's/[^a-zA-Z0-9]/-/g')/*.jsonl
+ls -lht ~/.claude/projects/$(pwd | sed 's/[^a-zA-Z0-9]/-/g')/*.jsonl
 ```
 
 ## Hooks
 ```
 cat ~/.claude/settings.json | jq '.hooks'
+cat ~/.claude/settings.local.json | jq '.hooks'
 cat $(pwd)/.claude/settings.json | jq '.hooks'
+cat $(pwd)/.claude/settings.local.json | jq '.hooks'
 /plugin disable <plugin-name>
+```
+
+### ~/.claude/hooks/claude-env-file-hook.sh
+```
+#!/bin/bash
+# ~/.claude/hooks/claude-env-file-hook.sh
+# register this hook script in ~/.claude/settings(.local).json
+# at .hooks.SessionStart[].hooks[]
+# with {"type": "command", "command": "bash ~/.claude/hooks/claude-env-file-hook.sh"}
+echo "CLAUDE_ENV_FILE: '$CLAUDE_ENV_FILE'" >> /tmp/claude_code_debug.log
 ```
 
 ## .gitignore
