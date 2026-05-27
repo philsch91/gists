@@ -117,11 +117,14 @@ $HOME/Library/Application\ Support/VSCodium/User/settings.json
         "servers": {
             "atlassian-jira-mcp-server": {
                 "type": "stdio",
-                "command_win": "C:\\dev\\python-env\\Scripts\\python.exe",
-                "command": "/mnt/c/dev/python-env/Scripts/python.exe",
-                "args": [
+                "command_win": "C:\\dev\\python-venv\\Scripts\\python.exe",
+                "command": "/mnt/c/dev/python-venv/bin/python",
+                "args_win": [
                     "C:\\dev\\python-tests\\test-atlassian-jira-mcp-server.py"
                 ],
+                "args": [
+                    "/mnt/c/dev/python-tests/test-atlassian-jira-mcp-server.py"
+                ]
                 "env": {
                     "JIRA_CA_BUNDLE": "C:\\Users\\<username>\\Desktop\\Root-CA.cer",
                     "JIRA_BASE_URL": "<jira-base-url>",
@@ -137,34 +140,44 @@ $HOME/Library/Application\ Support/VSCodium/User/settings.json
 ```
 # Windows
 # $HOME/AppData/Roaming/Code/User/mcp.json
+# Linux
+# $HOME/.config/Code/User/mcp.json
 
-"servers": {
-    "atlassian-confluence-mcp-server": {
-        "type": "stdio",
-        "command": "uv",
-        "args": [
-            "run",
-            "/mnt/c/dev/python-tests/test-atlassian-confluence-mcp-server.py"
-        ],
-        "env": {
-            "CONFLUENCE_CA_BUNDLE": "/home/<username>/Root-CA.pem",
-            "CONFLUENCE_BASE_URL": "<confluence-base-url>",
-            "CONFLUENCE_BEARER_TOKEN": "<confluence-token>"
-        }
-    },
-    "atlassian-jira-mcp-server": {
-        "type": "stdio",
-        "command": "C:\\dev\\python-env\\Scripts\\python.exe",
-        "args": [
-            "C:\\dev\\python-tests\\test-atlassian-jira-mcp-server.py"
-        ],
-        "env": {
-            "JIRA_CA_BUNDLE": "C:\\Users\\<username>\\Desktop\\Root-CA.cer",
-            "JIRA_BASE_URL": "<jira-base-url>",
-            "JIRA_BEARER_TOKEN": "<jira-token>"
+{
+    "servers": {
+        "atlassian-confluence-mcp-server": {
+            "type": "stdio",
+            "command": "uv",
+            "args": [
+                "run",
+                "/mnt/c/dev/python-tests/test-atlassian-confluence-mcp-server.py"
+            ],
+            "env": {
+                "CONFLUENCE_CA_BUNDLE": "/home/<username>/Root-CA.pem",
+                "CONFLUENCE_BASE_URL": "<confluence-base-url>",
+                "CONFLUENCE_BEARER_TOKEN": "<confluence-token>"
+            }
+        },
+        "atlassian-jira-mcp-server": {
+            "type": "stdio",
+            "command": "C:\\dev\\python-venv\\Scripts\\python.exe",
+            "args": [
+                "C:\\dev\\python-tests\\test-atlassian-jira-mcp-server.py"
+            ],
+            "env": {
+                "JIRA_CA_BUNDLE": "C:\\Users\\<username>\\Desktop\\Root-CA.cer",
+                "JIRA_BASE_URL": "<jira-base-url>",
+                "JIRA_BEARER_TOKEN": "<jira-token>"
+            }
         }
     }
 }
+```
+
+## github.copilot-chat
+```
+
+Tool `manage_todo_list` (`functions.manage_todo_list` API) tracks and updates the todos.
 ```
 
 ## vscode-java
