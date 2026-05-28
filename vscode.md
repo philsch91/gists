@@ -176,7 +176,8 @@ $HOME/Library/Application\ Support/VSCodium/User/settings.json
 
 ## github.copilot-chat
 ```
-
+# memory-tool
+~/.config/Code/User/workspaceStorage/<session-id>/GitHub.copilot-chat/memory-tool/memories/repo/<class>_<method>_<yyyy-mm-dd>.md
 Tool `manage_todo_list` (`functions.manage_todo_list` API) tracks and updates the todos.
 ```
 
