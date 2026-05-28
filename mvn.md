@@ -25,7 +25,7 @@ mvn clean compile
 ## package
 ```
 # runs phases up to package, including generate-sources -> compile -> package
-mvn clean [compile] package
+mvn clean [compile] [-DskipTests] package
 unzip -p target/<artifactId>-<version>.jar META-INF/MANIFEST.MF
 ```
 
@@ -41,7 +41,12 @@ rm -rv /home/<username>/.m2/repository/<groupId1>/<groupId2>/<groupId3>/<artifac
 
 ## dependency plugin
 
-### mvn dependency:sources
+### dependency:tree
+```
+mvn dependency:tree -Ddetail=true
+```
+
+### dependency:sources
 ```
 mvn dependency:sources [-f /path/to/pom.xml]
 ```
