@@ -211,6 +211,7 @@ Java: Clean Java Language Server Workspace
 Java: Import Java Projects into Workspace
 Java: Update Project Source Attachment
 Java: Update Project Configuration
+Developer: Reload Window
 ```
 
 ## vscode-dotnet-runtime
