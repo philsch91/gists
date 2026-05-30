@@ -22,6 +22,11 @@ validate -> generate-sources -> process-resources -> compile -> test -> package 
 mvn clean compile
 ```
 
+## test
+```
+mvn -Dtest=<package-1.package-2>.<test-class-name> -D<prop-name-1.prop-name-2>=<prop-value> test
+```
+
 ## package
 ```
 # runs phases up to package, including generate-sources -> compile -> package
