@@ -1,15 +1,20 @@
 # Maven
 
-## repository
+## Files
 ```
 ls $HOME/.m2/repository/
 ls -lah /home/<username>/.m2/repository/<groupId1>/<groupId2>/<groupId3>/*
-```
 
 ## settings
-```
-${M2_HOME}/conf/settings.xml # global settings
+${M2_HOME|MAVEN_HOME}/conf/settings.xml # global settings
 ${HOME}/.m2/settings.xml # user settings
+```
+
+## Variables
+```
+# Maven >= 3.9.0
+export MAVEN_ARGS="-s /path/to/settings.xml"
+export MAVEN_OPTS="-Dmaven.settings=/path/to/settings.xml"
 ```
 
 ## phases
@@ -24,7 +29,7 @@ mvn clean compile
 
 ## test
 ```
-mvn -Dtest=<package-1.package-2>.<test-class-name> -D<prop-name-1.prop-name-2>=<prop-value> test
+mvn -Dtest=<package-1.package-2>.<test-class-name>#<method-name> -D<prop-name-1.prop-name-2>=<prop-value> test
 ```
 
 ## package
