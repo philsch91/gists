@@ -1,20 +1,31 @@
 # Java
 
 ## JVM Settings
+```
+java -X # will return a list of all -X options
+java -XshowSettings:properties -version 2>&1 | grep "java.io.tmpdir"
+```
 
-- `java -X` will return a list of all -X options
+### JAVA_TOOL_OPTIONS
+```
+export JAVA_TOOL_OPTIONS="-Djava.io.tmpdir=/tmp"
+```
 
 ### Networking and Proxies
 
-Linux and macOS
 ```
-JAVA_OPTS=-Dhttp.proxyHost=<proxy-dns-name-or-ip> -Dhttp.proxyPort=8080 -Dhttps.proxyHost=<proxy-dns-name-or-ip> -Dhttps.proxyPort=8080 -Dhttp.nonProxyHosts="localhost|127.0.0.1|10.*.*.*|*.company.com‌​|etc"
+# Linux and macOS
+export JAVA_TOOL_OPTIONS=-Dhttp.proxyHost=<proxy-dns-name-or-ip> -Dhttp.proxyPort=8080 -Dhttps.proxyHost=<proxy-dns-name-or-ip> -Dhttps.proxyPort=8080 -Dhttp.nonProxyHosts="localhost|127.0.0.1|10.*.*.*|*.company.com‌​|etc"
+echo $JAVA_TOOL_OPTIONS
+# or JAVA_OPTS
+export JAVA_OPTS=x
 echo $JAVA_OPTS
-```
 
-Windows
-```
-set JAVA_OPTS=-Dhttp.proxyHost=<proxy-dns-name-or-ip> -Dhttp.proxyPort=8080 -Dhttps.proxyHost=<proxy-dns-name-or-ip> -Dhttps.proxyPort=8080 -Dhttp.nonProxyHosts="localhost|127.0.0.1|10.*.*.*|*.company.com‌​|etc"
+# Windows
+setx JAVA_TOOL_OPTIONS=-Dhttp.proxyHost=<proxy-dns-name-or-ip> -Dhttp.proxyPort=8080 -Dhttps.proxyHost=<proxy-dns-name-or-ip> -Dhttps.proxyPort=8080 -Dhttp.nonProxyHosts="localhost|127.0.0.1|10.*.*.*|*.company.com‌​|etc"
+echo %JAVA_TOOL_OPTIONS%
+# or JAVA_OPTS
+setx JAVA_OPTS=x
 echo %JAVA_OPTS%
 ```
 
