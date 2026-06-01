@@ -62,6 +62,12 @@ conan build . -of build.release -o tests=True -r artifactory -pr:a gcc13-cpp20-r
 conan build . -of build.win.math.debug -o tests=True -r artifactory -pr:a vs17-cpp20-dbg [-c tools.cmake.cmaketoolchain:generator="Ninja"] [--lockfile .\conan.lock]
 ```
 
+## create
+```
+create = export + install + build + package
+conan create . --build=missing [--version=1.x.y]
+```
+
 ## Profiles
 ```
 conan profile detect
