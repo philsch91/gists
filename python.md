@@ -77,6 +77,22 @@ pip install -r requirements.txt
 deactivate
 ```
 
+### venv pyvenv.cfg
+```
+# Linux
+home = /usr/bin
+include-system-site-packages = false
+version = 3.12.3
+executable = /usr/bin/python3.12
+command = /usr/bin/python3 -m venv /mnt/c/dev/python-venv-linux
+# Windows
+home = c:\python313
+include-system-site-packages = false
+version = 3.13.5
+executable = C:\Python313\python.exe
+command = c:\python313\python.exe -m venv C:\dev\python-venv-windows
+```
+
 ## Execute
 ```
 export PYTHONPATH="${PYTHONPATH}:~/dev/python-libs/"
