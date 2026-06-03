@@ -238,3 +238,8 @@ Developer: Reload Window
     "dotnetAcquisitionExtension.installTimeoutValue": 180
 }
 ```
+
+## Logs
+```
+find $HOME/AppData/Roaming/Code/logs/ -type f -name "*copilot-chat*.log" -print0 | xargs -0 grep -i "error"
+```
