@@ -42,6 +42,11 @@ Chart.lock
 .project
 ```
 
+## exection flow
+```
+lint -> template -> repo add -> repo update -> registry login -> dependency update -> package -> push -> pull -> install/upgrade -> registry logout
+```
+
 ## lint
 ```
 helm lint
@@ -50,12 +55,6 @@ helm lint
 ## template
 ```
 helm template <release-name> [[<repo-name>/]<chart-name> | .] [-f values.yaml -f values2.yaml] -n <namespace> [--post-renderer ./path/to/executable|hook.sh(kubectl kustomize <kustomization_dir>) \] --debug [--kube-version v1.25.0]
-```
-
-## package
-```
-# download and extract dependencies in /charts directory
-helm package <chart-name>|<directory>|.
 ```
 
 ## repo
@@ -101,6 +100,21 @@ helm registry login container.registry.io -u <user-name> -p <password>
 helm registry logout container.registry.io
 ```
 
+## dependency
+```
+# generate Chart.lock, create /charts directory and download dependencies
+helm dependency update
+# reconstruct chart dependencies and build out charts/ directory from Chart.lock file
+# If no Chart.lock file is found, 'helm dependency build' will mirror/call 'helm dependency update'
+helm dependency build
+```
+
+## package
+```
+# download and extract dependencies in /charts directory
+helm package <chart-name>|<directory>|. [--destination packaged] [--dependency-update]
+```
+
 ## push
 ```
 # upload a chart to a repo in an OCI-based registry
@@ -120,15 +134,6 @@ helm pull <chart-name> --repo <repo-url | https://charts.external-secrets.io> --
 
 // with repo in an OCI-based registry
 helm pull oci://localhost:5000/helm-charts/chart --version <version | 0.1.0>
-```
-
-## dependency
-```
-# generate Chart.lock, create /charts directory and download dependencies
-helm dependency update
-# reconstruct chart dependencies and build out charts/ directory from Chart.lock file
-# If no Chart.lock file is found, 'helm dependency build' will mirror/call 'helm dependency update'
-helm dependency build
 ```
 
 ## install
