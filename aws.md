@@ -180,6 +180,29 @@ eksctl delete nodegroup --cluster=<clusterName> --name=<nodegroupName> --disable
 ### EKS + EC2 Windows
 ```
 k -n kube-system get cm/amazon-vpc-cni -o jsonpath='{.data.enable-windows-ipam}'
+
+# EC2Launch
+Get-Content C:\ProgramData\Amazon\EC2Launch\log\agent.log
+# Get user script file path
+# Example: C:\Windows\system32\config\systemprofile\AppData\Local\Temp\EC2Launch1658446796\UserScript.ps1
+Select-String -Path "C:\ProgramData\Amazon\EC2Launch\log\agent.log" -Pattern "UserScript.ps1"
+Select-String -Path "C:\ProgramData\Amazon\EC2Launch\log\agent.log" -Pattern "Script file"
+# Read user script file
+Get-Content C:\Windows\system32\config\systemprofile\AppData\Local\Temp\EC2Launch1658446796\UserScript.ps1
+# Get user script output file
+# Example: C:\Windows\system32\config\systemprofile\AppData\Local\Temp\EC2Launch1658446796\output.tmp
+Select-String -Path "C:\ProgramData\Amazon\EC2Launch\log\agent.log" -Pattern "Output file"
+# Read user script output file
+Get-Content C:\Windows\system32\config\systemprofile\AppData\Local\Temp\EC2Launch1658446796\output.tmp
+
+# Pods
+Get-Content C:\var\log\pods\<namespace>_<name>-<pod-id>\<container>\0.log
+# Containers
+Get-Content C:\var\log\containers\<container-name>-<id>_<namespace>_<workload-name>-<id>.log
+
+# containerd
+dir C:\ProgramData\containerd\root\io.containerd.snapshotter.v1.windows\snapshots\
+& "C:\Program Files\containerd\ctr.exe" -n k8s.io images list
 ```
 
 ## S3
