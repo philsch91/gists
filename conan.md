@@ -1,11 +1,17 @@
 # conan
 
+## Install
 ```
+# create virtual environment
 cd $HOME/dev
-python3 -m venv conan
-source conan/bin/activate
-pip install conan
+python3 -m venv conan-python-venv
+# option 1: install in sourced venv
+source conan-python-venv/bin/activate
+pip install conan|conan==2.26.2
 pip show conan
+deactivate
+# option 2: install with pip in venv
+$HOME/dev/conan-python-venv/bin/pip install conan|conan==2.26.2
 # Windows
 C:\dev\conan\bin\Activate.ps1
 where conan
@@ -17,6 +23,12 @@ python3 -m pip install pip-system-certs
 
 - $HOME/.conan2/global.conf
 - $HOME/.conan2/remotes.json
+
+## Variables
+```
+export CONAN_CACERT_PATH=/path/to/certifi/cacert.pem
+set CONAN_CACERT_PATH=C:\path\to\certifi\cacert.pem
+```
 
 ## version
 ```
@@ -47,7 +59,7 @@ core.net.http:cacert_path={{conan_home_folder}}\cacert.pem
 conan remote list
 conan remote add artifactory https://<artifactory-base-url>/artifactory/api/conan/artifactory
 conan remote login artifactory <username> -p <password>
-conan remote update <remote-name> --url="<remote-url>"
+conan remote update <remote-name> --url="<remote-url>" [--insecure]
 ```
 
 ## install
