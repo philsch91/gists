@@ -53,6 +53,7 @@ ln -s /usr/bin/pip3 /usr/bin/pip
 ```
 pip --version
 python -m pip --version
+python -m pip install --upgrade pip
 pip list
 pip install 'urllib3<2'
 pip install [--no-cache-dir] -r requirements.txt
@@ -96,6 +97,7 @@ command = c:\python313\python.exe -m venv C:\dev\python-venv-windows
 ## Execute
 ```
 export PYTHONPATH="${PYTHONPATH}:~/dev/python-libs/"
+python -c "import sys; print('Success!')"
 ```
 
 ## Errors
