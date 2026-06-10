@@ -155,3 +155,35 @@ If there are problems with Docker on Windows.
 
 1. Restart `Docker Desktop Service (com.docker.service)` at `C:\Program Files\Docker\Docker\com.docker.service` registered via `services.msc` and returned by `Get-Service -Name "Docker Desktop Service"`
 2. Restart `C:\Program Files\Docker\Docker\Docker Desktop.exe` registered for Autostart via `msconfig`
+
+### NAT mode and connection from WSL to Windows
+```
+# virtual router
+ip route show | grep default | awk '{print $3}' # 172.30.224.1
+curl -iSs http://172.30.224.1:8080
+# test if connection fails
+Set-NetFirewallProfile -Profile Domain,Public,Private -State False
+Set-NetFirewallProfile -Profile Domain,Public,Private -State True
+# get WSL network profile
+# network category "Public" will require an inbound rule
+(Get-NetConnectionProfile).NetworkCategory
+#
+Get-NetFirewallSetting | Select-Object LogBlockedPackets
+# create port-based rule
+New-NetFirewallRule -DisplayName "Allow WSL2 Access to Port 8080" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8080 -Profile Any
+# remove port-based rule
+Remove-NetFirewallRule -DisplayName "Allow WSL2 Access to Port 8080"
+# create subnet-based rule
+New-NetFirewallRule -DisplayName "Allow WSL2 Subnet Traffic" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8080 -RemoteAddress 172.16.0.0/12
+# remove subnet-based rule
+Remove-NetFirewallRule -DisplayName "Allow WSL2 Subnet Traffic"
+
+# disable firewall for WSL interfaces
+## get network adapters for WSL
+Get-NetAdapter -IncludeHidden | Select-Object Name, InterfaceAlias, Status, InterfaceDescription | Format-Table -AutoSize | findstr "WSL"
+## disable firewall profile for WSL interfaces
+Set-NetFirewallProfile -Profile Private,Public,Domain -DisabledInterfaceAliases "vEthernet (WSL (Hyper-V firewall))", "vEthernet (WSL)"
+
+# hostname
+nc -zv "$(hostname).local" 8080
+```
