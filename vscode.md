@@ -181,6 +181,13 @@ $HOME/Library/Application\ Support/VSCodium/User/settings.json
 Tool `manage_todo_list` (`functions.manage_todo_list` API) tracks and updates the todos.
 ```
 
+### github.copilot-chat + ollama
+```
+VSCode >= 1.113
+github.copilot-chat >= 0.41.0
+Ollama >= v0.18.3
+```
+
 ## vscode-java
 
 ### vscode-java settings
