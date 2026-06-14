@@ -161,7 +161,9 @@ macOS user daemons
 
 ## pmset
 ```
-# -b=battery, -a=ac+battery
+# -b=battery, -c=charger, -u=ups, -a=all (battery + charger + ups)
+# display settings in use
+pmset -g
 
 # set 0 minutes before (disable) sleep
 pmset [-b|-a] sleep 0
@@ -173,6 +175,9 @@ pmset [-b|-a] sleep 5
 pmset [-b|-a] disablesleep 1
 # re-enable sleep
 pmset [-b|-a] disablesleep 0
+
+# reduce disk sleep time to x minute(s)
+pmset -a disksleep x
 ```
 
 ## caffeinate
