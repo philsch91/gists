@@ -80,6 +80,13 @@ create = export + install + build + package
 conan create . --build=missing [--version=1.x.y]
 ```
 
+## remove
+```
+# resolve
+# ERROR: Pkg '<pkg-name>/<pkg-version>:<id>' folder must exist: $HOME\.conan2\p\<libxyz>-<hash>\p
+conan remove "<pkg-name>/<pkg-version | *>"
+```
+
 ## Profiles
 ```
 conan profile detect
