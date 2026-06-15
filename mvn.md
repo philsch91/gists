@@ -10,6 +10,116 @@ ${M2_HOME|MAVEN_HOME}/conf/settings.xml # global settings
 ${HOME}/.m2/settings.xml # user settings
 ```
 
+### pom.xml
+```
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId></groupId>
+  <artifactId></artifactId>
+  <version>${revision}</version>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <revision></revision>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>nexus-releases</id>
+      <url>https://nexus.org.tld/repository/releases</url>
+    </repository>
+  </repositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId></groupId>
+        <artifactId></artifactId>
+        <version></version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId></groupId>
+      <artifactId></artifactId>
+      <scope></scope>
+    </dependency>
+  </dependencies>
+</project>
+```
+
+### settings.xml
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                    https://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <localRepository/>
+    <interactiveMode/>
+    <offline/>
+    <pluginGroups/>
+    <servers>
+        <!-- needed (only) if repo.user and repo.password are needed and set -->
+        <server>
+            <!-- server id in settings.xml must match repository id in pom.xml -->
+            <id>nexus-releases</id>
+            <!-- -Dnexus.repo.user=<username> -Dnexus.repo.password=<password> -->
+            <!--
+            <username>${nexus.repo.user}</username>
+            <password>${nexus.repo.password}</password>
+            -->
+            <!-- set as export REPO_USER=<username> and export REPO_PWD=<password> -->
+            <!--
+            <username>${env.REPO_USER}</username>
+            <password>${env.REPO_PWD}</password>
+            -->
+        </server>
+    </servers>
+    <mirrors/>
+    <proxies>
+        <proxy>
+            <!--<id>company-proxy</id>-->
+            <active>true</active>
+            <protocol>http</protocol>
+            <!--<host>proxy.company.com:8080/proxy_pac</host>-->
+            <host>proxy.company.com</host>
+            <port>8080</port>
+            <!--<username></username>-->
+            <!--<password></password>-->
+            <nonProxyHosts>*.local.net|*.company.com|some.host.com|www.google.com</nonProxyHosts>
+        </proxy>
+      </proxies>
+    <profiles>
+        <profile>
+            <id>nexus</id>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <url>https://nexus.devops-services.cloud.company.com/repository/central/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>nexus</activeProfile>
+    </activeProfiles>
+</settings>
+```
+
 ## Variables
 ```
 # Maven >= 3.9.0
