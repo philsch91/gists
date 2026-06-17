@@ -12,9 +12,17 @@ curl -fsSL https://ollama.ai/install.sh | sh
 # check version
 ollama --version
 # start Ollama (runs in background)
+export OLLAMA_HOST="0.0.0.0:11434"
 ollama serve
 # verify if ollama is running
 curl -iSs http://localhost:11434
+```
+
+## run
+```
+export OLLAMA_HOST="http://localhost:11434"
+ollama list
+ollama run <model-name>
 ```
 
 ## pull
