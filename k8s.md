@@ -153,6 +153,25 @@ kubectl debug <pod-name-to-copy> --copy-to=<pod-name>-debug --set-image=*=ubuntu
 kubectl debug -it <pod-name-to-copy> --copy-to=<pod-name>-debug --container=<container-name-to-copy> -- sh
 kubectl annotate --overwrite pod <pod-name>-debug livenessprobe=disabled
 
+// kubectl debug node
+kubectl debug node/<node-name> --image=alpine --profile=sysadmin -it -- \
+  nsenter -t 1 -m -u -i -n -- crictl rmi ghcr.io/actions/actions-runner:latest
+
+// kubectl debug node and crictl
+kubectl debug node/<node-name> --image=alpine -it -- sh
+CONTAINERD_ADDRESS="unix:///host/run/containerd/containerd.sock"
+/host/usr/bin/crictl --runtime-endpoint=$CONTAINERD_ADDRESS images
+
+// kubectl debug node and ctr
+kubectl debug node/<node-name> --image=alpine -it -- sh
+chroot /host
+/usr/bin/ctr -n k8s.io images list
+/usr/bin/ctr -n k8s.io images list | grep ghcr.io/actions/actions-runner:latest
+/usr/bin/ctr -n=k8s.io images rm ghcr.io/actions/actions-runner:latest
+/usr/bin/ctr -n=k8s.io images rm ghcr.io/actions/actions-runner@sha256:123456
+/usr/bin/ctr -n k8s.io images list | grep ghcr.io/actions/actions-runner:latest
+/usr/bin/ctr -n k8s.io images list | ghcr.io/actions/actions-runner@sha256:123456
+
 // create a copy of pod with changed probes avoiding restarts
 kubectl get pod/<pod-name>-debug -o json | kubectl patch --type=json -f - -p='[{"op": "replace", "path": "/spec/containers/0/livenessProbe", "value": {"exec":{"command":["/bin/sh", "-c", "cat /opt/toolchain-base/bin/liveness_probe.sh"]}}}, {"op": "replace", "path": "/spec/containers/0/readinessProbe", "value": {"exec":{"command":["/bin/sh", "-c", "cat /opt/toolchain-base/bin/readiness_probe.sh"]}}}, {"op": "replace", "path": "/metadata/name", value: "<pod-name>-debug-2"}]' --dry-run=client -o yaml | kubectl apply -f -
 ```
@@ -303,6 +322,23 @@ mv kubelogin kubectl-oidc_login
 // Windows
 setx /M path "%path%;C:\path\to\kubectl-oidc_login.exe"
 ```
+
+## crictl
+crictl images | grep actions-runner
+crictl rmi ghcr.io/actions/actions-runner:YOUR_TAG
+
+## ctr and containerd
+ctr -n k8s.io images list
+ctr -n=k8s.io images rm ghcr.io/actions/actions-runner:latest
+
+## docker and dockershim
+docker rmi ghcr.io/actions/actions-runner:latest
+
+## nsenter
+nsenter -t 1 -m -u -i -n -- command -v crictl
+nsenter -t 1 -m -u -i -n -- crictl rmi ghcr.io/actions/actions-runner:latest
+nsenter -t 1 -m -u -i -n -- command -v ctr
+nsenter -t 1 -m -u -i -n -- ctr -n=k8s.io images rm ghcr.io/actions/actions-runner:latest
 
 ## Notes
 
