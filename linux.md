@@ -245,6 +245,7 @@ apt list --installed "*openjdk*"
 apt list --installed "*pip*"
 apt list --installed "code*"
 apt list --installed "*chrome*"
+apt list --installed "zstd"
 
 ## apt update
 ### updates package cache
@@ -311,6 +312,11 @@ apt install google-chrome-stable
 ## apt install (upgrade) openjdk-21-jdk
 ```
 apt install openjdk-21-jdk
+```
+
+## apt install (upgrade) zstd
+```
+apt install zstd
 ```
 
 ## dpkg
