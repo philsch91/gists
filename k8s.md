@@ -344,7 +344,7 @@ nsenter -t 1 -m -u -i -n -- crictl rmi ghcr.io/actions/actions-runner:latest
 nsenter -t 1 -m -u -i -n -- command -v ctr
 nsenter -t 1 -m -u -i -n -- ctr -n=k8s.io images rm ghcr.io/actions/actions-runner:latest
 
-## Notes
+## PersistentVolume
 
 ### `PersistentVolume`s and `PersistenVolumeClaim`s
 
@@ -415,6 +415,121 @@ spec:
   storageClassName: efs-sc
   volumeMode: Filesystem
 ```
+
+## Gateway API
+
+GatewayClass -> Gateway -> TLSRoute|HTTPRoute -> Service
+
+### GatewayClass.v1.gateway.networking.k8s.io
+```
+kubectl get gatewayclass.v1.gateway.networking.k8s.io [-A]
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: istio
+spec:
+  controllerName: istio.io/gateway-controller
+  description: The default Istio GatewayClass
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  annotations:
+  labels:
+    app.kubernetes.io/instance: traefik-adp-traefik
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: traefik
+    helm.sh/chart: traefik-39.0.0
+  name: traefik
+spec:
+  controllerName: traefik.io/gateway-controller
+status:
+  supportedFeatures:
+  - name: Gateway
+  - name: HTTPRoute
+  - name: TLSRoute
+```
+
+### Gateway.v1.gateway.networking.k8s.io
+```
+kubectl get gateway.v1.gateway.networking.k8s.io [-A]
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: wildcard-traefik-gateway
+  namespace: traefik
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: "*.example.com"
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: tls-cert
+        namespace: traefik
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: http
+    protocol: HTTP
+    port: 80
+    allowedRoutes:
+      namespaces:
+        from: All
+```
+
+### Middleware.v1alpha1.traefik.io
+```
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: app-api-auth
+  namespace: app-namespace
+spec:
+  basicAuth:
+    secret: app-auth-secret
+```
+
+### HTTPRoute.v1.gateway.networking.k8s.io
+```
+kubectl get httproute.v1.gateway.networking.k8s.io [-A]
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: app-route
+  namespace: app-namespace
+spec:
+  parentRefs:
+  - name: wildcard-traefik-gateway
+    namespace: traefik
+  hostnames:
+  - "://example.com"
+  - "*.example.com"
+  - "app.example.com"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: traefik.io
+        kind: Middleware
+        name: app-api-auth
+    backendRefs:
+    - name: my-app-service
+      port: 8080
+```
+
+## Notes
 
 ### Autoscaling
 
