@@ -46,15 +46,29 @@ ollama list
 ollama run <model-name>
 ```
 
+## list
+```
+curl -s https://ollama.com/library | grep -oP 'href="/library/\K[^"]+'
+curl -s https://ollama.com/library/qwen3.5/tags | grep -o "$1:[^\" ]*q[^\" ]*" | grep -E -v 'text|base|fp|q[45]_[01]'
+curl -s https://ollama.com/library/qwen3.6/tags | grep -o "$1:[^\" ]*q[^\" ]*" | grep -E -v 'text|base|fp|q[45]_[01]'
+```
+
 ## pull
 ```
 ollama pull deepseek-r1:latest  # latest/default version
 ollama pull deepseek-r1:32b     # 32B parameter version
 ollama pull qwen2.5-coder:1.5b
+ollama pull qwen3.5:9b-q4_K_M
+ollama pull qwen3.6:35b-a3b-q4_K_M
 ollama pull mistral:latest
 
 # list downloaded models
 ollama list
+```
+
+## create
+```
+ollama create <name> -f ./Modelfile
 ```
 
 ## launch
