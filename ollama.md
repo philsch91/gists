@@ -1,5 +1,22 @@
 # ollama
 
+## Variables
+```
+export OLLAMA_HOST="0.0.0.0:11434" # server
+export OLLAMA_HOST="http://localhost:11434" # client
+export OLLAMA_ORIGINS="localhost, 127.0.0.1, 0.0.0.0., app://, file://"
+export OLLAMA_MODELS="$HOME/.ollama/models"
+export OLLAMA_KEEP_ALIVE="24h"
+export OLLAMA_NUM_PARALLEL="0" # 0 = unlimited
+export OLLAMA_MAX_LOADED_MODELS="0" # 0 = unlimited
+export OLLAMA_FLASH_ATTENTION="1" # reduce VRAM usage during inference, experimental
+export OLLAMA_LLM_LIBRARY=""
+export OLLAMA_TMPDIR=""
+export OLLAMA_MAX_QUEUE="512"
+export OLLAMA_MAX_VRAM="0" # 0 = unlimited
+export OLLAMA_DEBUG=1
+```
+
 ## install
 ```
 # macOS
@@ -11,16 +28,20 @@ curl -fsSL https://ollama.ai/install.sh | sh
 
 # check version
 ollama --version
+ollama -h
+ollama help <command>
 # start Ollama (runs in background)
 export OLLAMA_HOST="0.0.0.0:11434"
 ollama serve
 # verify if ollama is running
 curl -iSs http://localhost:11434
+curl -iSs http://localhost:11434/api/ps
 ```
 
 ## run
 ```
 export OLLAMA_HOST="http://localhost:11434"
+ollama ps
 ollama list
 ollama run <model-name>
 ```
