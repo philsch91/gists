@@ -346,6 +346,76 @@ nsenter -t 1 -m -u -i -n -- ctr -n=k8s.io images rm ghcr.io/actions/actions-runn
 
 ## Notes
 
+### `PersistentVolume`s and `PersistenVolumeClaim`s
+
+```
+id
+grep -E "Uid:|Gid:" /proc/1/status; ps -p 1 -o pid,user,uid,gid,cmd
+cat /proc/mounts | grep <mount-path>
+ls -ld "<mount-path>"
+stat -c "%U %G %a %n" "<mount-path>" 2>/dev/null || true
+
+kubectl -n <namespace> exec -it <pod-name>  -c <container-name> -- sh -c '[ -w "<mount-path>" ] && echo writable || echo not-writable'
+touch <mount-path>/perm_test && ls -lah <mount-path>/perm_test && rm -v <mount-path>/perm_test
+```
+
+- PVs are cluster-scoped
+- PVCs are namespaced
+- StorageClasses are cluster-scoped
+- EFS Access Points (APs) are EFS server resources (not namespaced).
+- Pods can reference and mount PVCs referencing existing PVs (.spec.volumeName) and SCs (.spec.storageClassName) in any namespace that reference EFS APs.
+
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+  name: <pvc-name>
+  namespace: <pvc-namespace>
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 30Gi
+  storageClassName: efs-sc
+  volumeMode: Filesystem
+  volumeName: <pv-name>
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+  finalizers:
+  - external-provisioner.volume.kubernetes.io/finalizer
+  - kubernetes.io/pv-protection
+  name: <pv-name>
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 30Gi
+  # delete claimRef
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: <pvc-name>
+    namespace: <pvc-namspace>
+  csi:
+    driver: efs.csi.aws.com
+    volumeAttributes:
+      storage.kubernetes.io/csiProvisionerIdentity: <id>-efs.csi.aws.com
+    volumeHandle: fs-<id>::fsap-<id>
+  mountOptions:
+  - tls
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: efs-sc
+  volumeMode: Filesystem
+```
+
 ### Autoscaling
 
 I think you mean my attempt to explain that Karpenter primarily provisiones the cluster nodes based on the sum of the resource requests for existing and new workloads. The cluster cannot scale out for already running workloads and without new resource requests.<br />
