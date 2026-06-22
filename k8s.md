@@ -154,6 +154,10 @@ kubectl debug -it <pod-name-to-copy> --copy-to=<pod-name>-debug --container=<con
 kubectl annotate --overwrite pod <pod-name>-debug livenessprobe=disabled
 
 // kubectl debug node
+// creates pod on node with 'hostPID: true'
+// and the host root filesystem mounted at /host
+kubectl debug node/<node-name> --image=alpine --profile=sysadmin -it -- \
+  chroot /host && systemctl restart kubelet
 kubectl debug node/<node-name> --image=alpine --profile=sysadmin -it -- \
   nsenter -t 1 -m -u -i -n -- crictl rmi ghcr.io/actions/actions-runner:latest
 
