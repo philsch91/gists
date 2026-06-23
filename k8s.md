@@ -511,11 +511,11 @@ spec:
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
-  name: app-api-auth
+  name: app-basic-auth
   namespace: app-namespace
 spec:
   basicAuth:
-    secret: app-auth-secret
+    secret: app-basic-auth-secret
 ```
 
 ### HTTPRoute.v1.gateway.networking.k8s.io
@@ -547,7 +547,7 @@ spec:
       extensionRef:
         group: traefik.io
         kind: Middleware
-        name: app-api-auth
+        name: app-basic-auth
     backendRefs:
     - name: my-app-service
       port: 8080
