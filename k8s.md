@@ -482,6 +482,28 @@ spec:
     allowedRoutes:
       namespaces:
         from: All
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: wildcard-traefik-gateway
+  namespace: traefik
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: https
+    protocol: HTTPS
+    port: 8443 # 443
+    hostname: "*.subdomain.org.tld"
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: traefik-tls
+        namespace: traefik
+    allowedRoutes:
+      namespaces:
+        from: All
 ```
 
 ### Middleware.v1alpha1.traefik.io
@@ -507,11 +529,13 @@ metadata:
   namespace: app-namespace
 spec:
   parentRefs:
-  - name: wildcard-traefik-gateway
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: wildcard-traefik-gateway
     namespace: traefik
   hostnames:
-  - "://example.com"
-  - "*.example.com"
+  # - "://example.com"
+  # - "*.example.com"
   - "app.example.com"
   rules:
   - matches:
