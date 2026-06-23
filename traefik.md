@@ -45,6 +45,49 @@ spec:
         from: All
 ```
 
+## Middleware.v1alpha1.traefik.io
+```
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: app-basic-auth
+  namespace: app-namespace
+spec:
+  basicAuth:
+    secret: app-basic-auth-secret
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: app-api-key-auth
+  namespace: app-namespace
+spec:
+  headers:
+    customRequestHeaders:
+      X-API-KEY: "<api-key>"
+---
+---
+# symmetric
+openssl rand -base64 32
+## Example output: tU4vW8x/A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6Q7r=
+kubectl -n app-namespace create secret generic app-jwt-secret \
+  --from-literal=secret="tU4vW8x/A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6Q7r="
+# asymmetric
+kubectl -n app-namespace create secret generic app-jwt-rsa-secret \
+  --from-file=publicKey=/path/to/your/public.pem
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: app-jwt-auth
+  namespace: app-namespace
+spec:
+  jwt:
+    algorithm: HS256|RS256
+    signingSecret: app-jwt-secret|app-jwt-rsa-secret
+    forwardAuthorization: false
+```
+
 ## HTTPRoute.v1.gateway.networking.k8s.io
 ```
 apiVersion: gateway.networking.k8s.io/v1
@@ -63,14 +106,30 @@ spec:
     name: wildcard-traefik-gateway
     namespace: traefik
   rules:
-  - backendRefs:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: traefik.io
+        kind: Middleware
+        name: app-basic-auth
+    - type: ExtensionRef
+      extensionRef:
+        group: traefik.io
+        kind: Middleware
+        name: app-api-key-auth
+    - type: ExtensionRef
+      extensionRef:
+        group: traefik.io
+        kind: Middleware
+        name: app-jwt-auth
+    backendRefs:
     - group: ""
       kind: Service
       name: ollama-nonprod-ec1
       port: 11434
       weight: 1
-    matches:
-    - path:
-        type: PathPrefix
-        value: /
 ```
