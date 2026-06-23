@@ -21,8 +21,22 @@ export OLLAMA_DEBUG=1
 ```
 # macOS
 brew install ollama
+
 # Linux
+## Linux 1
 curl -fsSL https://ollama.ai/install.sh | sh
+## Linux 2
+curl --show-error --location https://github.com/ollama/ollama/releases/download/v0.30.10/ollama-linux-amd64.tar.zst --output /tmp/ollama-linux-amd64.tar.zst
+mkdir -pv /tmp/ollama
+tar -C /tmp/ollama -xvf /tmp/ollama-linux-amd64.tar.zst
+rm -v /tmp/ollama-linux-amd64.tar.zst
+ls -lah /tmp/ollama
+ls -lah /tmp/ollama/bin/
+ls -lah /tmp/ollama/lib/ollama/
+cp -v /tmp/ollama/bin/ollama /usr/bin/
+cp -rv /tmp/ollama/lib/ollama /usr/lib/
+rm -rv /tmp/ollama
+
 # Windows
 # Download from ollama.ai
 
@@ -36,6 +50,7 @@ ollama serve
 # verify if ollama is running
 curl -iSs http://localhost:11434
 curl -iSs http://localhost:11434/api/ps
+curl -iSs http://localhost:11434/api/tags
 ```
 
 ## run
