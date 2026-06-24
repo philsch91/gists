@@ -18,6 +18,53 @@ kubectl get deployment -l app.kubernetes.io/name=traefik -A -o jsonpath='{.items
 ## Service
 ```
 kubectl -n traefik get svc/traefik -o go-template='{{ $ing := index .status.loadBalancer.ingress 0 }}{{ if $ing.ip }}{{ $ing.ip }}{{ else }}{{ $ing.hostname }}{{ end }}' | nslookup | awk -F': ' 'NR==6 { print $2 }'
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+    traefik.ingress.kubernetes.io/service.sticky.cookie.name: sticky-app-session
+    traefik.ingress.kubernetes.io/service.sticky.cookie.secure: "true"
+  name: sticky-app
+  namespace: app-namespace # ollama
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app.kubernetes.io/name: <httproute-name|ingress-name>
+```
+
+## Ingress.v1.networking.k8s.io
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+  name: sticky-app
+  namespace: app-namespace # ollama
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: app.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: sticky-app
+                port:
+                  name: http
+                  # number: 80
+  tls:
+    - secretName: traefik-tls
+      hosts:
+        - app.example.com
 ```
 
 ## Gateway.v1.gateway.networking.k8s.io
@@ -98,6 +145,50 @@ spec:
     algorithm: HS256|RS256
     signingSecret: app-jwt-secret|app-jwt-rsa-secret
     forwardAuthorization: false
+---
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: app-ip-allowlist
+  namespace: traefik|app-namespace
+spec:
+  ipAllowList:
+    sourceRange:
+      - "10.0.0.0/8"
+      - "172.16.0.0/12"
+      - "192.168.0.0/16"
+      - "203.0.113.0/24"
+---
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: app-oauth-auth
+  namespace: app-namespace
+spec:
+  forwardAuth:
+    address: http://oauth2-proxy.app.svc.cluster.local:4180/oauth2/auth
+    trustForwardHeader: true
+    authResponseHeaders:
+      - "X-Auth-Request-User"
+      - "X-Auth-Request-Email"
+      - "Authorization"
+---
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: app-oauth-errors
+  namespace: app-namespace
+spec:
+  errors:
+    status:
+      - "401-403"
+    service:
+      name: oauth2-proxy
+      port: 4180
+    query: "/oauth2/sign_in"
 ```
 
 ## HTTPRoute.v1.gateway.networking.k8s.io
@@ -108,7 +199,7 @@ metadata:
   annotations:
   labels:
   name: ollama-nonprod-ec1
-  namespace: ollama
+  namespace: app-namespace # ollama
 spec:
   hostnames:
   - ollama.subdomain.org.tld
@@ -157,4 +248,62 @@ spec:
       name: ollama-nonprod-ec1
       port: 11434
       weight: 1
+```
+
+## IngressRouteTCP.v1alpha1.traefik.io
+```
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: ldap
+  namespace: app-namespace # ollama
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  entryPoints:
+    - ldap # must match entryPoint in .spec.template.spec.containers[0].args of traefik deployment
+  routes:
+    - match: HostSNI(`*`) # use wildcard for plain TCP (no TLS SNI)
+      services:
+        - name: ldap-service
+          port: 1389
+```
+
+## IngressRoute.v1alpha1.traefik.io
+```
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: app
+  namespace: app-namespace # ollama
+spec:
+  entryPoints:
+    - web # must match entryPoint in .spec.template.spec.containers[0].args of traefik deployment
+  routes:
+    - match: Host(`app.example.com`)
+      kind: Rule
+      priority: 200
+      services:
+        - name: ollama
+          port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sticky-app
+  namespace: app-namespace # ollama
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: app.example.com
+      # http:
+      #   paths:
+      #     - path: /
+      #       pathType: Prefix
+      #       backend:
+      #         service:
+      #           name: sticky-app
+      #           port:
+      #             name: http
+      #             # number: 80
 ```
