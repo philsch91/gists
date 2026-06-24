@@ -319,6 +319,12 @@ apt install openjdk-21-jdk
 apt install zstd
 ```
 
+## apt install (upgrade) apache2-utils
+```
+apt install apache2-utils
+command -v htpasswd
+```
+
 ## dpkg
 ```
 ## query
