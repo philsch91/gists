@@ -47,6 +47,16 @@ spec:
 
 ## Middleware.v1alpha1.traefik.io
 ```
+# htpasswd
+# -n = display results on stdout, -B = bcrypt encryption
+echo $(htpasswd -nB <username>)
+## Type your plain-text password when prompted
+## Example output: <username>:$2y$05$vI7Ea8K3XJcMToY68...
+# pwgen
+echo "<username>:$(pwgen -y -s 32 1)"
+kubectl -n app-namespace create secret generic app-basic-auth-secret \
+  --from-literal=users="<username>:$2y$05$vI7Ea8K3XJcMToY68..."
+---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
@@ -55,6 +65,8 @@ metadata:
 spec:
   basicAuth:
     secret: app-basic-auth-secret
+    removeHeader: true
+---
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -111,6 +123,7 @@ spec:
         type: PathPrefix
         value: /
     filters:
+    # and filters in one rule
     - type: ExtensionRef
       extensionRef:
         group: traefik.io
@@ -121,6 +134,18 @@ spec:
         group: traefik.io
         kind: Middleware
         name: app-api-key-auth
+    backendRefs:
+    - group: ""
+      kind: Service
+      name: ollama-nonprod-ec1
+      port: 11434
+      weight: 1
+  # or filters with multiple rules
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    filters:
     - type: ExtensionRef
       extensionRef:
         group: traefik.io
