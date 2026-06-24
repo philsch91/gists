@@ -516,6 +516,7 @@ metadata:
 spec:
   basicAuth:
     secret: app-basic-auth-secret
+    removeHeader: false|true
 ```
 
 ### HTTPRoute.v1.gateway.networking.k8s.io
