@@ -418,7 +418,7 @@ spec:
 
 ## Gateway API
 
-GatewayClass -> Gateway -> TLSRoute|HTTPRoute -> Service
+GatewayClass -> Gateway -> Middleware -> TLSRoute|HTTPRoute -> Service
 
 ### GatewayClass.v1.gateway.networking.k8s.io
 ```
@@ -465,13 +465,13 @@ spec:
   listeners:
   - name: https
     protocol: HTTPS
-    port: 443
-    hostname: "*.example.com"
+    port: 8443 # must match .spec.ports[*].targetPort in service and .spec.template.spec.containers[0].ports[*].containerPort in deployment # 443
+    hostname: "*.org.com"
     tls:
       mode: Terminate
       certificateRefs:
       - kind: Secret
-        name: tls-cert
+        name: traefik-tls
         namespace: traefik
     allowedRoutes:
       namespaces:
@@ -479,28 +479,6 @@ spec:
   - name: http
     protocol: HTTP
     port: 80
-    allowedRoutes:
-      namespaces:
-        from: All
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: Gateway
-metadata:
-  name: wildcard-traefik-gateway
-  namespace: traefik
-spec:
-  gatewayClassName: traefik
-  listeners:
-  - name: https
-    protocol: HTTPS
-    port: 8443 # 443
-    hostname: "*.subdomain.org.tld"
-    tls:
-      mode: Terminate
-      certificateRefs:
-      - kind: Secret
-        name: traefik-tls
-        namespace: traefik
     allowedRoutes:
       namespaces:
         from: All
@@ -535,9 +513,9 @@ spec:
     name: wildcard-traefik-gateway
     namespace: traefik
   hostnames:
-  # - "://example.com"
-  # - "*.example.com"
-  - "app.example.com"
+  # - "://org.com"
+  # - "*.org.com"
+  - "app.org.com"
   rules:
   - matches:
     - path:
@@ -550,7 +528,7 @@ spec:
         kind: Middleware
         name: app-basic-auth
     backendRefs:
-    - name: my-app-service
+    - name: app-service
       port: 8080
 ```
 
