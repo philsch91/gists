@@ -12,11 +12,15 @@
 # --entryPoints.web.http.redirections.entryPoint.permanent=true
 # --entryPoints.websecure.http.tls=true
 kubectl -n traefik get deployment/traefik -o jsonpath='{.spec.template.spec.containers[0].args}'
+kubectl -n traefik get deployment/traefik -o jsonpath='{.spec.template.spec.containers[0].ports}'
 kubectl get deployment -l app.kubernetes.io/name=traefik -A -o jsonpath='{.items[*].spec.template.spec.containers[*].args}' | jq -r . | grep entryPoints
 ```
 
 ## Service
 ```
+# .spec.ports[*].targetPort in service must match .spec.template.spec.containers[0].ports[*].containerPort in deployment
+# .spec.ports[*].port in service is exposed via LB
+kubectl -n traefik get svc/traefik -o jsonpath='{.spec.ports}' | grep 443
 kubectl -n traefik get svc/traefik -o go-template='{{ $ing := index .status.loadBalancer.ingress 0 }}{{ if $ing.ip }}{{ $ing.ip }}{{ else }}{{ $ing.hostname }}{{ end }}' | nslookup | awk -F': ' 'NR==6 { print $2 }'
 
 ---
