@@ -221,20 +221,18 @@ getent group <groupname>
 
 ## apt
 
-## apt files
 ```
+## apt files
 /etc/apt/sources.list
 /etc/apt/sources.list.d/azure-cli.list
 /etc/apt/sources.list.d/docker.list
 /etc/apt/sources.list.d/google-chrome.list
-/etc/apt/sources.list.d/kubernetes.list
 /etc/apt/sources.list.d/vscode.list
-# deb822 files
+/etc/apt/sources.list.d/kubernetes.list
+### deb822 files
 /etc/apt/sources.list.d/ubuntu.sources
 /etc/apt/sources.list.d/vscode.sources
-```
 
-```
 ## apt list
 apt list --upgradable
 apt list --installed [-qq|--quiet] <(*)package-name(*)>
@@ -273,56 +271,40 @@ cat /etc/apt/sources.list.d/vscode.sources
 # Architectures: amd64
 # Signed-By: /usr/share/keyrings/microsoft.gpg
 
-## apt remove
-apt-get remove <package-name>
-
-## apt purge
-apt purge <package1> <packagen>
-```
-
 ## apt install gcc
-```
 echo "deb http://cz.archive.ubuntu.com/ubuntu mantic main" | sudo tee /etc/apt/sources.list.d/temporary-repository.list
 sudo apt update
 sudo apt install <package1> <packagen> # gcc-13 gcc-13-aarch64-linux-gnu
 sudo rm /etc/apt/sources.list.d/temporary-repository.list
 sudo apt update
-```
 
 ## apt install python3-pip
-```
 sudo apt install python3-pip
-```
 
 ## apt install cmake
-```
 sudo apt install cmake
-```
-
-## apt install (upgrade) code (vscode)
-```
-apt install code
-```
 
 ## apt install (upgrade) google-chrome-stable
-```
 apt install google-chrome-stable
-```
+
+## apt install (upgrade) code (vscode)
+apt install code
 
 ## apt install (upgrade) openjdk-21-jdk
-```
 apt install openjdk-21-jdk
-```
 
 ## apt install (upgrade) zstd
-```
 apt install zstd
-```
 
 ## apt install (upgrade) apache2-utils
-```
 apt install apache2-utils
 command -v htpasswd
+
+## apt remove
+apt-get remove <package-name>
+
+## apt purge
+apt purge <package1> <packagen>
 ```
 
 ## dpkg
