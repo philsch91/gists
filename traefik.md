@@ -98,15 +98,16 @@ spec:
 
 ## Middleware.v1alpha1.traefik.io
 ```
+# pwgen
+echo "plain-text password: $(pwgen -y -s 32 1)"
 # htpasswd
 # -n = display results on stdout, -B = bcrypt encryption
 echo $(htpasswd -nB <username>)
-## Type your plain-text password when prompted
+## Insert your plain-text password when prompted
 ## Example output: <username>:$2y$05$vI7Ea8K3XJcMToY68...
-# pwgen
-echo "<username>:$(pwgen -y -s 32 1)"
 kubectl -n app-namespace create secret generic app-basic-auth-secret \
   --from-literal=users="<username>:$2y$05$vI7Ea8K3XJcMToY68..."
+curl -iSs -u '<username>:<plain-text-password>' "https://app.org.com/api/tags"
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -128,6 +129,7 @@ spec:
   headers:
     customRequestHeaders:
       X-API-KEY: "<api-key>"
+      Authorization: "Bearer <token>"
 ---
 ---
 # symmetric
