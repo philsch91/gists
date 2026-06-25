@@ -344,6 +344,79 @@ nsenter -t 1 -m -u -i -n -- crictl rmi ghcr.io/actions/actions-runner:latest
 nsenter -t 1 -m -u -i -n -- command -v ctr
 nsenter -t 1 -m -u -i -n -- ctr -n=k8s.io images rm ghcr.io/actions/actions-runner:latest
 
+## Deployment.v1.apps
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <name>
+  namespace: <namspace>
+  labels:
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: <name>
+      app.kubernetes.io/instance: <instance>
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: <name>
+        app.kubernetes.io/instance: <instance>
+    spec:
+      serviceAccountName: <sa-name>
+      terminationGracePeriodSeconds: 120
+      securityContext:
+        {}
+      containers:
+        - name: ollama
+          securityContext:
+            {}
+          image: "ollama/ollama:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 11434
+              protocol: TCP
+          env:
+            - name: OLLAMA_HOST
+              value: "0.0.0.0:11434"
+            - name: OLLAMA_DEBUG
+              value: "1"
+            - name: OLLAMA_LOG_LEVEL
+              value: info
+          envFrom:
+            - secretRef:
+                name: ollama-secret
+          args:
+          resources:
+            limits: {}
+            requests:
+              memory: 8192Mi
+```
+
+## Secret.v1
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  annotations:
+  labels:
+  name: ollama-secret
+  namespace: <namspace>
+  ownerReferences:
+    - apiVersion: external-secrets.io/v1
+      blockOwnerDeletion: true
+      kind: ExternalSecret
+      name: ollama-es
+type: Opaque
+immutable: false
+data:
+  OLLAMA_API_KEY_TEST: xyz
+```
+
 ## PersistentVolume
 
 ### `PersistentVolume`s and `PersistenVolumeClaim`s
@@ -414,6 +487,33 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: efs-sc
   volumeMode: Filesystem
+```
+
+## ExternalSecret.v1.external-secrets
+```
+ExternalSecret.v1.external-secrets -> Secret.v1
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: ollama-es
+  namespace: <namespace>
+spec:
+  dataFrom:
+  - extract:
+      conversionStrategy: Default
+      decodingStrategy: None
+      key: path/to/ollama-secrets
+      metadataPolicy: None
+      version: AWSCURRENT
+  refreshInterval: "24h0m0s"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: cluster-secretstore
+  target:
+    creationPolicy: Owner
+    deletionPolicy: Retain
+    name: ollama-secret
 ```
 
 ## Gateway API
