@@ -1,5 +1,15 @@
 # ollama
 
+## Files
+```
+# Linux
+/usr/share/ollama/.models/
+# macOS
+/Users/<username>/.ollama/models
+# Windows
+C:\Users\<username>\.ollama\models\
+```
+
 ## Variables
 ```
 export OLLAMA_HOST="0.0.0.0:11434" # server
@@ -8,11 +18,11 @@ export OLLAMA_ORIGINS="localhost, 127.0.0.1, 0.0.0.0., app://, file://"
 export OLLAMA_MODELS="$HOME/.ollama/models"
 export OLLAMA_KEEP_ALIVE="24h"
 export OLLAMA_NUM_PARALLEL="0" # 0 = unlimited
+export OLLAMA_MAX_QUEUE="512" # default 512
 export OLLAMA_MAX_LOADED_MODELS="0" # 0 = unlimited
 export OLLAMA_FLASH_ATTENTION="1" # reduce VRAM usage during inference, experimental
 export OLLAMA_LLM_LIBRARY=""
 export OLLAMA_TMPDIR=""
-export OLLAMA_MAX_QUEUE="512"
 export OLLAMA_MAX_VRAM="0" # 0 = unlimited
 export OLLAMA_DEBUG=1
 ```
@@ -57,15 +67,29 @@ curl -iSs http://localhost:11434/api/tags
 ```
 export OLLAMA_HOST="http://localhost:11434"
 ollama ps
-ollama list
-ollama run <model-name>
+ollama run <model-name> [--think=false|true]
+>>> /set nothink|think
+>>> /save <model-name>-nothink
+
+kubectl logs -l app.kubernetes.io/name=ollama -f|--tail 500 | grep -i "slots"
+kubectl logs -l app.kubernetes.io/name=ollama -f|--tail 500 | grep -i "runner.parallel"
+
+curl https://<hostname>/api/chat \
+    -d '{"model": "<model-name>", "messages": [{"role": "user", "content": "Hello, describe the images", "images": ["'$(base64 -w0 image1.jpg)'"]}], "tools": [], "think": false, "stream": false, "options": []}'
+
+curl https://<hostname>/v1/chat/completions \
+    -d '{"model": "<model-name>", "messages": [{"role": "user", "content": "Hello, describe the images", "images": ["'$(base64 -w0 image1.jpg)'"]}], "tools": [], "think": false, "stream": false, "options": []}'
 ```
 
 ## list
 ```
+ollama list
+ollama rm <model-name>
+
 curl -s https://ollama.com/library | grep -oP 'href="/library/\K[^"]+'
 curl -s https://ollama.com/library/qwen3.5/tags | grep -o "$1:[^\" ]*q[^\" ]*" | grep -E -v 'text|base|fp|q[45]_[01]'
 curl -s https://ollama.com/library/qwen3.6/tags | grep -o "$1:[^\" ]*q[^\" ]*" | grep -E -v 'text|base|fp|q[45]_[01]'
+curl -X DELETE https://<hostname> -d '{"name": "<model-name>"}'
 ```
 
 ## pull
@@ -73,6 +97,10 @@ curl -s https://ollama.com/library/qwen3.6/tags | grep -o "$1:[^\" ]*q[^\" ]*" |
 ollama pull deepseek-r1:latest  # latest/default version
 ollama pull deepseek-r1:32b     # 32B parameter version
 ollama pull qwen2.5-coder:1.5b
+ollama pull qwen3.5:2b-q4_K_M
+ollama pull qwen3.5:2b-q8_0
+ollama pull qwen3.5:4b-q4_K_M
+ollama pull qwen3.5:4b-q8_0
 ollama pull qwen3.5:9b-q4_K_M
 ollama pull qwen3.6:35b-a3b-q4_K_M
 ollama pull mistral:latest
@@ -81,9 +109,62 @@ ollama pull mistral:latest
 ollama list
 ```
 
+## show
+```
+ollama show --modelfile <model-name> ./Modelfile
+
+curl https://<hostname>/api/show -H 'Content-Type: application/json' -d '{"model": "<model-name>"}' | jq -r '.modelfile' >./Modelfile
+```
+
 ## create
 ```
-ollama create <name> -f ./Modelfile
+ollama create <model-name> -f ./Modelfile
+
+curl https://<hostname> \
+    -d '{
+        "name": "<model-name>",
+        "modelfile": "FROM qwen3.5:2b-q4_K_M\nPARAMETER thinking_mode off"
+    }'
+```
+
+## Modelfile
+```
+FROM qwen3.5:4b-q4_K_M
+
+# deactivate reasoning
+PARAMETER thinking_mode "off"
+
+# set context window length
+PARAMETER num_ctx 2048
+
+# set number of threads
+PARAMETER num_thread 4
+
+# set number of tokens for answer length
+PARAMETER num_predict 256
+
+# repeat_penalty
+PARAMETER repeat_penalty 1.1
+
+PARAMETER top_p 0.95
+PARAMETER presence_penalty 1.5
+PARAMETER temperature 1
+PARAMETER top_k 20
+
+# stop tokens to abort generation
+PARAMETER stop "<think>"
+PARAMETER stop "</think>"
+
+TEMPLATE """{{ if .System }}<|im_start|>system
+{{ .System }}<|im_end|>
+{{ end }}{{ if .Prompt }}<|im_start|>user
+/nothink {{ .Prompt }}<|im_end|>
+{{ end }}<|im_start|>assistant
+{{ .Response }}<|im_end|>"""
+
+# set default system prompt
+SYSTEM "You are a helpful assistant. Provide direct, concise answers. Do not use reasoning, thoughts, or <think> tags. Answer immediately."
+SYSTEM "You are a helpful assistant. You must NEVER generate a `<think>` tag. You must NEVER output your thought process. Start your response directly with the final answer. If you use a `<think>` tag, the system will crash."
 ```
 
 ## launch
@@ -92,4 +173,31 @@ ollama launch vscode [--model <model-name>:<tag>]
 ollama launch vscode --model qwen3.5:cloud
 ollama launch vscode --model deepseek-r1:32b
 ollama launch vscode --model qwen2.5-coder:1.5b
+```
+
+## OpenAI Python SDK
+```
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="http://127.0.0.1:11433/v1",
+    api_key="ollama",
+)
+
+messages = [
+    {"role": "user", "content": "Hello world!"}
+]
+
+chat_response = client.chat.completions.create(
+    model="qwen3.5:2b",
+    messages=messages,
+    max_tokens=32768,
+    temperature=0.7,
+    top_p=0.8,
+    presence_penalty=1.5,
+    think=false,
+    reasoning_effort="none",
+)
+
+print(chat_response.choices[0].message.content)
 ```
