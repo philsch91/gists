@@ -21,7 +21,9 @@ tmux ls|list-sessions # list running sessions
 #
 tmux new|new-session [-A(=attach-session)] -s <session-name> # create new or attach (-A) or switch session with name
 tmux attach|attach-session -t <session-name>|. [-c /path/to/new/working/dir/for/session/and/new/windows] # (re)attach to existing session
+echo $TMUX
 tmux has|has-session -t <session-name> # check for running session
+tmux detach
 tmux kill-session -t <session-name> # kill named session
 #
 tmux -V # print version info
