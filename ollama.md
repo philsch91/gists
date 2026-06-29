@@ -77,8 +77,9 @@ kubectl logs -l app.kubernetes.io/name=ollama -f|--tail 500 | grep -i "runner.pa
 curl https://<hostname>/api/chat \
     -d '{"model": "<model-name>", "messages": [{"role": "user", "content": "Hello, describe the images", "images": ["'$(base64 -w0 image1.jpg)'"]}], "tools": [], "think": false, "stream": false, "options": []}'
 
+# default: stream: false
 curl https://<hostname>/v1/chat/completions \
-    -d '{"model": "<model-name>", "messages": [{"role": "user", "content": "Hello, describe the images", "images": ["'$(base64 -w0 image1.jpg)'"]}], "tools": [], "think": false, "stream": false, "options": []}'
+    -d '{"model": "<model-name>", "messages": [{"role": "user", "content": "Hello, describe the images", "images": ["'$(base64 -w0 image1.jpg)'"]}], "tools": [], "tool_choice": "auto", "reasoning_effort": "none|low|medium|high", "stream": true, "options": [], "extra_body": {}}'
 ```
 
 ## list
@@ -114,6 +115,8 @@ ollama list
 ollama show --modelfile <model-name> ./Modelfile
 
 curl https://<hostname>/api/show -H 'Content-Type: application/json' -d '{"model": "<model-name>"}' | jq -r '.modelfile' >./Modelfile
+
+curl -s $(echo $OLLAMA_HOST)/api/show -H 'Content-Type: application/json' -d '{"name": "qwen3.5-2b-q4_K_M-nothink-v1"}' | jq '{context_length: .model_info["llama.context_length"], parameters: .parameters, details: .details}'
 ```
 
 ## create
@@ -135,6 +138,7 @@ FROM qwen3.5:4b-q4_K_M
 PARAMETER thinking_mode "off"
 
 # set context window length
+# important for "finish_reason": "length"
 PARAMETER num_ctx 2048
 
 # set number of threads
@@ -188,6 +192,7 @@ messages = [
     {"role": "user", "content": "Hello world!"}
 ]
 
+# /v1/chat/completions
 chat_response = client.chat.completions.create(
     model="qwen3.5:2b",
     messages=messages,
@@ -195,9 +200,120 @@ chat_response = client.chat.completions.create(
     temperature=0.7,
     top_p=0.8,
     presence_penalty=1.5,
-    think=false,
+    stream=false,
     reasoning_effort="none",
+    extra_body={},
+    functions=[],
+    function_call=[],
 )
 
 print(chat_response.choices[0].message.content)
+
+# "finish_reason": "tool_calls"
+{
+    "comment_type": "ChatCompletion",
+    "id": "chatcmpl-122",
+    "object": "chat.completion",
+    "model": "qwen3.5:4b-q4_K_M",
+    choices: [
+        {
+            "comment_choice_type": "Choice",
+            "index": 0,
+            "finish_reason": "tool_calls",
+            "message": {
+                "comment_message_type": "ChatCompletionMessage",
+                "content": "",
+                "refusal": null,
+                "role": "assistant",
+                "function_call": null,
+                "tool_calls": [
+                    {
+                        "comment_tool_call_type": "ChatCompletionMessageFunctionToolCall",
+                        "index": 0,
+                        "type": "function",
+                        "id": "call_wn6l11xh",
+                        "function": {
+                            "comment_function_type": "Function",
+                            "name": 'search_pages_and_get_text',
+                            "arguments": '{"arg1":["test","ignore"],"arg2":"arg2_val","arg3":"arg3_val","arg4":1}'
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
+
+# "finish_reason": "stop"
+{
+    "id": "chatcmpl-123",
+    "object": "chat.completion",
+    "created": 1782729029,
+    "model": "qwen3.5:4b-q4_K_M",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant", "content": "Hello..."
+            },
+            "finish_reason": "stop"
+        }
+    ],
+    "usage": {
+        "prompt_tokens": 19,
+        "completion_tokens": 116,
+        "total_tokens": 135
+    }
+}
+
+# stream /v1/chat/completions
+response_stream = client.chat.completions.create(
+    model="qwen3.5:2b",
+    messages=messages,
+    stream=true
+    reasoning_effort="none",
+)
+
+for chunk in response_stream:
+    if chunk.choices[0].delta.content is not None:
+        print(chunk.choices[0].delta.content, end="", flush=True)
+print()
+
+# "finish_reason": null + "finish_reason": "stop"
+{
+    "id": "chatcmpl-124",
+    "object": "chat.completion.chunk",
+    "created": 1782728953,
+    "model": "qwen3.5:4b-q4_K_M",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+        {
+            "index": 0,
+            "delta": {
+                "role": "assistant",
+                "content": "."
+            },
+            "finish_reason": null
+        }
+    ]
+}
+
+{
+    "id": "chatcmpl-124",
+    "object": "chat.completion.chunk",
+    "created": 1782728953,
+    "model": "qwen3.5:4b-q4_K_M",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+        {
+            "index": 0,
+            "delta":{
+                "role": "assistant",
+                "content": ""
+            },
+            "finish_reason": "stop"
+        }
+    ]
+}
 ```
