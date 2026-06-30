@@ -2,7 +2,11 @@
 
 ## proxy
 ```
-curl -iSs https://host -x | --proxy <[protocol://]host[:port]> [--noproxy "*|subdomain.domain.tld"]
+curl -iSs https://hostname -x|--proxy <[protocol://]proxy-host[:port]> [--noproxy "*|subdomain.domain.tld"]
+
+# check if proxy establishes pure HTTPS tunnel with original certificate
+# or uses SSL interception/inspection with replaced certificate
+curl -v https://hostname -x|--proxy <[protocol://]proxy-host[:port]> | grep -E 'issuer|CAfile'
 ```
 
 ## cookie
@@ -12,6 +16,7 @@ curl -ikSsL --cookie cookie.txt --cookie-jar cookie.txt
 
 ## cacert
 ```
+## curl uses a fallback mechanism from CAfile (--cacert) to CApath (--capath)
 curl -iSs --cacert certs.pem <url>
 ```
 
