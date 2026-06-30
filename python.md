@@ -1,4 +1,15 @@
-# Python Notes
+# Python
+
+## Variables
+```
+# global Python, Python standard module 'ssl', and OpenSSL
+SSL_CERT_FILE="/etc/ssl/certs/ca-bundle.crt"
+# Python module 'requests'
+# requests library uses certifi package with separate certificates
+REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-bundle.crt"
+# Python module 'curl'
+CURL_CA_BUNDLE="/etc/ssl/certs/ca-bundle.crt"
+```
 
 ## Install
 ```
@@ -98,6 +109,24 @@ command = c:\python313\python.exe -m venv C:\dev\python-venv-windows
 ```
 export PYTHONPATH="${PYTHONPATH}:~/dev/python-libs/"
 python -c "import sys; print('Success!')"
+
+# certifi
+## curl uses a fallback mechanism from CAfile (--cacert) to CApath (--capath)
+/usr/bin/python3.12 -c "import certifi; print(certifi.where())"
+curl -v https://<hostname> --cacert $(/usr/bin/python3.12 -c "import certifi; print(certifi.where())")
+
+echo "https://hostname.subdomain.tld" | /usr/bin/python3.12 -c "import sys, os, requests; url = sys.stdin.read().strip(); req_ca_bundle_var = os.environ.get('REQUESTS_CA_BUNDLE'); print(f'REQUESTS_CA_BUNDLE: {req_ca_bundle_var}'); os.environ.pop('REQUESTS_CA_BUNDLE', None); req_ca_bundle_var = os.environ.get('REQUESTS_CA_BUNDLE'); print(f'REQUESTS_CA_BUNDLE: {req_ca_bundle_var}'); response = requests.post(url, verify=True); print(f'Status: {response.status_code}'); print(response.text)"
+
+/usr/bin/env /mnt/c/dev/python-venv-linux/bin/python - << 'PY'
+import importlib, traceback, sys
+try:
+    importlib.import_module('llm.openai')
+    importlib.import_module('workflows.nodes')
+    print('IMPORT_OK')
+except Exception:
+    traceback.print_exc()
+    sys.exit(1)
+PY
 ```
 
 ## Errors
