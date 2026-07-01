@@ -244,6 +244,7 @@ apt list --installed "*pip*"
 apt list --installed "code*"
 apt list --installed "*chrome*"
 apt list --installed "zstd"
+apt list --installed "opencode*"
 
 ## apt update
 ### updates package cache
