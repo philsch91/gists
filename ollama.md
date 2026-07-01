@@ -16,7 +16,7 @@ export OLLAMA_HOST="0.0.0.0:11434" # server
 export OLLAMA_HOST="http://localhost:11434" # client
 export OLLAMA_ORIGINS="localhost, 127.0.0.1, 0.0.0.0., app://, file://"
 export OLLAMA_MODELS="$HOME/.ollama/models"
-export OLLAMA_KEEP_ALIVE="24h"
+export OLLAMA_KEEP_ALIVE="24h" # -1 = keep models infinitely loaded
 export OLLAMA_NUM_PARALLEL="0" # 0 = unlimited
 export OLLAMA_MAX_QUEUE="512" # default 512
 export OLLAMA_MAX_LOADED_MODELS="0" # 0 = unlimited
