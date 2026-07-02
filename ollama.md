@@ -20,6 +20,7 @@ export OLLAMA_KEEP_ALIVE="24h" # -1 = keep models infinitely loaded
 export OLLAMA_NUM_PARALLEL="0" # 0 = unlimited
 export OLLAMA_MAX_QUEUE="512" # default 512
 export OLLAMA_MAX_LOADED_MODELS="0" # 0 = unlimited
+export OLLAMA_CONTEXT_LENGTH="16384|32768"
 export OLLAMA_FLASH_ATTENTION="1" # reduce VRAM usage during inference, experimental
 export OLLAMA_LLM_LIBRARY=""
 export OLLAMA_TMPDIR=""
