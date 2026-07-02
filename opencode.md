@@ -41,6 +41,8 @@ opencode upgrade
 # macOS: /Users/<username>/.config/opencode/opencode.jsonc
 ## provider.<name>.options.timeout is in ms or false
 ## provider.<name>.options.chunkTimeout is in ms or disabled with 0
+## 32-bit signed integer max (const max = (1 << 31) - 1): 2147483647
+## Number.MAX_SAFE_INTEGER: 9007199254740991
 {
   "$schema": "https://opencode.ai/config.json",
   "provider": {
@@ -62,9 +64,9 @@ opencode upgrade
       "options": {
         "baseURL": "https://ollama.subdomain.tld/v1",
         "apiKey": ""
-        "timeout": 9007199254740991,
+        "timeout": 2147483647,
         "headerTimeout": false,
-        "chunkTimeout": 9007199254740991,
+        "chunkTimeout": 2147483647,
         "extraParams": {
           "reasoning_effort": "none",
           "num_ctx": 32768
