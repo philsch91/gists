@@ -4,10 +4,18 @@
 which opencode
 # /Users/<username>/.opencode/bin/opencode
 # /home/<username>/.local/bin/opencode
+opencode -v
+opencode debug paths
 opencode --print-logs
 opencode --log-level DEBUG
-opencode upgrade
+opencode -d # start with debug logging
+opencode -c </path/to/directory> # start with specific current work dir
+# opencode non-interactive prompt mode
+# -q = quiet, -f = format
+opencode -p "What is the tech stack of the current project" [-q] [-f text|json]
 opencode run "Add error handling to the API calls in src/client.py"
+# upgrade
+opencode upgrade
 ```
 
 ## Files
@@ -15,6 +23,7 @@ opencode run "Add error handling to the API calls in src/client.py"
 # Linux
 /home/<username>/.config/opencode/opencode.json
 /home/<username>/.local/state/opencode/log/opencode.log
+/home/<username>/.local/share/opencode/log/opencode.log
 # macOS
 /Users/<username>/.config/opencode/opencode.jsonc
 /Users/<username>/.config/opencode/plugins/
@@ -26,9 +35,12 @@ opencode run "Add error handling to the API calls in src/client.py"
 /Users/<username>/Library/Application Support
 ```
 
-### opencode.jsonc
+### opencode.json
 ```
-# /Users/<username>/.config/opencode/opencode.jsonc
+# Linux: /home/<username>/.config/opencode/opencode.json
+# macOS: /Users/<username>/.config/opencode/opencode.jsonc
+## provider.<name>.options.timeout is in ms or false
+## provider.<name>.options.chunkTimeout is in ms or disabled with 0
 {
   "$schema": "https://opencode.ai/config.json",
   "provider": {
@@ -44,19 +56,18 @@ opencode run "Add error handling to the API calls in src/client.py"
           "name": "mlx-community/Qwen3.6-27B-4bit (local)"
         }
       }
-    }
-  }
-}
-
-# /home/<username>/.config/opencode/opencode.json
-{
-  "provider": {
+    },
     "ollama-remote": {
       "npm": "@ai-sdk/openai-compatible",
       "options": {
         "baseURL": "https://ollama.subdomain.tld/v1",
+        "apiKey": ""
+        "timeout": 9007199254740991,
+        "headerTimeout": false,
+        "chunkTimeout": 9007199254740991,
         "extraParams": {
-          "reasoning_effort": "none"
+          "reasoning_effort": "none",
+          "num_ctx": 32768
         }
       },
       "models": {
@@ -64,7 +75,9 @@ opencode run "Add error handling to the API calls in src/client.py"
           "name": "qwen3.5:4b-q4_K_M"
         },
         "qwen3.5:9b-q4_K_M": {
-          "name": "qwen3.5:9b-q4_K_M"
+          "name": "qwen3.5:9b-q4_K_M",
+          "tools": true,
+          "reasoning": true
         },
         "frob/qwen3.5-instruct:4b": {
           "name": "frob/qwen3.5-instruct:4b"
@@ -73,6 +86,11 @@ opencode run "Add error handling to the API calls in src/client.py"
     }
   }
 }
+```
+
+## Variables
+```
+export AI_TIMEOUT=600000
 ```
 
 ## Install
@@ -97,6 +115,7 @@ apt remove opencode
 /connect
 /models
 /sessions
+/init --model <model-name(frob/qwen3.5-instruct:4b)>
 /skills
 /exit
 [Tab] # switch between "Build" and "Plan" modes
