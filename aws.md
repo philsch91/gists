@@ -26,6 +26,50 @@ pip install 'urllib3<2'
 aws iam get-role --role-name AWSServiceRoleForEC2Spot
 aws iam list-roles --query "Roles[?starts_with(Path, '/aws-service-role/')].RoleName"
 aws iam create-service-linked-role --aws-service-name spot.amazonaws.com
+
+# s3-replication-policy
+## replicate objects from source to destination bucket
+s3:ReplicateObject
+
+## read the rule from the source bucket
+s3:GetReplicationConfiguration
+
+## read each object version to replicate
+s3:GetObjectVersionForReplication
+
+## replicate object ACLs
+s3:GetObjectVersionAcl
+
+## replicate object tags
+s3:GetObjectVersionTagging
+
+## write tags on the destination
+s3:ReplicateTags
+
+## replicate delete markers
+s3:ReplicateDelete
+
+# confirm permission boundary policy exists
+aws iam get-policy --policy-arn arn:aws:iam::<account-id>:policy/boundary-policy
+
+# create the new replication policy with correct permissions
+aws iam create-policy \
+  --policy-name s3-replication-policy \
+  --description "Allows S3 replication from <account-id>-bucket to <account-id>-bucket-ew3" \
+  --policy-document '{ ... }'
+
+# create the new replication role with s3.amazonaws.com trust policy and permission boundary
+aws iam create-role \
+  --role-name s3-replication-role \
+  --description "Assumed by S3 service to replicate <account-id>-bucket to <account-id>-bucket-ew3" \
+  --assume-role-policy-document '{"Principal": { "Service": "s3.amazonaws.com" }, ...}' \
+  --permissions-boundary arn:aws:iam::<account-id>:policy/boundary-policy \
+  --tags '[...]'
+
+# attach the new policy to the new role
+aws iam attach-role-policy \
+  --role-name s3-replication-role \
+  --policy-arn arn:aws:iam::<account-id>:policy/s3-replication-policy
 ```
 
 ### configure
@@ -219,6 +263,39 @@ upload: test.txt to s3://bucket-name/test.txt
 
 # read/get (copy)
 aws s3 cp <S3-URL> - | less
+
+## s3api
+
+# check versioning on source and destination buckets
+aws s3api get-bucket-versioning --bucket <account-id>-bucket
+aws s3api get-bucket-versioning --bucket <account-id>-bucket-ew3
+
+# inspect the IAM role used by the replication rule
+aws iam get-role --role-name ecs-s3-eks-eu-central-1-role
+
+# list policies attached to that role
+aws iam list-attached-role-policies --role-name ecs-s3-eks-eu-central-1-role
+aws iam list-role-policies --role-name ecs-s3-eks-eu-central-1-role
+
+# read the policy document
+aws iam get-policy-version \
+  --policy-arn arn:aws:iam::<account-id>:policy/ecs-s3-eks-eu-central-1-policy \
+  --version-id v3
+
+# check destination bucket policy
+aws s3api get-bucket-policy --bucket <account-id>-bucket-ew3
+
+# check bucket regions
+aws s3api get-bucket-location --bucket <account-id>-bucket
+aws s3api get-bucket-location --bucket <account-id>-bucket-ew3
+
+# update the bucket replication rule to reference the new role
+aws s3api put-bucket-replication \
+  --bucket <account-id>-bucket \
+  --replication-configuration '{"Role": "arn:aws:iam::<account-id>:role/s3-replication-role", ... }'
+
+# get the bucket replication configuration
+aws s3api get-bucket-replication --bucket "<bucket-name>"
 
 # get replication status
 aws s3api head-object --bucket <bucket-name> --key <object-path> --query "ReplicationStatus"
