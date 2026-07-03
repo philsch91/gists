@@ -668,7 +668,7 @@ For a Pod to be given a QoS class of `Guaranteed`:
 ### Pod rescheduling
 ```
 kubectl cordon <node-name>
-kubectl delete pod <pod-name>
+kubectl -n <namespace> delete pod <pod-name> [--force] [--grace-period=0]
 kubectl uncordon <node-name>
 ```
 
