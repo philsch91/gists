@@ -62,7 +62,7 @@ aws iam create-policy \
 aws iam create-role \
   --role-name s3-replication-role \
   --description "Assumed by S3 service to replicate <account-id>-bucket to <account-id>-bucket-ew3" \
-  --assume-role-policy-document '{"Principal": { "Service": "s3.amazonaws.com" }, ...}' \
+  --assume-role-policy-document '{"Principal": {"Service": "s3.amazonaws.com" }, ...}' \
   --permissions-boundary arn:aws:iam::<account-id>:policy/boundary-policy \
   --tags '[...]'
 
@@ -70,6 +70,23 @@ aws iam create-role \
 aws iam attach-role-policy \
   --role-name s3-replication-role \
   --policy-arn arn:aws:iam::<account-id>:policy/s3-replication-policy
+
+# add batchoperations.s3.amazonaws.com to the assume role trust policy document
+aws iam update-assume-role-policy \
+  --role-name s3-replication-role \
+  --policy-document '{"Principal": {"Service": ["s3.amazonaws.com", "batchoperations.s3.amazonaws.com"] } ... }'
+
+# add s3:InitiateReplication to the policy (v2)
+aws iam create-policy-version \
+  --policy-arn arn:aws:iam::<account-id>:policy/s3-replication-policy \
+  --set-as-default \
+  --policy-document '{ ... s3:InitiateReplication ... }'
+
+# add s3:PutInventoryConfiguration to the policy (v3) as required by the manifest generator
+aws iam create-policy-version \
+  --policy-arn arn:aws:iam::<account-id>:policy/s3-replication-policy \
+  --set-as-default \
+  --policy-document '{ ... s3:PutInventoryConfiguration ... }'
 ```
 
 ### configure
@@ -271,15 +288,20 @@ aws s3api get-bucket-versioning --bucket <account-id>-bucket
 aws s3api get-bucket-versioning --bucket <account-id>-bucket-ew3
 
 # inspect the IAM role used by the replication rule
-aws iam get-role --role-name ecs-s3-eks-eu-central-1-role
+aws iam get-role --role-name s3-replication-role
 
 # list policies attached to that role
-aws iam list-attached-role-policies --role-name ecs-s3-eks-eu-central-1-role
-aws iam list-role-policies --role-name ecs-s3-eks-eu-central-1-role
+aws iam list-attached-role-policies --role-name s3-replication-role
+aws iam list-role-policies --role-name s3-replication-role
 
 # read the policy document
 aws iam get-policy-version \
-  --policy-arn arn:aws:iam::<account-id>:policy/ecs-s3-eks-eu-central-1-policy \
+  --policy-arn arn:aws:iam::<account-id>:policy/s3-replication-policy \
+  --version-id v3
+
+# read permission boundary to confirm s3:PutInventoryConfiguration is allowed
+aws iam get-policy-version \
+  --policy-arn arn:aws:iam::<account-id>:policy/boundary-policy \
   --version-id v3
 
 # check destination bucket policy
@@ -299,6 +321,36 @@ aws s3api get-bucket-replication --bucket "<bucket-name>"
 
 # get replication status
 aws s3api head-object --bucket <bucket-name> --key <object-path> --query "ReplicationStatus"
+
+# verify objects in destination bucket
+aws s3api list-objects-v2 --bucket <account-id>-bucket-ew3
+
+## s3control
+
+# create the batch replication job manually
+# returns job ID
+aws s3control create-job \
+  --account-id <account-id> \
+  --operation '{"S3ReplicateObject":{}}' \
+  --manifest-generator '{
+    "S3JobManifestGenerator": {
+      "SourceBucket": "arn:aws:s3:::<account-id>-bucket",
+      "EnableManifestOutput": false,
+      "Filter": {"EligibleForReplication": true}
+    }
+  }' \
+  --report '{"Enabled":false}' \
+  --priority 10 \
+  --role-arn arn:aws:iam::025337410881:role/s3-replication-role \
+  [--policy-document '{ ... s3:PutInventoryConfiguration ... }']
+  --no-confirmation-required \
+  --region eu-central-1
+
+# monitor job progress
+aws s3control describe-job \
+  --account-id <account-id> \
+  --job-id <job-id> \
+  --region eu-central-1
 ```
 
 ## SSM
