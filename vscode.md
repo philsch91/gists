@@ -8,17 +8,22 @@ ls -lah $(which code)
 ls -lah /usr/local/bin/codium
 ls -lah $(which codium)
 ls -lah /home/<username>/.config/Code/
+ps -ef | grep /usr/share/code | less
 ```
 
+## Variables
 ```
 # environment variables
 echo $DBUS_SESSION_BUS_ADDRESS
 echo $XDG_CURRENT_DESKTOP
 # export XDG_CURRENT_DESKTOP=GNOME
 export NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
+```
 
+## Commands
+```
 # start
-code --ignore-certificate-errors .
+code --ignore-certificate-errors [-n(new window)] .|/path/to/folder|[/path/to/]file.txt
 code --list-extensions --show-versions --ignore-certificate-errors
 
 # start verbose
@@ -249,4 +254,11 @@ Developer: Reload Window
 ## Logs
 ```
 find $HOME/AppData/Roaming/Code/logs/ -type f -name "*copilot-chat*.log" -print0 | xargs -0 grep -i "error"
+```
+
+## Keys
+```
+# select multiple lines
+Win: Ctrl+Alt+Arrow
+Linux: Shift+Alt+Arrow
 ```
