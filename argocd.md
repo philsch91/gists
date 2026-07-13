@@ -38,7 +38,7 @@ for argo_repo_cred_secret in $(k -n argocd get secret -l argocd.argoproj.io/secr
 ```
 k -n argocd get ingress/argocd-server -o yaml >/tmp/argocd/argocd-server-ingress.yaml
 helm -n argocd ls | grep argo-cd
-helm -n argocd upgrade argocd oci://ghcr.io/argoproj/argo-helm/argo-cd --version <chart-version(8.6.4)> --values values-8.6.4.yaml --wait --dry-run="server"
+helm -n argocd upgrade argocd oci://ghcr.io/argoproj/argo-helm/argo-cd --version <chart-version(8.6.4)> --values values-8.6.4.yaml --wait --dry-run="server" [--debug]
 helm -n argocd upgrade argocd oci://ghcr.io/argoproj/argo-helm/argo-cd --version <chart-version(8.6.4)> --values values-8.6.4.yaml --atomic
 ```
 
@@ -47,32 +47,36 @@ helm -n argocd upgrade argocd oci://ghcr.io/argoproj/argo-helm/argo-cd --version
 argocd version [--grpc-web] [| grep server]
 argocd completion
 argocd configure
-argocd logout
-```
-
-## account
-```
-argocd account list
-argocd account get --account <username>
-# If users are managed as admin user, <current-user-password> should be the current admin password
-argocd account update-password \
-  --account <name> \
-  --current-password <current-user-password> \
-  --new-password <new-user-password>
-# Argo CD generates token for current user if flag --account is omitted
-argocd account generate-token --account <username>
 ```
 
 ## login
 ```
 argocd login <argocd.hostname> --sso
 argocd login <argocd.hostname> --username <username> --password <password>
+argocd logout <argocd.hostname|context>
 ```
 
 ## context
-Get the current settings and connection information
 ```
+# get the current settings and connection information
 argocd context
+```
+
+## account
+```
+# argocd login <argocd.hostname>
+argocd account list
+argocd account get --account <username>
+argocd account get-user-info
+argocd account can-i get|sync applications '<project-name>/<app-name>|*/*' [--server <argocd.hostname>] [--auth-token <auth-jwt>]
+# If users are managed as admin user, <current-user-password> should be the current admin password
+argocd account update-password \
+  --account <name> \
+  --current-password <current-user-password> \
+  --new-password <new-user-password>
+# Argo CD generates token for current user if flag --account is omitted
+argocd account generate-token --account <username(tu-cicd)>
+argocd account list --server <argocd.hostname> --auth-token <auth-jwt>
 ```
 
 ## admin
@@ -95,8 +99,10 @@ argocd cluster list
 
 ## app
 ```
+export ARGOCD_AUTH_TOKEN="auth-jwt"
 argocd app list [| grep -i <search-string>]
 argocd app get argocd/<app-name> [--grpc-web]
+argocd app sync <app-name>
 ```
 
 ## repo
@@ -131,6 +137,38 @@ k -n argocd get deployment/argocd-repo-server -o yaml
 k -n argocd get cm/argocd-cmd-params-cm -o json | jq -r '.data["reposerver.disable.tls"]'
 k -n argocd get deployment/argocd-repo-server -o json | jq -r '.spec.template.spec.containers[].env[] | select(.name == "ARGOCD_REPO_SERVER_DISABLE_TLS")'
 k -n argocd logs pod/argocd-repo-server-76fc47d78d-8tgxh
+```
+
+## argocd-cm
+```
+configs:
+  cm:
+    create: true
+    # register account in argocd-cm ConfigMap
+    accounts.tu-cicd: apiKey # login, apiKey
+  rbac:
+    policy.csv: |
+      # define permissions with role
+      p, role:tu-cicd-role, applications, get, */*, allow
+      p, role:tu-cicd-role, applications, sync, <project-name>/<app-name>, allow
+      # associate user with role
+      g, tu-cicd, role:tu-cicd-role
+```
+
+## user-token secret
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tu-cicd-token
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: argocd
+type: Opaque
+stringData:
+  # valid JWT for account type apiKey
+  # password for account type login
+  token: "<jwt>"
 ```
 
 ## App of Apps
@@ -185,7 +223,7 @@ Argo CD uses Helm if a `Chart.yaml` file exists at the location pointed to by `.
 
 ## Application.v1alpha1.argoproj.io
 
-Define `Application`s with `.spec.syncPolicy.automated.prune: false` and `.spec.syncPolicy.automated.allowEmpty: false`, especially in combination with `stage: prod`, except `Application`s creating child `Application`s with the "App of Apps" approach.
+Define `Application`s with `.spec.syncPolicy.automated.prune: false` and `.spec.syncPolicy.automated.allowEmpty: false`, especially in combination with `stage: prod`, except `Application`s creating child `Application`s with the "App of Apps" approach. Prefer `.spec.syncPolicy.syncOptions.ServerSideApply: true` for resource annotation limit of `kubectl.kubernetes.io/last-applied-configuration`, multiple owners and actors of resource fields, and concurrent management of controllers.
 
 ## Argo CD + Kustomize
 
@@ -228,6 +266,7 @@ spec:
     - Prune=false
     # - PrunePropagationPolicy=foreground
     # - PruneLast=true
+    # - CreateNamespace=true
 ```
 
 ## Errors
