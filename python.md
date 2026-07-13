@@ -9,6 +9,7 @@ SSL_CERT_FILE="/etc/ssl/certs/ca-bundle.crt"
 REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-bundle.crt"
 # Python module 'curl'
 CURL_CA_BUNDLE="/etc/ssl/certs/ca-bundle.crt"
+PYTHONHTTPSVERIFY=0
 ```
 
 ## Install
