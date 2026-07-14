@@ -233,9 +233,11 @@ In Helm, when using conditions in templates, even if the first condition is fals
 ```
 
 ## index
+```
+### index for map keys with "-"
+{{- $apps := index .Values "argocd-apps" "applications" -}}
 
 ### index and splitList
-```
 {{- $serviceHostname := "" -}}
 {{- $gatewayName := "" -}}
 
@@ -252,6 +254,11 @@ In Helm, when using conditions in templates, even if the first condition is fals
     {{- end -}}
   {{- end -}}
 {{- end -}}
+```
+
+## dig
+```
+{{- $apps := dig "argocd-apps" "applications" list .Values -}}
 ```
 
 ## Post Rendering
