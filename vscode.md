@@ -91,8 +91,16 @@ $HOME/Library/Application\ Support/VSCodium/User/settings.json
 ```
 
 ## Workspace Settings
+```
+<dir>/.vscode/settings.json
+```
 
-`<dir>/.vscode/settings.json`
+## Session Workspace Storage
+```
+ls -laht $HOME/.config/Code/User/workspaceStorage/ # ordered by last modified date
+ls -laht $HOME/.config/Code/User/workspaceStorage/<session-id>/
+ls -laht $HOME/.config/Code/User/workspaceStorage/<session-id>/state.vscdb
+```
 
 ## VS Code Settings
 ```
