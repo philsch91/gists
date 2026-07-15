@@ -277,3 +277,13 @@ export HELM_DRIVER=<secret|configmap|sql> # Helm v3 default = secret
 export HELM_DRIVER_SQL_CONNECTION_STRING=postgresql://helm-postgres:5432/helm?user=helm&password=changeme
 kubectl get secret --all-namespaces -l "owner=helm"
 ```
+
+## Chart
+
+### Chart adaptation
+```
+# ordered from least to most adaptability
+1. hosted remote chart
+2. parent chart with subchart (helm dependency update)
+3. copied chart (helm pull)
+```
