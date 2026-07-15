@@ -11,6 +11,19 @@ ls -lah /home/<username>/.config/Code/
 ps -ef | grep /usr/share/code | less
 ```
 
+## Install
+```
+# Linux
+ls -lah /usr/bin/code
+ls -lah /usr/share/code/
+ls -lah /usr/share/code/bin/code
+# Windows
+$HOME\AppData\Local\Programs\Microsoft VS Code
+# Windows via Intune
+C:\Program Files\Microsoft VS Code\bin\code
+C:\Program Files\Microsoft VS Code\bin\code.cmd
+```
+
 ## Variables
 ```
 # environment variables
@@ -74,7 +87,7 @@ F1 > Network Proxy Test: Show OS Certificates
 ## App Settings
 ```
 # Windows
-$HOME/AppData/Roaming/Code/settings.json
+$HOME\AppData\Roaming\Code\settings.json
 ```
 
 ## User Settings
@@ -97,9 +110,13 @@ $HOME/Library/Application\ Support/VSCodium/User/settings.json
 
 ## Session Workspace Storage
 ```
+# Linux
 ls -laht $HOME/.config/Code/User/workspaceStorage/ # ordered by last modified date
 ls -laht $HOME/.config/Code/User/workspaceStorage/<session-id>/
 ls -laht $HOME/.config/Code/User/workspaceStorage/<session-id>/state.vscdb
+# Windows
+dir C:\Users\<username>\AppData\Roaming\Code\User\workspaceStorage\<session-id>
+dir C:\Users\<username>\AppData\Roaming\Code\User\workspaceStorage\<session-id>\state.vscdb
 ```
 
 ## VS Code Settings
