@@ -108,18 +108,7 @@ $HOME/Library/Application\ Support/VSCodium/User/settings.json
 <dir>/.vscode/settings.json
 ```
 
-## Session Workspace Storage
-```
-# Linux
-ls -laht $HOME/.config/Code/User/workspaceStorage/ # ordered by last modified date
-ls -laht $HOME/.config/Code/User/workspaceStorage/<session-id>/
-ls -laht $HOME/.config/Code/User/workspaceStorage/<session-id>/state.vscdb
-# Windows
-dir C:\Users\<username>\AppData\Roaming\Code\User\workspaceStorage\<session-id>
-dir C:\Users\<username>\AppData\Roaming\Code\User\workspaceStorage\<session-id>\state.vscdb
-```
-
-## VS Code Settings
+## settings.json
 ```
 {
     "update.mode": "none",
@@ -131,6 +120,12 @@ dir C:\Users\<username>\AppData\Roaming\Code\User\workspaceStorage\<session-id>\
         "**/.settings": true,
         "**/.factorypath": true
     },
+    "files.autoRefresh": true,
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/**": true
+    },
     "editor.detectIndentation": false,
     "editor.insertSpaces": false,
     "editor.tabSize": 4,
@@ -141,6 +136,7 @@ dir C:\Users\<username>\AppData\Roaming\Code\User\workspaceStorage\<session-id>\
     "editor.selectionHighlight": false,
     "editor.occurrencesHighlight": "off",
     "editor.occurrencesHighlight.alt": "singleFile|multiFile",
+    "git.autorefresh": true,
     "workbench.colorTheme": "Flatland Monokai",
     "github.copilot.chat.githubMcpServer.enabled": true,
     "mcp": {
@@ -202,6 +198,18 @@ dir C:\Users\<username>\AppData\Roaming\Code\User\workspaceStorage\<session-id>\
         }
     }
 }
+```
+
+## Session Workspace Storage
+```
+# Linux
+ls -laht $HOME/.config/Code/User/workspaceStorage/ # ordered by last modified date
+ls -laht $HOME/.config/Code/User/workspaceStorage/<session-id>/
+ls -laht $HOME/.config/Code/User/workspaceStorage/<session-id>/state.vscdb
+find $HOME/.config/Code/User/workspaceStorage/ -type f \( -name "*.json" -o -name "*.jsonl" \) -path "*/chatSessions/*" -print0 | xargs -0 grep -i "<search-string>"
+# Windows
+dir C:\Users\<username>\AppData\Roaming\Code\User\workspaceStorage\<session-id>
+dir C:\Users\<username>\AppData\Roaming\Code\User\workspaceStorage\<session-id>\state.vscdb
 ```
 
 ## github.copilot-chat
@@ -278,6 +286,10 @@ Developer: Reload Window
 
 ## Logs
 ```
+# Linux
+find $HOME/.config/Code/logs -type f -name "*.log" -print0 | xargs -0 grep -i "<search-string>"
+# Windows
+C:\Users\<username>\AppData\Roaming\Code\logs\20260603T075457\window1
 find $HOME/AppData/Roaming/Code/logs/ -type f -name "*copilot-chat*.log" -print0 | xargs -0 grep -i "error"
 ```
 
@@ -286,4 +298,36 @@ find $HOME/AppData/Roaming/Code/logs/ -type f -name "*copilot-chat*.log" -print0
 # select multiple lines
 Win: Ctrl+Alt+Arrow
 Linux: Shift+Alt+Arrow
+```
+
+## launch.json
+```
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "ng serve",
+      "type": "msedge",
+      "request": "launch",
+      "preLaunchTask": "npm: start",
+      "url": "http://localhost:4200/"
+    },
+    {
+      "name": "ng test",
+      "type": "msedge",
+      "request": "launch",
+      "preLaunchTask": "npm: test",
+      "url": "http://localhost:9876/debug.html"
+    },
+    {
+      "name": "npm run ng -- serve",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "ng", "--", "serve", "--poll=2000"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    }
+  ]
+}
 ```
