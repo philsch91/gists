@@ -130,6 +130,54 @@ except Exception:
 PY
 ```
 
+## pyproject.toml
+```
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "program"
+version = "1.0.0"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.27",
+    "pydantic>=2.0",
+    "python-dotenv>=1.0",
+    "click>=8.0",
+    "mcp>=1.0.0",
+    "cryptography>=42.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.mypy]
+strict = true
+packages = ["program"]
+mypy_path = "src"
+
+[project.scripts]
+program = "<package>.<file>:<function>"
+```
+
+## click
+
+### program auth login
+```
+@click.group()
+def cli() -> None:
+    """Program: Program description."""
+
+@cli.group()
+def auth() -> None:
+    """Manage authentication."""
+
+@auth.command("login")
+def auth_login() -> None:
+	"""Authentication login."""
+```
+
 ## Errors
 
 error: externally-managed-environment
