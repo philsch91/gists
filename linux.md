@@ -258,6 +258,10 @@ apt-get [-u|--show-upgraded] [-V|--verbose-versions] [[--assume-no]] upgrade # s
 ## apt install
 apt-get [-f|--fix-broken] [-m|--fix-missing] [[--no-cache]] install <package-name>|./<file-name>.deb
 
+# /etc/apt/trusted.gpg.d/
+ls -lah /etc/apt/trusted.gpg.d/
+curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg >/dev/null
+
 cat /etc/apt/sources.list.d/google-chrome.list
 # deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main
 
@@ -300,6 +304,10 @@ apt install zstd
 ## apt install (upgrade) apache2-utils
 apt install apache2-utils
 command -v htpasswd
+
+## apt install azure-cli
+echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ <repo-name> main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+sudo apt-get install azure-cli
 
 ## apt remove
 apt-get remove <package-name>
