@@ -154,8 +154,22 @@ project/
 /skills
 ## hooks
 /hooks
-## plugins
+## plugin
 /plugin [disable <plugin-name>]
+### list known (configured) repository marketplaces
+/plugin marketplace list
+### add repository and update repository URL
+### in ~/.claude/plugins/known_marketplaces.json
+### and in ~/.claude/plugins/marketplaces/<repository-marketplace-name>
+/plugin marketplace add https://<url>.**git**
+### view repository URL
+/plugin marketplace update
+### update repository plugins
+/plugin marketplace update <repository-name>
+### install plugin (+ skills) from known repository marketplaces
+/plugin install <plugin-name>
+### uninstall plugin
+/plugin uninstall <plugin-name>
 ## agents
 /agents # create agents interactively
 ## tasks
