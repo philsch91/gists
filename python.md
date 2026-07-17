@@ -10,6 +10,8 @@ REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-bundle.crt"
 # Python module 'curl'
 CURL_CA_BUNDLE="/etc/ssl/certs/ca-bundle.crt"
 PYTHONHTTPSVERIFY=0
+# disable creation of Python byte code files
+PYTHONDONTWRITEBYTECODE=1
 ```
 
 ## Install
