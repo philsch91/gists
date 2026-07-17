@@ -220,6 +220,15 @@ aws eks list-nodegroups --cluster <cluster-name>
 ## eks update-cluster-config
 aws eks update-cluster-config --name <cluster-name> --logging '{"clusterLogging":[{"types":["audit"],"enabled":true},{"types":["api","authenticator","controllerManager","scheduler"],"enabled":false}]}' [--profile <profile-name>] [--region <region>]
 
+## eks list-addons
+aws eks list-addons --cluster-name <cluster-name>
+
+## eks update-addon
+aws eks update-addon --cluster-name <cluster-name> --addon-name <addon-name> --addon-version <addon-version> --service-account-role-arn arn:aws:iam::111122223333:role/role-name --configuration-values '{}' --resolve-conflicts PRESERVE
+
+## eks list-insights
+aws eks list-insights --region <region-code> --cluster-name <cluster-name>
+
 # drain node (instance) first
 aws autoscaling terminate-instance-in-auto-scaling-group --instance-id <instance-id> --should-decrement-desired-capacity [--region <region>]
 
