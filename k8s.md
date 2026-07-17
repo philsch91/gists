@@ -489,6 +489,34 @@ spec:
   volumeMode: Filesystem
 ```
 
+## Finalizers
+
+Finalizers should be defined at `.metadata.finalizers[]`. Kubernetes defines built-in finalizers at `.spec.finalizers[]`.
+
+```
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: <namespace-name>
+  labels:
+    name: <namespace-name>
+    <group>.<org>.com: <label-value>
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false
+  finalizers:
+  - <group>.<org>.com/finalizer
+spec:
+  finalizers:
+    - kubernetes
+```
+
+```
+# get all finalizers
+kubectl get all -o custom-columns=Kind:.kind,Name:.metadata.name,Finalizers:.metadata.finalizers --all-namespaces
+# add finalizer
+kubectl -n <namespace> patch pvc pvc-<id> --type=merge -p '{"metadata":{"finalizers":["<group>.<org>.com/finalizer"]}}'
+```
+
 ## ExternalSecret.v1.external-secrets
 ```
 ExternalSecret.v1.external-secrets -> Secret.v1
