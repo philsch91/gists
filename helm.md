@@ -284,6 +284,37 @@ kubectl get secret --all-namespaces -l "owner=helm"
 ```
 # ordered from least to most adaptability
 1. hosted remote chart
-2. parent chart with subchart (helm dependency update)
+2. parent (wrapper) chart with subchart (helm dependency update)
 3. copied chart (helm pull)
+```
+
+### Chart structure
+```
+main-chart-name/
+├── Chart.yaml
+├── values.yaml
+├── templates/
+│   ├── external-secrets.yaml
+│   ├── ingress.yaml
+│   └── httproute.yaml
+└── charts/
+    └── subchart-name-1/ # pulled and extracted subchart
+        ├── Chart.yaml
+        ├── values.yaml
+        └── templates/   # customized subchart templates
+            ├── deployment.yaml
+            ├── secrets.yaml
+            └── service.yaml
+```
+
+### Wrapper chart values.yaml
+```
+# main-chart-name/values.yaml
+
+replicaCount: 1
+
+# subchart values (must match subchart directory name)
+mariadb:
+  auth:
+    database: db-name
 ```
