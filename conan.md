@@ -13,7 +13,7 @@ deactivate
 # option 2: install with pip in venv
 $HOME/dev/conan-python-venv/bin/pip install conan|conan==2.26.2
 # Windows
-C:\dev\conan\bin\Activate.ps1
+C:\dev\conan-win-python-venv\Scripts\Activate.ps1
 where conan
 C:\Users\<user>\AppData\Roaming\Python\Python313\Scripts\conan.exe
 python3 -m pip install pip-system-certs
@@ -59,7 +59,7 @@ core.net.http:cacert_path={{conan_home_folder}}\cacert.pem
 conan remote list
 conan remote add artifactory https://<artifactory-base-url>/artifactory/api/conan/artifactory
 conan remote login artifactory <username> -p <password>
-conan remote update <remote-name> --url="<remote-url>" [--insecure]
+conan remote update <remote-name> [--url="<remote-url>"] [--insecure]
 ```
 
 ## install
@@ -136,4 +136,21 @@ cat /tmp/resolv.cmake
 #set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -lresolv")
 
 link_libraries(resolv)
+```
+
+## Errors
+
+### Fatal Python error: Failed to import encodings module
+```
+# conan version or pip list
+Could not find platform independent libraries <prefix>
+Fatal Python error: Failed to import encodings module
+Python runtime state: core initialized
+ModuleNotFoundError: No module named 'encodings'
+
+Current thread 0x00006fe8 (most recent call first):
+  <no Python frame>
+
+# solution:
+reinstall Python (where python) and Conan (where conan)
 ```
