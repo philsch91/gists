@@ -123,6 +123,8 @@ sudo apt-get update
 sudo apt install wsl
 wsl -v
 which wsl
+sudo apt install curl gpg
+sudo apt install microsoft-identity-broker
 ```
 
 ## free
