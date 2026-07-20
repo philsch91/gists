@@ -19,6 +19,11 @@ az --version
 az login --scope https://graph.windows.net//.default
 ```
 
+## config
+```
+az config set core.enable_broker_on_windows=true
+```
+
 ## account
 ```
 az account show # get current session context
