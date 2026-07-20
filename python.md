@@ -182,7 +182,7 @@ def auth_login() -> None:
 
 ## Errors
 
-error: externally-managed-environment
+### error: externally-managed-environment
 ```
 # option 1
 <command (python -m pip install --upgrade pip)> --break-system-packages
