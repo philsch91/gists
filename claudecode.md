@@ -22,9 +22,10 @@ claude mcp add <python-fastmcp-server> --scope user [--transport stdio] --env EN
 
 claude mcp list
 claude mcp remove <mcp-server>
+claude plugin validate .
 ```
 
-## Environment variables
+## Variables
 ```
 echo $CLAUDE_ENV_FILE
 # recommended
@@ -34,6 +35,7 @@ export CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1
 export CLAUDE_CODE_DISABLE_AUTO_MEMORY=1
 export CLAUDE_CONFIG_DIR="~/.claude.json"
 export CLAUDE_CODE_SHELL="/bin/bash" # /bin/zsh
+export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1
 ```
 
 ## Files
@@ -47,6 +49,7 @@ export CLAUDE_CODE_SHELL="/bin/bash" # /bin/zsh
 - `~/.claude/projects/<project-path>/memory/`
 - `~/.claude/agents/`
 - `~/.claude/agent-memory/<name-of-agent>/`
+- `~/.claude/plugins/cache/<known-marketplace-name>/<plugin-name>`
 - `$(pwd)/CLAUDE.md` or `$(pwd)/.claude/CLAUDE.md`
 - `$(pwd)/CLAUDE.local.md` # personal project-specific preferences
 - `$(pwd)/.claude/settings.json`
@@ -161,15 +164,25 @@ project/
 ### add repository and update repository URL
 ### in ~/.claude/plugins/known_marketplaces.json
 ### and in ~/.claude/plugins/marketplaces/<repository-marketplace-name>
-/plugin marketplace add https://<url>.**git**
+/plugin marketplace add <source> [options]
+/plugin marketplace add https://<url>[.git][#branch]
+/plugin marketplace add ./path/to/marketplace
+/plugin marketplace add <github-org>/<github-repo>[@ref]
 ### view repository URL
 /plugin marketplace update
 ### update repository plugins
+#### updates ~/.claude/plugins/marketplaces/<known-marketplace-name>/
+#### and ~/.claude/plugins/installed_plugins.json
+#### and ~/.claude/plugins/cache/
 /plugin marketplace update <repository-name>
 ### install plugin (+ skills) from known repository marketplaces
 /plugin install <plugin-name>
+### plugin update
+/plugin -> installed -> <plugin-name> -> update
 ### uninstall plugin
 /plugin uninstall <plugin-name>
+## reload-plugins
+/reload-plugins # updates ~/.claude/plugins/cache/
 ## agents
 /agents # create agents interactively
 ## tasks
