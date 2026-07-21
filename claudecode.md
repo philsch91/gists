@@ -179,6 +179,13 @@ project/
 /plugin install <plugin-name>
 ### plugin update
 /plugin -> installed -> <plugin-name> -> update
+#### update plugin with same version but different gitCommitSha
+/plugin -> installed -> <plugin-name> -> uninstall # 1, updates ~/.claude/plugins/installed_plugins.json
+rm -rv ~/.claude/plugins/marketplaces/<known-marketplace-name>/plugins/<plugin-name> # 2
+rm -rv ~/.claude/plugins/cache/<known-marketplace-name>/<plugin-name>/<version> # 3
+/plugin marketplace update <repository-name> # 4, updates ~/.claude/plugins/marketplaces/<known-marketplace-name>
+/plugin -> marketplaces -> browse plugins -> select + install # 5, updates ~/.claude/plugins/cache/<known-marketplace-name>/<plugin-name>/<version>
+/reload-plugins # 6
 ### uninstall plugin
 /plugin uninstall <plugin-name>
 ## reload-plugins
