@@ -66,14 +66,15 @@ ln -s /usr/bin/pip3 /usr/bin/pip
 ## pip
 ```
 pip --version
-python -m pip --version
-python -m pip install --upgrade pip
 pip list
 pip install 'urllib3<2'
 pip install [--no-cache-dir] -r requirements.txt
 pip install numpy config --global http.sslVerify false
 pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org --upgrade setuptools
 pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org --upgrade pipwin
+
+python -m pip --version
+python -m pip list
 ```
 
 ## venv
@@ -84,10 +85,16 @@ cd $HOME/dev
 python3 -m venv (/path/to/new/)virtualenvironment
 source (/path/to/new/)virtualenvironment/bin/activate
 echo $VIRTUAL_ENV
+which python
 # install pip in virtual environment without affecting system (OS) Python
 python -m ensurepip --default-pip
 ...
+# option 1
 pip install -r requirements.txt
+pip list
+# option 2
+python -m pip install -r requirements.txt
+python -m pip list
 ...
 deactivate
 ```
