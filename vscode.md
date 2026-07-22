@@ -52,6 +52,7 @@ F1 > Preferences: Open User Settings Settings (JSON)
 F1 > Developer: Reload Window
 F1 > Network Proxy Test: Test Connection
 F1 > Network Proxy Test: Show OS Certificates
+F1 > Python: Select Interpreter
 ```
 
 ### AI extensions
@@ -281,6 +282,29 @@ Developer: Reload Window
         }
     ],
     "dotnetAcquisitionExtension.installTimeoutValue": 180
+}
+```
+
+## ms-python.python
+```
+.venv/
+├── pyvenv.cfg
+├── bin/
+│   ├── python
+│   └── pip
+└── lib/
+    └── python3.12/
+        └── site-packages/
+            └── <package-name>
+                └── <class-name>.py
+
+F1 > Python: Select Interpreter > .venv/bin/python
+F1 > Developer: Reload Window
+
+# <dir>/.vscode/settings.json
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.analysis.extraPaths": ["${workspaceFolder}/.venv/lib/python3.12/site-packages"]
 }
 ```
 
