@@ -362,6 +362,20 @@ aws s3control describe-job \
   --region eu-central-1
 ```
 
+## SecretsManager
+```bash
+KUBE_CONFIG_STRING="$(cat </path/to/kube/config> | jq -Rs .)"
+aws secretsmanager create-secret \
+  --name <config-secret-path> \
+  --secret-string "{\"kubeconfig\": ${KUBE_CONFIG_STRING}}"
+
+# alternatively
+AWS_SECRET_KUBE_CONFIG_JSON_STRING=$(jq -n --rawfile kc </path/to/kube/config> '{"kubeconfig": $kc}')
+echo $AWS_SECRET_KUBE_CONFIG_JSON_STRING | aws secretsmanager create-secret \
+    --name <config-secret-path> \
+    --secret-string file:///dev/stdin
+```
+
 ## SSM
 ```
 ### returns Name for parameter
