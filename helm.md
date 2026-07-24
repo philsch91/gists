@@ -261,6 +261,33 @@ In Helm, when using conditions in templates, even if the first condition is fals
 {{- $apps := dig "argocd-apps" "applications" list .Values -}}
 ```
 
+## Named Templates (Functions)
+```
+# _helpers.tpl
+{{/*
+Extract the last segment of a secret path and sanitize it as a Kubernetes-compliant name.
+Example: "app/backend/My_Secret" -> "my-secret"
+*/}}
+{{- define "path.basename" -}}
+{{- . | base | lower | replace "_" "-" | replace "." "-" | replace ":" "-" | replace "/" "-" | replace " " "-" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{- define "backend.configSecretName" -}}
+{{- if .Values.backend.configSecretName }}
+{{- .Values.backend.configSecretName }}
+{{- else }}
+{{- include "path.basename" .Values.backend.configSecretPath }}
+{{- end }}
+{{- end }}
+
+# deployment.yaml
+- name: BEARER_TOKEN
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "backend.configSecretName" . }}
+      key: bearer_token
+```
+
 ## Post Rendering
 
 ### hook.sh
