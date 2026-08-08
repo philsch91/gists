@@ -1,5 +1,16 @@
 # Xcode
 
+## xcodebuild
+```
+# which xcode-select
+# command -v xcode-select
+sudo xcode-select -switch /Applications/Xcode_26.6.app
+
+# which xcodebuild
+# command -v xcodebuild
+xcodebuild --version
+```
+
 ## Support new devices with old Xcode
 
 ```
