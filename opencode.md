@@ -6,10 +6,11 @@ which opencode
 # /home/<username>/.local/bin/opencode
 opencode -v
 opencode debug paths
-opencode --print-logs
-opencode --log-level DEBUG
+opencode --print-logs --log-level DEBUG
 opencode -d # start with debug logging
-opencode -c </path/to/directory> # start with specific current work dir
+opencode -c|--continue # continue with the last session
+opencode --dir </path/to/directory> # start with specific current work dir
+opencode --thinking # show thinking
 # opencode non-interactive prompt mode
 # -q = quiet, -f = format
 opencode -p "What is the tech stack of the current project" [-q] [-f text|json]
@@ -90,6 +91,17 @@ opencode upgrade
 }
 ```
 
+### tui.json
+```
+# $HOME/.config/opencode/tui.json
+{
+  "$schema": "https://opencode.ai/tui.json",
+  "ui": {
+    "expand_reasoning": true
+  }
+}
+```
+
 ## Variables
 ```
 export AI_TIMEOUT=600000
@@ -117,6 +129,7 @@ apt remove opencode
 /connect
 /models
 /sessions
+/thinking
 /init --model <model-name(frob/qwen3.5-instruct:4b)>
 /skills
 /exit
