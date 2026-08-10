@@ -59,27 +59,69 @@ grep -rl [-I] <old-string> . [--exclude-dir=.git] | xargs sed -i 's/<old-string>
 
 ## useradd
 ```
-# user `passwd <username>` instead of -p
-useradd -m|--create-home [-s|--shell /bin/bash] -U|--user-group -d|--home-dir /home/<username> -G|--groups adm,dialout,cdrom,floppy,sudo,audio,dip,video,plugdev,netdev [-p|--password $(echo "<password>" | openssl passwd -1 -stdin)] <username>
+# useradd = low-level, predictable, scriptable, widely available
+# adduser = interactive wrapper for useradd
+# use `passwd <username>` instead of -p
+# -U = create group with the same name as the user, and add user to this group
+# -g = primary user gid
+# -G = list of supplementary groups which the user is also member of
+useradd -m|--create-home [-s|--shell /bin/bash] -u|--uid <numerical-uid(1000,1001)> -U|--user-group -d|--home-dir /home/<username> -g|--gid <primary-user-gid> -G|--groups adm,dialout,cdrom,floppy,sudo,audio,dip,video,plugdev,netdev [-p|--password $(echo "<password>" | openssl passwd -1 -stdin)] <username>
+```
+
+## groupadd
+```
+# addgroup = interactive wrapper for groupadd
+groupadd -g <gid> <group-name>
+groupdel <group-name>
 ```
 
 ## usermod
 ```
-# append (a) group (G)
-sudo usermod -aG sudo <username>
+# add user (a) to group (G)
+sudo usermod -aG <group-name(sudo)> <username>
+# unlock (-U) root
+usermod -U root
 ```
 
 ## passwd
 
+- /etc/passwd
 - /etc/shadow
 
 ```
 # set password for <username>
 passwd <username>
+# unlock root if password is set
+sudo passwd -u root
 # set password for root
 sudo passwd root
 # get account status (P = usable password, L = locked, NP = no password)
 sudo passwd -S root
+# try to become root
+su -
+# manually add user in /etc/passwd
+# UID 0 is root, use 1001
+# GID 0 is root group, use 1001
+echo "<username>:x:<uid>:<gid>::/home/<username>:/sbin/nologin" >>/etc/passwd
+sudo grep '^root:' /etc/shadow
+```
+
+### /etc/passwd
+```
+root:x:0:0:root:/root:/bin/bash
+<username>:x:1001:1002::/home/<username>:/bin/bash
+```
+
+### /etc/shadow
+```
+# * = no password, ! = locked
+root:*:19836:0:99999:7:::
+<username>:$<hashed-password>:20427:0:99999:7:::
+```
+
+## chpasswd
+```
+echo '<username>:<password>' | sudo chpasswd
 ```
 
 ## sudo
@@ -94,7 +136,7 @@ sudo passwd -S root
 sudo visudo
 # list, check if user is allowed to run sudo
 sudo -l [-U <username>]
-# validate
+# validate own password
 sudo -v
 sudo -nv 2>/dev/null && echo "Session active" || echo "Password required"
 sudo sudo -V | grep "Path to authentication timestamp dir"
@@ -102,6 +144,8 @@ sudo ls -l /run/sudo/ts
 groups [<username>] | grep "sudo"
 # delete timestamp
 sudo -k
+# become root via sudo
+sudo su -
 ```
 
 ## SysV
