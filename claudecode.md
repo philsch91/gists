@@ -92,6 +92,30 @@ See @README.md for project overview and @package.json for available npm commands
 - Always use pnpm, not npm and add this to CLAUDE.md
 ```
 
+### ~/.claude/settings.json
+```
+{
+    "autoUpdates": false,
+    "skipModelUpdates": false,
+    "includeCoAuthoredBy": false,
+    "env": {
+        "ENV_VAR_NAME_1": "ENV_VAR_VALUE_1"
+    },
+    "extraKnownMarketplaces": {
+        "custom-claude-code-plugins": {
+            "source": {
+                "ref": "dev",
+                "source": "git",
+                "url": "https://<hostname>/custom-claude-code-plugins.git"
+            }
+        }
+    },
+    "enabledPlugins": {
+        "plugin-name@custom-claude-code-plugins": true
+    }
+}
+```
+
 ## Project Structure
 ```
 project/
