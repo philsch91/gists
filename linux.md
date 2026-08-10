@@ -207,6 +207,16 @@ Start network listening
 nc -lk <port>
 ```
 
+## tar
+```
+# -xzvf for .tar.gz (.tgz)
+tar -C /tmp/subdir -xzvf /tmp/filename.<tar.gz|tgz>
+# --zstd -xvf for .tar.zst
+tar -C /tmp/subdir --zstd -xvf /tmp/filename.tar.zst
+# -xvf for .tar.gz (.tgz) and .tar.zst
+tar -C /tmp/subdir -xvf /tmp/filename.<tar.gz|tgz|tar.zst>
+```
+
 ## ldapsearch
 ```
 echo "TLS_REQCERT never" >>/etc/(open)ldap/ldap.conf
@@ -306,7 +316,7 @@ apt install apache2-utils
 command -v htpasswd
 
 ## apt install azure-cli
-echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ <repo-name> main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
+echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ <repo-name>|noble main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
 sudo apt-get install azure-cli
 
 ## apt remove
@@ -399,7 +409,7 @@ sudo bash -c "if ! grep <sub-dir>/root_ca.crt /etc/ca-certificates.conf; then ec
 sudo update-ca-certificates # updates certificates in /etc/ssl/certs/ca-certificates.crt
 
 # /usr/local/share/ca-certificates/ + /usr/sbin/update-ca-certificates
-cp -v root_ca.crt /usr/local/share/ca-certificates/
+cp -v root_ca.crt /usr/local/share/ca-certificates/[sub-dir/]
 sudo update-ca-certificates # updates certificates in /etc/ssl/certs/ca-certificates.crt
 openssl s_client -connect foo.whatever.com:443 -CApath /etc/ssl/certs
 ```
