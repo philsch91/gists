@@ -217,13 +217,63 @@ metadata:
   name: <namespace-name>
 ```
 
-## Argo CD + Helm
-
-Argo CD uses Helm if a `Chart.yaml` file exists at the location pointed to by `.spec.source.repoURL` and `.spec.source.path`, but only as a template mechanism. It runs `helm template` and then deploys the resulting manifests on the cluster instead of doing `helm install`. Resources can therefore not be viewed or verified with `helm ls`.
+## AppProject.v1alpha1.argoproj.io
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  annotations:
+    meta.helm.sh/release-name: bootstrap-apps-projects
+    meta.helm.sh/release-namespace: argocd
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: app-peerauthentication
+  namespace: argocd
+spec:
+  description: Project for rating PeerAuthentication resources
+  destinations:
+  - namespace: istio-system
+    server: https://kubernetes.default.svc
+  - namespace: istio-system
+    server: https://01234ABCDE.gr7.eu-central-1.eks.amazonaws.com
+  clusterResourceWhitelist:
+  - group: ""
+    kind: Namespace
+  - group: ""
+    kind: ServiceAccount
+  - group: "external-secrets.io"
+    kind: ClusterSecretStore
+  - group: "karpenter.sh"
+    kind: NodePool
+  - group: "karpenter.k8s.aws"
+    kind: "EC2NodeClass"
+  # - group: "*"
+  #   kind: "*"
+  namespaceResourceWhitelist:
+  # kubectl get crd <crd-name> -o jsonpath='{.spec.scope}' # Namespaced
+  - group: "networking.k8s.io"
+    kind: Ingress
+  - group: "apps"
+    kind: Deployment
+  - group: ""
+    kind: ConfigMap
+  - group: ""
+    kind: Service
+  - group: "security.istio.io"
+    kind: PeerAuthentication
+  # - group: "*"
+  #   kind: "*"
+  sourceRepos:
+  - '*'
+```
 
 ## Application.v1alpha1.argoproj.io
 
 Define `Application`s with `.spec.syncPolicy.automated.prune: false` and `.spec.syncPolicy.automated.allowEmpty: false`, especially in combination with `stage: prod`, except `Application`s creating child `Application`s with the "App of Apps" approach. Prefer `.spec.syncPolicy.syncOptions.ServerSideApply: true` for resource annotation limit of `kubectl.kubernetes.io/last-applied-configuration`, multiple owners and actors of resource fields, and concurrent management of controllers.
+
+## Argo CD + Helm
+
+Argo CD uses Helm if a `Chart.yaml` file exists at the location pointed to by `.spec.source.repoURL` and `.spec.source.path`, but only as a template mechanism. It runs `helm template` and then deploys the resulting manifests on the cluster instead of doing `helm install`. Resources can therefore not be viewed or verified with `helm ls`.
 
 ## Argo CD + Kustomize
 
