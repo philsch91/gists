@@ -36,6 +36,15 @@ Redirect only STDOUT to /dev/null, while STDERR is redirected to STDOUT, which i
 command 2>&1 >/dev/null
 ```
 
+## Variables
+```
+# or /etc/ssl/certs/ca-bundle.crt
+SSL_CERT_FILE="/etc/ssl/certs/ca-certificates.crt"
+CURL_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
+AWS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
+REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
+```
+
 ## ln
 ```
 # symlink (soft link)
