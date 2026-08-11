@@ -4,6 +4,7 @@
 ```
 # Linux
 /usr/share/ollama/.models/
+/home/<username>/.ollama/models
 # macOS
 /Users/<username>/.ollama/models
 # Windows
