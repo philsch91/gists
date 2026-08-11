@@ -148,6 +148,12 @@ sudo -k
 sudo su -
 ```
 
+## readlink
+```
+# /bin/<program-name> -> /usr/bin/<program-name>
+readlink -f $(which <program-name>)|<file-name>
+```
+
 ## SysV
 
 ```
@@ -253,12 +259,15 @@ nc -lk <port>
 
 ## tar
 ```
+mkdir -pv /tmp/subdir
 # -xzvf for .tar.gz (.tgz)
 tar -C /tmp/subdir -xzvf /tmp/filename.<tar.gz|tgz>
 # --zstd -xvf for .tar.zst
 tar -C /tmp/subdir --zstd -xvf /tmp/filename.tar.zst
 # -xvf for .tar.gz (.tgz) and .tar.zst
 tar -C /tmp/subdir -xvf /tmp/filename.<tar.gz|tgz|tar.zst>
+rm -v /tmp/filename.<tar.gz|tgz|tar.zst>
+ls -lah /tmp/subdir
 ```
 
 ## ldapsearch
