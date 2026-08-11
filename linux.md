@@ -148,6 +148,20 @@ sudo -k
 sudo su -
 ```
 
+## chown
+```
+chown [-R] <owner-uid>:<group-gid> <file>
+chown -R $UID:$GID /home/<username>
+chown root:root /usr/bin/<filename> /usr/lib/<filename>
+```
+
+## chmod
+```
+chmod [-R] <mode> <file>
+chmod -R u+rwx(=<s>7<go>) /home/<username>
+chmod -R [0]755 /usr/bin/<filename> /usr/lib/<filename>
+```
+
 ## readlink
 ```
 # /bin/<program-name> -> /usr/bin/<program-name>
