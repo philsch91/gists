@@ -58,6 +58,17 @@ sudo bash -c 'echo "generateResolvConf = false" >> /etc/wsl.conf'
 sudo chattr +i /etc/resolv.conf
 ```
 
+## Visual Studio
+```
+# vswhere.exe
+C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe
+vswhere.exe -property installationPath
+vswhere.exe -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools -find "VC\Tools\MSVC\**\bin\Hostx64\x64\cl.exe"
+vswhere.exe -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -find "VC\Tools\MSVC\**\bin\Hostx64\x64\cl.exe"
+# cl.exe
+C:\Program Files\Microsoft Visual Studio\2022\<edition>\VC\Tools\MSVC\<version>\bin\Hostx64\x64\cl.exe
+```
+
 ## ATA TRIM
 
 ### Query TRIM setting
