@@ -57,11 +57,40 @@ locals {
 
 ## Usage
 ```
+# version
 terraform version
-terraform [-chdir=terraform/aws] init [-backend-config tf-backend.config]
+
+# init
+[echo yes |] terraform [-chdir=terraform/aws] init [-backend-config tf-backend.config]
+
+INIT_EXIT_CODE=$?
+
+echo "Terraform init exit code: ${INIT_EXIT_CODE}"
+
+# fmt
 terraform fmt [-check] [-recursive] resource.tf
-terraform [-chdir=terraform/aws] plan [-destroy] [-var-file="testing.tfvars(.json)"] [-var 'name=value'] [-var 'listname=["a", "b", "c"]'] [-input=false] [-out terraform.tfplan] [-detailed-exitcode]
+
+# workspace list
+terraform workspace list
+
+# workspace select
+terraform workspace select "<workspace-name(ap-southeast-2-tf-backend)>" || terraform workspace new "<workspace-name(ap-southeast-2-tf-backend)>"
+
+# plan
+terraform [-chdir=terraform/aws] plan [-destroy] [-input=false] [-var-file="testing.tfvars(.json)"] [-var 'name=value'] [-var 'listname=["a", "b", "c"]'] [-out terraform.tfplan] [-detailed-exitcode]
+
+PLAN_EXIT_CODE=$?
+
+# exit code 2 indicates success and changes to apply
+if [ ${PLAN_EXIT_CODE} -ne 2 ]; then
+    echo "Error during terraform plan."
+    exit 1
+fi
+
+# apply
 terraform [-chdir=terraform/aws] apply [-destroy] [-var-file="testing.tfvars(.json)"] [-input=false] [terraform.tfplan]
+
+# output
 terraform [-chdir=terraform/aws] output [-no-color] -json
 ```
 
