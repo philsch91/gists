@@ -140,6 +140,8 @@ $HOME/Library/Application\ Support/VSCodium/User/settings.json
     "git.autorefresh": true,
     "workbench.colorTheme": "Flatland Monokai",
     "github.copilot.chat.githubMcpServer.enabled": true,
+    "github.copilot.nextEditSuggestions.enabled":  true,
+    "python.analysis.typeCheckingMode":  "standard",
     "mcp": {
         "servers": {
             "atlassian-jira-mcp-server": {
@@ -233,6 +235,7 @@ Ollama >= v0.18.3
 ```
 {
     "java.jdt.ls.java.home": "/usr/lib/jvm/java-21-openjdk-amd64",
+    "java.jdt.ls.java.home.win": "C:\\Program Files\\Java\\jdk-21.0.12.8",
     "java.jdt.ls.vmargs": "",
     "java.autobuild.enabled": false,
     "java.semanticHighlighting.enabled": true,
