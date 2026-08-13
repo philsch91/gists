@@ -22,12 +22,12 @@ Select-String -Path "C:\ProgramData\chocolatey\lib\<package-name>\*.nuspec" -Pat
 choco install <pkg> [<pkg2> <pkgn>] [-y] [-f|--force [-x|--force-dependencies]] [--ignore-dependencies] [-v|--verbose] [-d|--debug]
 # uninstall
 ## --force-dependencies = force uninstallation of dependent packages
-## --ignore-dependencies = ignore and do not uninstall packages depending on the package to be uninstalled
+## --ignore-dependencies + --force = ignore and do not uninstall packages depending on the package to be uninstalled
 ## --skip-autounclean = uninstall package only in the Chocolatey database; files will remain on the filesystem
-choco uninstall <pkg> [<pkg2> <pkgn>] [-y] [--force] [-x|--force-dependencies] [--ignore-dependencies] [--skip-autounclean] [-v|--verbose] [-d|--debug]
+choco uninstall <pkg> [<pkg2> <pkgn>] [-y] [-f|--force [--ignore-dependencies]] [-x|--force-dependencies] [--skip-autounclean] [-v|--verbose] [-d|--debug]
 # reinstall
-## reinstall with uninstall [--ignore-dependencies] and install
-choco uninstall <pkg> [<pkg2> <pkgn>] [-y] [--ignore-dependencies] -v -d
+## reinstall with uninstall --force --ignore-dependencies and install
+choco uninstall <pkg> [<pkg2> <pkgn>] [-y] --force --ignore-dependencies -v -d
 choco install <pkg> [<pkg2> <pkgn>] [-y] -v -d
 ## reinstall with install --force and --ignore-dependencies
 choco install <pkg> [<pkg2> <pkgn>] [-y] -f|--force --ignore-dependencies -v -d
