@@ -65,6 +65,21 @@ C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe
 vswhere.exe -property installationPath
 vswhere.exe -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools -find "VC\Tools\MSVC\**\bin\Hostx64\x64\cl.exe"
 vswhere.exe -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -find "VC\Tools\MSVC\**\bin\Hostx64\x64\cl.exe"
+vswhere.exe -path "C:\Program Files\Microsoft Visual Studio\2022\Professional" -format json
+# setup.exe
+C:\Program Files(x86)\Microsoft Visual Studio\Installer\setup.exe
+# --quiet = prevents UI from being displayed; for non-interactive installation via service, LocalSystem and session 0
+# --passive = display non-interactive UI; for interactive desktop installation
+# 1. modifySettings: switch to update channel
+setup.exe modifySettings --installPath "C:\Program Files\Microsoft Visual Studio\2022\Professional" --newChannelUri https://aka.ms/vs/17/release/channel --passive
+# check channelUri
+vswhere.exe -path "C:\Program Files\Microsoft Visual Studio\2022\Professional" -format json
+# 2. update: download and install new channel
+setup.exe update --installPath "C:\Program Files\Microsoft Visual Studio\2022\Professional" --passive --norestart
+# check installationVersion
+vswhere.exe -path "C:\Program Files\Microsoft Visual Studio\2022\Professional" -format json
+# 3. modify: re-assert component list
+setup.exe modify --installPath "C:\Program Files\Microsoft Visual Studio\2022\Professional" --add Microsoft.VisualStudio.Workload.NativeDesktop --add Microsoft.VisualStudio.Workload.ManagedDesktop --add Microsoft.VisualStudio.Component.CoreEditor --add Microsoft.VisualStudio.ComponentGroup.NativeDesktop.Core --add Component.VisualStudio.GitHub.Copilot --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.ATL --add Microsoft.VisualStudio.Component.CppBuildInsights --add Microsoft.VisualStudio.Component.Debugger.JustInTime --add Microsoft.VisualStudio.Component.VC.DiagnosticTools --add Microsoft.VisualStudio.Component.VC.CMake.Project --add Microsoft.VisualStudio.Component.VC.TestAdapterForBoostTest --add Microsoft.VisualStudio.Component.VC.TestAdapterForGoogleTest --add Component.Microsoft.VisualStudio.LiveShare.2022 --add Microsoft.VisualStudio.Component.IntelliCode --add Microsoft.VisualStudio.Component.VC.ASAN --add Microsoft.VisualStudio.Component.Windows11SDK.22621 --add Microsoft.VisualStudio.Component.Vcpkg --add Microsoft.VisualStudio.Component.VC.ATLMFC --add Microsoft.VisualStudio.Component.VC.Modules.x86.x64 --add Microsoft.VisualStudio.Component.Windows10SDK.19041 --add Microsoft.Net.Component.4.8.1.SDK --add Microsoft.Net.Component.4.8.1.TargetingPack --passive --norestart
 # cl.exe
 C:\Program Files\Microsoft Visual Studio\2022\<edition>\VC\Tools\MSVC\<version>\bin\Hostx64\x64\cl.exe
 ```
