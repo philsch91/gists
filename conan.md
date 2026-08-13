@@ -38,6 +38,7 @@ conan version
 ## config
 ```
 conan config list
+conan config install .
 ```
 
 ```
@@ -58,26 +59,50 @@ core.net.http:cacert_path={{conan_home_folder}}\cacert.pem
 ```
 conan remote list
 conan remote add artifactory https://<artifactory-base-url>/artifactory/api/conan/artifactory
-conan remote login artifactory <username> -p <password>
+conan remote login <remote-name>|artifactory <username> -p <password>
 conan remote update <remote-name> [--url="<remote-url>"] [--insecure]
+```
+
+## remove
+```
+conan remove "*" -c
+```
+
+## export
+```
+# copies recipe into cache, source(), build() and package() are not executed
+conan export . [<username>/<channel-name>]
 ```
 
 ## install
 ```
+# resolve and install dependencies for preparation of build (make, cmake)
+conan install . | <work-dir> [-r <remote-name>] [-o tests=True] [-pr:a <profile-name>] [--build=missing] [-deployer-package=*] [--envs-generation=false]
 conan install . -of build.release -o tests=True -r artifactory -pr:a gcc13-cpp20-rel [-b missing | --build=missing] [--cli-args="VERBOSE=1"]
 conan install . -of build.win.math.debug -o tests=True -r artifactory -pr:a vs17-cpp20-dbg [-b missing]
 ```
 
 ## build
 ```
-conan build . -of build.release -o tests=True -r artifactory -pr:a gcc13-cpp20-rel [--lockfile .\conan.lock]
-conan build . -of build.win.math.debug -o tests=True -r artifactory -pr:a vs17-cpp20-dbg [-c tools.cmake.cmaketoolchain:generator="Ninja"] [--lockfile .\conan.lock]
+# executes build()
+conan build . -of build.release -o tests=True -r artifactory -pr:a gcc13-cpp20-rel [--lockfile .\conan-lx.lock]
+conan build . -of build.release -o tests=True -r artifactory -pr:a gcc13-cpp20-rel-ubuntu [--lockfile .\conan-lx.lock]
+conan build . -of build.win.math.debug -o tests=True -r artifactory -pr:a vs17-cpp20-dbg [-c tools.cmake.cmaketoolchain:generator="Ninja"] [--lockfile .\conan-win.lock]
 ```
 
 ## create
 ```
-create = export + install + build + package
+# create = export + install + build + package
+# exports recipe and runs source(), build() and package()
+conan create . [<username>/<channel-name>]
 conan create . --build=missing [--version=1.x.y]
+```
+
+## export-pkg
+```
+# export and store package in cache
+# build() is not executed
+conan export-pkg . | <work-dir> [<username>/<channel-name>] [--package-folder=/absolute/path/to/build_output] [-s build_type=Release -s compiler=gcc -s compiler.version=13] [-pr:a <profile-name>] [--lockfile conan.lock] [--lockfile-out conan.lock] [--settings:host=os=Linux]
 ```
 
 ## remove
