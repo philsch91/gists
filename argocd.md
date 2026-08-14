@@ -218,6 +218,9 @@ metadata:
 ```
 
 ## AppProject.v1alpha1.argoproj.io
+
+Define `AppProject`s with `- resources-finalizer.argocd.argoproj.io` in `.metadata.finalizers` ensuring that it is not deleted while it is referenced by any application.
+
 ```yaml
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
@@ -229,6 +232,8 @@ metadata:
     app.kubernetes.io/managed-by: Helm
   name: app-peerauthentication
   namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
 spec:
   description: Project for rating PeerAuthentication resources
   destinations:
@@ -269,7 +274,46 @@ spec:
 
 ## Application.v1alpha1.argoproj.io
 
-Define `Application`s with `.spec.syncPolicy.automated.prune: false` and `.spec.syncPolicy.automated.allowEmpty: false`, especially in combination with `stage: prod`, except `Application`s creating child `Application`s with the "App of Apps" approach. Prefer `.spec.syncPolicy.syncOptions.ServerSideApply: true` for resource annotation limit of `kubectl.kubernetes.io/last-applied-configuration`, multiple owners and actors of resource fields, and concurrent management of controllers.
+Define `Application`s with `helm.sh/resource-policy: keep` and `argocd.argoproj.io/sync-options: Delete=false,Prune=false` in `.metadata.annotations`, especially `Application`s creating child `Application`s with the "App of Apps" approach. Define `Application`s with `.spec.syncPolicy.automated.prune: false` and `.spec.syncPolicy.automated.allowEmpty: false`, especially for critical applications, except `Application`s creating child `Application`s with the "App of Apps" approach. Prefer `.spec.syncPolicy.syncOptions.ServerSideApply: true` for resource annotation limit of `kubectl.kubernetes.io/last-applied-configuration`, multiple owners and actors of resource fields, and concurrent management of controllers.
+
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    helm.sh/resource-policy: keep
+    argocd.argoproj.io/sync-options: Delete=false,Prune=false
+    meta.helm.sh/release-name: app-bootstrap
+    meta.helm.sh/release-namespace: argocd
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: app-bootstrap
+  namespace: argocd
+spec:
+  destination:
+    namespace: argocd
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+  - helm:
+      valueFiles:
+      - $values/apps/<app>/values.yaml
+    path: .
+    repoURL: https://<hostname>/argocd-apps-bootstrap.git
+    targetRevision: main
+  - ref: values
+    repoURL: https://<hostname>/argocd.git
+    targetRevision: main
+  syncPolicy:
+    automated: true
+      selfHeal: true
+      prune: false
+      allowEmpty: false
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+```
 
 ## Argo CD + Helm
 
