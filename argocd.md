@@ -219,13 +219,15 @@ metadata:
 
 ## AppProject.v1alpha1.argoproj.io
 
-Define `AppProject`s with `- resources-finalizer.argocd.argoproj.io` in `.metadata.finalizers` ensuring that it is not deleted while it is referenced by any application.
+Define `AppProject`s with `helm.sh/resource-policy: keep` and `argocd.argoproj.io/sync-options: Delete=false,Prune=false` in `.metadata.annotations`, and `- resources-finalizer.argocd.argoproj.io` in `.metadata.finalizers` preventing a deletion for any application references.
 
 ```yaml
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
   annotations:
+    helm.sh/resource-policy: keep
+    argocd.argoproj.io/sync-options: Delete=false,Prune=false
     meta.helm.sh/release-name: bootstrap-apps-projects
     meta.helm.sh/release-namespace: argocd
   labels:
@@ -235,7 +237,7 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
-  description: Project for rating PeerAuthentication resources
+  description: Project for PeerAuthentication resources
   destinations:
   - namespace: istio-system
     server: https://kubernetes.default.svc
@@ -306,13 +308,16 @@ spec:
     targetRevision: main
   syncPolicy:
     automated: true
-      selfHeal: true
-      prune: false
-      allowEmpty: false
+      # enabled: true # true by default
+      selfHeal: true # false by default
+      prune: false # false by default
+      allowEmpty: false # false by default
     syncOptions:
-    - CreateNamespace=true
+    - ServerSideApply=true
+    - Prune=false
     - PrunePropagationPolicy=foreground
     - PruneLast=true
+    - CreateNamespace=true
 ```
 
 ## Argo CD + Helm
@@ -351,16 +356,7 @@ spec:
           name: app-namespace
   syncPolicy:
     automated:
-      # enabled: true # true by default
-      selfHeal: true # false by default
-      # prune: false # false by default
-      # allowEmpty: false # false by default
     syncOptions:
-    - ServerSideApply=true
-    - Prune=false
-    # - PrunePropagationPolicy=foreground
-    # - PruneLast=true
-    # - CreateNamespace=true
 ```
 
 ## Errors
