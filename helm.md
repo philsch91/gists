@@ -167,7 +167,7 @@ helm upgrade -i <release-name> [<repo-name>/]<chart-name> | . (=local chart with
   [--version <chart-version>]
   --timeout=10m \
   --debug \
-  [--wait --dry-run=<server|client> | --atomic]
+  [--wait --dry-run[=<server|client>] | --atomic]
 ```
 
 ## list
