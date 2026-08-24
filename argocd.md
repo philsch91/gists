@@ -297,15 +297,16 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   sources:
-  - helm:
-      valueFiles:
-      - $values/apps/<app>/values.yaml
+  - repoURL: https://<hostname>/argocd-apps-bootstrap.git
     path: .
-    repoURL: https://<hostname>/argocd-apps-bootstrap.git
     targetRevision: main
-  - ref: values
-    repoURL: https://<hostname>/argocd.git
+    helm:
+      valueFiles:
+        - $values/apps/<app>/values.yaml
+  - repoURL: https://<hostname>/argocd.git
+    path: .
     targetRevision: main
+    ref: values
   syncPolicy:
     automated: true
       # enabled: true # true by default
