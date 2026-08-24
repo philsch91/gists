@@ -81,6 +81,11 @@ echo "https://${github_name}:${github_pat}@github.com" >>${HOME}/.git-credential
 - `git config remote.upstream.url https://github.com/abc/abc.git`
 - `git config branch.master.remote origin`
 
+## credential
+```
+echo -e "protocol=https\nhost=<git-hostname>" | git credential fill
+```
+
 ## diff
 ```
 // check for merge conflict markers
