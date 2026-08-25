@@ -157,3 +157,13 @@ terraform [-chdir=terraform/aws] output [-no-color] -json
 
 ## Debugging
 `export TF_LOG="TRACE|DEBUG|INFO|WARN|ERROR"`
+
+## tfenv
+```
+tfenv list-remote
+tfenv install latest
+tfenv use latest
+tfenv install 1.11.0
+tfenv use 1.11.0
+terraform -v
+```
