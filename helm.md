@@ -150,6 +150,7 @@ helm install <release-name> [<repo-name>/]<chart-name> | . (=local chart with su
   [--set installCRDs=true \]
   [--post-renderer ./path/to/executable|hook.sh(kubectl kustomize <kustomization_dir>) \]
   [--version <chart-version>]
+  [--take-ownership]
   --timeout=10m \
   --debug \
   [--wait --dry-run[=<server|client>] | --atomic]
@@ -165,6 +166,7 @@ helm upgrade -i <release-name> [<repo-name>/]<chart-name> | . (=local chart with
   [--set "ingress.hosts[0].host=<app.domain.tld>,ingress.hosts[0].paths[0].path=/" \]
   [--post-renderer ./path/to/executable|hook.sh(kubectl kustomize <kustomization_dir>) \]
   [--version <chart-version>]
+  [--take-ownership]
   --timeout=10m \
   --debug \
   [--wait --dry-run[=<server|client>] | --atomic]
@@ -344,4 +346,32 @@ replicaCount: 1
 mariadb:
   auth:
     database: db-name
+```
+
+## Annotations
+
+### helm.sh/resource-policy: keep
+
+The annotation `helm.sh/resource-policy: keep` in `.metadata.annotations` instructs Helm to skip the deletion of a resource when `helm uninstall`, `helm upgrade` or `helm rollback` would result in its deletion. However, a resource with the annotation `helm.sh/resource-policy: keep` in `.metadata.annotations` becomes unmanaged with `helm uninstall`, or orphaned with `helm upgrade` or `helm rollback` if the resource is not part of a new release. A resource is unmanaged or orphaned if the annotations `meta.helm.sh/release-name` and `meta.helm.sh/release-namespace` and the label `app.kubernetes.io/managed-by` are not set.
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  annotations:
+    helm.sh/resource-policy: keep
+    meta.helm.sh/release-name: <app>-bootstrap
+    meta.helm.sh/release-namespace: argocd
+  labels:
+    app.kubernetes.io/managed-by: Helm
+```
+
+## Release resource migration and adoption
+```
+# option 1
+kubectl annotate <type>/<name> meta.helm.sh/release-name="<release-name>" --overwrite
+kubectl annotate <type>/<name> meta.helm.sh/release-namespace="<release-namespace>" --overwrite
+kubectl label <type>/<name> app.kubernetes.io/managed-by=Helm --overwrite
+# option 2
+helm upgrade -i <release-name> [<repo-name>/]<chart-name> | . --take-ownership
 ```
