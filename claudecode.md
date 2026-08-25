@@ -112,7 +112,8 @@ See @README.md for project overview and @package.json for available npm commands
     },
     "enabledPlugins": {
         "plugin-name@custom-claude-code-plugins": true
-    }
+    },
+    "tui": "default"
 }
 ```
 
@@ -223,6 +224,7 @@ rm -rv ~/.claude/plugins/cache/<known-marketplace-name>/<plugin-name>/<version> 
 /effort
 /model
 /btw
+/tui <default|fullscreen>
 /exit
 ```
 
