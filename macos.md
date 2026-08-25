@@ -216,6 +216,11 @@ mv /System/Library/LaunchAgents/com.apple.SoftwareUpdateNotificationManager.plis
 defaults write com.apple.finder CreateDesktop 0
 ```
 
+## Dock
+```
+defaults write com.apple.dock slow-motion-allowed -bool true # && killall Dock
+```
+
 ## powermetrics
 
 ```
