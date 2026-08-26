@@ -117,8 +117,71 @@ argocd repo add registry.name.tld/<repository>/<chart-repository> --type helm --
 
 ## repocreds
 ```
+argocd repocreds list
 ## add credentials for accessing multiple repositories with the matching domain or pattern
 argocd repocreds add registry.name.tld --username <username> --password <password> --type helm --enable-oci
+```
+
+```python
+def fnv32a(data: bytes) -> int:
+  """
+  Compute the FNV-1a (Fowler-Noll-Vo, variant "a") 32-bit hash of a byte string.
+
+  This is a straight re-implementation of Go's hash/fnv package
+  (fnv.New32a()), which ArgoCD uses internally to derive deterministic
+  Kubernetes Secret names for Repository / RepoCreds objects.
+
+  Algorithm (FNV-1a, 32-bit):
+      hash = offset_basis
+      for each byte b in data:
+          hash = hash XOR b
+          hash = (hash * FNV_prime) mod 2**32
+
+  Constants (fixed by the FNV spec for the 32-bit variant):
+      offset_basis = 2166136261  (0x811c9dc5)
+      FNV_prime    = 16777619    (0x01000193)
+
+  Note the XOR happens BEFORE the multiply on each byte - that's what
+  distinguishes "1a" from the older "1" variant (multiply-then-XOR).
+  """
+  FNV_OFFSET_BASIS_32 = 2166136261
+  FNV_PRIME_32 = 16777619
+
+  h = FNV_OFFSET_BASIS_32
+  for byte in data:
+    h ^= byte
+    h = (h * FNV_PRIME_32) & 0xFFFFFFFF  # wrap to 32 bits, like Go's uint32
+  return h
+
+prefix = "creds"
+repo = "01234.dkr.ecr.eu-central-1.amazonaws.com"
+project = ""
+digest = fnv32a(repo.encode("utf-8") + project.encode("utf-8"))
+secret_name = f"{prefix}-{digest}"
+print(f"Derived secret name: {secret_name}")
+```
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  annotations:
+    managed-by: argocd.argoproj.io
+    reconcile.external-secrets.io/data-hash: cf5e81eb0924f811a703af219be28c97
+    expirationTimestamp: "1787775763"
+  labels:
+    argocd.argoproj.io/secret-type: repo-creds
+    app.kubernetes.io/managed-by: external-secrets
+  name: creds-3851367438
+  namespace: argocd
+type: Opaque
+immutable: false
+data:
+  username: QVdT # AWS
+  password: abcd # update via CronJob or External Secrets
+  url: MDEyMzQuZGtyLmVjci5ldS1jZW50cmFsLTEuYW1hem9uYXdzLmNvbQo= # 01234.dkr.ecr.eu-central-1.amazonaws.com
+  type: aGVsbQ== # helm
+  enableOCI: dHJ1ZQ== # true
 ```
 
 ## argocd-server
