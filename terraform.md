@@ -14,6 +14,8 @@ terraform {
 ```
 
 ### backend "s3"
+
+#### aws provider ~> 6.0
 ```
 terraform {
   required_version = ">= 0.13.4"
@@ -39,6 +41,32 @@ provider "aws" {
   # }
   # profile = var.profile
   region  = var.region
+}
+```
+
+#### aws provider ~> 5.0
+```
+terraform {
+  required_version = ">= 1.5.7"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+
+  backend "s3" {
+    bucket         = "s3-<account-id>-<region>-tf-backend"
+    key            = "iam/ec2-instance-manager/terraform.tfstate"
+    region         = "eu-central-1"
+    dynamodb_table = "ec1-tf-backend-dynamodb"
+    encrypt        = true
+  }
+}
+
+provider "aws" {
+  region = "eu-central-1"
 }
 ```
 
