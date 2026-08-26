@@ -20,6 +20,9 @@ claude mcp add <python-fastmcp-server> --scope user [--transport stdio] --env EN
 # python
 claude mcp add <python-fastmcp-server> --scope user [--transport stdio] --env ENV_VAR_1=ENV_VAR_VALUE --env ENV_VAR_2=ENV_VAR_VALUE -- python3 fastmcp-server.py
 
+# docker
+claude mcp add terraform --scope user --transport stdio -- docker run -i --rm hashicorp/terraform-mcp-server[:0.4.0]
+
 claude mcp list
 claude mcp remove <mcp-server>
 claude plugin validate .
