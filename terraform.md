@@ -29,8 +29,11 @@ terraform {
   }
 
   backend "s3" {
-    key    = "prod/eks-sg/terraform.tfstate"
+    bucket = "s3-<account-id>-<region>-tf-backend"
+    key = "prod/eks-sg/terraform.tfstate"
     region = var.region
+    encrypt = true
+    use_lockfile = true
   }
 }
 
@@ -83,13 +86,21 @@ locals {
 }
 ```
 
+## backend.tfvars
+```
+bucket       = "<state-bucket>"
+region       = "<region>"
+encrypt      = true
+use_lockfile = true
+```
+
 ## Usage
 ```
 # version
 terraform version
 
 # init
-[echo yes |] terraform [-chdir=terraform/aws] init [-backend-config tf-backend.config]
+[echo yes |] terraform [-chdir=terraform/aws] init [-backend-config backend.tfvars]
 
 INIT_EXIT_CODE=$?
 
