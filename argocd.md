@@ -261,13 +261,38 @@ k -n argocd get cm/argocd-cmd-params-cm -o json | jq -r '.data["controller.self.
 k -n argocd get sts/argocd-application-controller -o json | jq -r '.spec.template.spec.containers[].env[] | select(.name == "ARGOCD_APPLICATION_CONTROLLER_SELF_HEAL_TIMEOUT_SECONDS")'
 ```
 
+### Automated Sync via UI
+
+The `Refresh` button triggers a retrieval of the sources from Git and a comparison of the rendered manifests with the resources on the cluster. An automated sync is executed if the application is configured with `.spec.syncPolicy.automated.<subkey>: true|false`.
+
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    helm.sh/resource-policy: keep
+    argocd.argoproj.io/sync-options: Delete=false,Prune=false
+    meta.helm.sh/release-name: app-bootstrap
+    meta.helm.sh/release-namespace: argocd
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: app-bootstrap
+spec:
+  syncPolicy:
+    automated:
+      enabled: true # true by default
+      selfHeal: true # false by default
+      prune: false # false by default
+      allowEmpty: false # false by default
+```
+
 ## Sync Options
 
 Most of the sync options are configured in the `Application` resource `spec.syncPolicy.syncOptions` attribute. Some sync options can be defined with the `argocd.argoproj.io/sync-options` annotation in a specific resource. Multiple sync options are configured with the `argocd.argoproj.io/sync-options` annotation by concatenation with a `,` in the annotation value, where white-spaces will be trimmed.
 
 ### Disable `Prune`
 
-```
+```yaml
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -371,8 +396,8 @@ spec:
     targetRevision: main
     ref: values
   syncPolicy:
-    automated: true
-      # enabled: true # true by default
+    automated:
+      enabled: true # true by default
       selfHeal: true # false by default
       prune: false # false by default
       allowEmpty: false # false by default
