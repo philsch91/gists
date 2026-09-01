@@ -513,6 +513,11 @@ update-ca-trust
 pwgen -y|--symbols -s|--secure [<pw-length>|32] [<pw-count>|1] # generate one random password with a length of 32 characters including symbols
 ```
 
+## base64
+```
+base64 [-w|--wrap 0] | -d
+```
+
 ## pkill
 ```
 pgrep -af </path/to/program>
