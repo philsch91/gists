@@ -83,6 +83,16 @@ cat ${MY_DOMAIN}.cert.pem ${CA_NAME}.cert.pem >chain.crt
 openssl x509 -inform der -in <file.cer> -outform pem -out <file.pem>
 ```
 
+## rsa + x509 + md5
+```
+# get and compare hashes of private key and certificate
+openssl rsa -noout -modulus -in <certificate.key> | openssl md5
+MD5(stdin)= 2c6c4f2f2af9ca734c21997924cb17a4
+
+openssl x509 -noout -modulus -in <certificate.cer> | openssl md5
+MD5(stdin)= 2c6c4f2f2af9ca734c21997924cb17a4
+```
+
 ## .pem
 
 - Privacy Enhanced Mail
@@ -105,7 +115,7 @@ openssl x509 -inform der -in <file.cer> -outform pem -out <file.pem>
 - public and private certificate pairs
 
 ```
-// convert .pem to .p12
+// convert .pem to .p12 (.pfx)
 // export certificate into .p12 keystore (without private key)
 // Linux and macOS
 openssl pkcs12 -export [-nokeys] -in certificate.pem -out certificate.p12
@@ -118,6 +128,12 @@ openssl pkcs12 -export -in <certificate.pem> -inkey <certificate.key> -out <cert
 
 // convert .p12 to .pem (without certificates)
 openssl pkcs12 -in certificate.p12 -out certificate.pem -nodes [-nocerts]
+
+// extract private key from PKCS12 (PFX)
+openssl pkcs12 -in <certificate.pfx> -nocerts -nodes -out <certificate.key>
+
+// extract certificate (chain with intermediate CAs) from PKCS12 (PFX)
+openssl pkcs12 -in <certificate.pfx> -clcerts -nokeys -out <certificate.cer>
 
 // extract private key and certificates from a PKCS#12 (.pfx) file
 openssl pkcs12 -in <certificate.pfx> -info -nodes
