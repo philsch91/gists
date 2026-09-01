@@ -148,6 +148,9 @@ ${var:+alt_value}
 DEBUG_MODE="true"
 my_command ${DEBUG_MODE:+--verbose}
 
+# If var is unset or empty, substitute nothing
+${var:-}
+
 echo "${no_proxyy}${no_proxyy:+,}new-domain.tld"
 new-domain.tld
 echo "${no_proxy}${no_proxy:+,}new-domain.tld"
@@ -175,4 +178,18 @@ while((1)); do echo "$(date)">/tmp/db2logfile.log; sleep 60; done &
 ```
 # response time measurement
 for((i=0;i<=3600;i++)); do echo "$(date)" >>/tmp/readiness.log; time curl -k --noproxy "*" http://localhost:3769/readiness >>/tmp/readiness.log; sleep 1; done &
+```
+
+## bash
+```
+# exit if variables are unset
+## use ${var:-} to guard for unset variables
+set -o nounset (set -u)
+# fail if any command in a pipeline (cmd1 | cmd2) fails
+set -o pipefail
+# -n = no execution (noexec) and syntax check, return code 0 = no errors
+bash -n <file>.sh
+echo $?
+
+for file in *.sh; do bash -n "$file" || exit 1; done
 ```
