@@ -21,24 +21,28 @@ function set_default_gitconfig() {
 }
 ```
 
-### declare (bash)
-
+## declare (bash)
 ```
 declare -r (=read-only) -x (=export) <variable-name>=<value> # declare read-only exported variable
 sudo gdb -ex 'call unbind_variable("<variable-name>")' --pid=$$ --batch # unset read-only variable
 ```
 
-### typeset (zsh)
-
+## typeset (zsh)
 ```
 typeset -r (=read-only) -x (=export) <variable-name>=<value> # set read-only exported variable
 typeset +r <variable-name> # set read-only variable as read-write
 unset <variable-name>
 ```
 
-### test
-
+## test
 ```
+# one-liner
+if [ -d $XDG_CONFIG_HOME ]; then echo "$XDG_CONFIG_HOME exists and is a directory"; else echo "$XDG_CONFIG_HOME directory does not exist"; fi
+
+# shorthand
+## combines logical operators
+[ -d $XDG_CONFIG_HOME ] && echo "$XDG_CONFIG_HOME exists and is a directory" || echo "$XDG_CONFIG_HOME directory does not exist"
+
 if [ $# -ne 1 -a "$2" != "old" ]; then
   # number of arguments is not equal to 1 and argument 2 is not equal to "old"
 fi
@@ -65,7 +69,7 @@ if [ ${STAGE_NAME} = "prod" ] || [ -z ${CLUSTER_NAME##*prod*} ] && [ ! -z ${CLUS
 fi
 ```
 
-#### String operators
+### String operators
 ```
 if [ -n "${VAR}" ]; then
   # VAR is non-zero and not empty
@@ -80,7 +84,7 @@ if [ ! -z "${VAR}" ]; then
 fi
 ```
 
-#### File operators
+### File operators
 ```
 if [ -f "${FILE_PATH}" ]; then
   # file at FILE_PATH exists and is a regular file
@@ -96,17 +100,16 @@ if [ ! -f "${HOME}/.git-credentials" ] || ! grep -q $GITCONFIG_NAME $HOME/.git-c
 fi
 ```
 
-### read
+## read
 ```
 read -p "Enter your choice <y|n> " response
 if [ $response = "Y" ] || [ $response = "y" ]; then
 fi
 ```
 
-### grep
-
-#### Search for string in files
+## grep
 ```
+# search for string in files
 grep -rnwl '/path/to/directory' -e 'searchstring'
 grep --include=\*.{c,h} -rnwl '/path/to/directory' -e 'searchstring'
 grep --exclude=\*.o -rnwl '/path/to/directory' -e 'searchstring'
@@ -114,22 +117,19 @@ grep -ri -n|l [--include="*.txt *.php *.sh"] <search-string> .
 <command> | grep -e 'term1' -e 'term2\|term3' [-A 10] [-B 10] # term1 or term2 or term3
 ```
 
-### find
-
-#### Search for a directory
+## find
 ```
+# Search for a directory
 find / -type d -name "<dir-name>" 2>/dev/null
-```
-#### Search for large files
-```
+
+# Search for large files
 find . -xdev -type f -printf "%s\t%p\n" | sort -n | tail -20
-```
-#### Remove high number of files
-```
+
+# Remove high number of files
 find . -type f -print0 | xargs -0 rm -v
 ```
 
-### Variable processing
+## Variable processing
 ```
 lastchar="${var:$((${#var}-1)):1}"
 if [ "$lastchar" != "/" ]; then
@@ -137,20 +137,26 @@ if [ "$lastchar" != "/" ]; then
 fi
 ```
 
-#### Parameter Substitution
-${var+alt_value}
-If var is set, use alt_value, else use null string.<br />
-${var:+alt_value}
-If var is set and not null, use alt_value, else use null string
+## Parameter expansion and substitution
 ```
+# If var is set, use alt_value, else use null string.
+${var+alt_value}
+
+# If var is set and not null, use alt_value, else use null string
+${var:+alt_value}
+## example
+DEBUG_MODE="true"
+my_command ${DEBUG_MODE:+--verbose}
+
 echo "${no_proxyy}${no_proxyy:+,}new-domain.tld"
 new-domain.tld
 echo "${no_proxy}${no_proxy:+,}new-domain.tld"
 domain1,domain2,domain3,domain4,new-domain.tld
 ```
 
-#### Replace String in XML tag
+## sed
 ```
+# replace string in XML tag
 LOGGINGCONFIGFILE="${CONFIG_PATH}/log4net.config"
 
 if [ -n "${LOGLEVEL}" -a -f "${LOGGINGCONFIGFILE}" ]; then
@@ -159,12 +165,14 @@ if [ -n "${LOGLEVEL}" -a -f "${LOGGINGCONFIGFILE}" ]; then
 fi
 ```
 
-### Misc 
-used to prevent filling up disk space in the CISL container
+## while
 ```
+# prevent filling up disk space in a container
 while((1)); do echo "$(date)">/tmp/db2logfile.log; sleep 60; done &
 ```
-response time measurement
+
+## for
 ```
+# response time measurement
 for((i=0;i<=3600;i++)); do echo "$(date)" >>/tmp/readiness.log; time curl -k --noproxy "*" http://localhost:3769/readiness >>/tmp/readiness.log; sleep 1; done &
 ```
