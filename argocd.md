@@ -290,7 +290,7 @@ spec:
 
 Most of the sync options are configured in the `Application` resource `spec.syncPolicy.syncOptions` attribute. Some sync options can be defined with the `argocd.argoproj.io/sync-options` annotation in a specific resource. Multiple sync options are configured with the `argocd.argoproj.io/sync-options` annotation by concatenation with a `,` in the annotation value, where white-spaces will be trimmed.
 
-### Disable `Prune`
+### Disable `Delete` and `Prune`
 
 ```yaml
 apiVersion: v1
@@ -301,7 +301,7 @@ metadata:
   finalizers:
   - suborg.org.com/finalizer
   annotations:
-    argocd.argoproj.io/sync-options: Prune=false
+    argocd.argoproj.io/sync-options: Delete=false,Prune=false
   name: <namespace-name>
 ```
 
