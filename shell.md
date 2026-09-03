@@ -9,7 +9,11 @@ set_default_gitconfig() {
   arg1=$1
   local arg2=$2
 
-  return
+  local output=$("${PYTHON:-python}" "${SCRIPT_PATH}" "${args[@]}" 2>&1)
+  local rc=$?
+  local version=$(printf '%s' "$output" | tr -d '\n')
+  printf '%s' "$version"
+  return $rc
 }
 
 # option 2
@@ -17,7 +21,11 @@ function set_default_gitconfig() {
   arg1=$1
   local arg2=$2
 
-  return
+  local output=$("${PYTHON:-python}" "${SCRIPT_PATH}" "${args[@]}" 2>&1)
+  local rc=$?
+  local version=$(printf '%s' "$output" | tr -d '\n')
+  printf '%s' "$version"
+  return $rc
 }
 ```
 
@@ -185,7 +193,9 @@ for((i=0;i<=3600;i++)); do echo "$(date)" >>/tmp/readiness.log; time curl -k --n
 # exit if variables are unset
 ## use ${var:-} to guard for unset variables
 set -o nounset (set -u)
-# fail if any command in a pipeline (cmd1 | cmd2) fails
+# exit if a command returns non-zero status
+set -o errexit (set -e)
+# fail if any command anywhere in a pipeline (cmd1 | cmd2) fails
 set -o pipefail
 # -n = no execution (noexec) and syntax check, return code 0 = no errors
 bash -n <file>.sh
