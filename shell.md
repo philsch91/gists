@@ -190,6 +190,9 @@ for((i=0;i<=3600;i++)); do echo "$(date)" >>/tmp/readiness.log; time curl -k --n
 
 ## bash
 ```
+# print each command (with expansions) before execution
+# combined with the PS4 variable for the trace prefix
+set -o xtrace (set -x)
 # exit if variables are unset
 ## use ${var:-} to guard for unset variables
 set -o nounset (set -u)
