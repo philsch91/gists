@@ -80,6 +80,20 @@ wc -w $(pwd)/CLAUDE.local.md
 #### CLAUDE.md example
 ```
 # CLAUDE.md
+
+## Memory persistence convention
+
+Always persist project- and session-scoped information in a file named according to this scheme:
+
+```
+~/.claude/projects/<project-name>/memory/<session-name>.md
+```
+
+- `<project-name>` is the existing sanitized project directory name under `~/.claude/projects/` (the one already used for that project's memory).
+- `<session-name>` is the current session's name (e.g. as set via `/rename`, or a sensible slug if unnamed).
+- One file per session holds all persisted information for that project+session combination, rather than splitting it across multiple topic-named files.
+- Still index each such file with a one-line pointer in that project's `memory/MEMORY.md`.
+
 See @README.md for project overview and @package.json for available npm commands for this project.
 
 ## Agents
@@ -93,6 +107,9 @@ See @README.md for project overview and @package.json for available npm commands
 #### CLAUDE.md prompts
 ```
 - Always use pnpm, not npm and add this to CLAUDE.md
+- Always persist information for a project and session in a file named according to the
+  generalized scheme ~/.claude/projects/<project-name>/memory/<session-name>.md, and add
+  this to ~/.claude/CLAUDE.md.
 ```
 
 ### ~/.claude/settings.json
@@ -117,6 +134,29 @@ See @README.md for project overview and @package.json for available npm commands
         "plugin-name@custom-claude-code-plugins": true
     },
     "tui": "default"
+}
+```
+
+### ~/.claude/settings.local.json
+```
+{
+    "permissions": {
+        "allow": [
+            "Read(//etc/**)"
+        ]
+    },
+    "hooks": {
+        "SessionStart": [
+            {
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "bash ~/.claude/hooks/claude-env-file-hook.sh"
+                    }
+                ]
+            }
+        ]
+    }
 }
 ```
 
