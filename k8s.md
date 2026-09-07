@@ -544,13 +544,56 @@ spec:
     name: ollama-secret
 ```
 
+## Ingress API
+
+`IngressClass.v1.networking.k8s.io` -> `Ingress.v1.networking.k8s.io` -> `Service`
+
+### IngressClass.v1.networking.k8s.io
+```
+# k get ingressclass.v1.networking.k8s.io -A
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  annotations:
+    meta.helm.sh/release-name: ingress-nginx
+    meta.helm.sh/release-namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/version: 1.14.5
+    helm.sh/chart: ingress-nginx-4.14.5
+  name: nginx
+spec:
+  controller: k8s.io/ingress-nginx
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "false"
+    meta.helm.sh/release-name: traefik
+    meta.helm.sh/release-namespace: traefik
+  labels:
+    app.kubernetes.io/instance: traefik-custom-traefik
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: traefik
+    helm.sh/chart: traefik-39.0.9
+  name: traefik
+spec:
+  controller: traefik.io/ingress-controller
+```
+
 ## Gateway API
 
-GatewayClass -> Gateway -> Middleware -> TLSRoute|HTTPRoute -> Service
+`GatewayClass` -> `Gateway` -> `Middleware` -> `TLSRoute|HTTPRoute` -> `Service`
 
 ### GatewayClass.v1.gateway.networking.k8s.io
 ```
-kubectl get gatewayclass.v1.gateway.networking.k8s.io [-A]
+# kubectl get gatewayclass.v1.gateway.networking.k8s.io [-A]
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
@@ -565,7 +608,7 @@ kind: GatewayClass
 metadata:
   annotations:
   labels:
-    app.kubernetes.io/instance: traefik-adp-traefik
+    app.kubernetes.io/instance: traefik-custom-traefik
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: traefik
     helm.sh/chart: traefik-39.0.0
@@ -727,11 +770,18 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: tls-nginx-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m" # custom max body size
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "256k"
+    nginx.ingress.kubernetes.io/proxy-buffering: "on" # needed for rate limiting
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
 spec:
+  ingressClassName: nginx
   tls:
-  - hosts:
+  - secretName: ingress-tls-secret
+    hosts:
       - https-example.foo.com
-    secretName: ingress-tls-secret
   rules:
   - host: https-example.foo.com
     http:
@@ -739,10 +789,72 @@ spec:
       - path: /
         pathType: Prefix # ImplementationSpecific
         backend:
-          service:
+          service: # point to K8s Service
             name: service1
             port:
               number: 80
+```
+
+## Traefik Ingress Controller
+
+### Traefik + Ingress.v1.networking.k8s.io + Traefik IngressClass.v1.networking.k8s.io
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: app
+spec:
+  ingressClassName: traefik
+  tls:
+    - secretName: traefik-tls
+      hosts:
+        - app.<cluster-name>.<domain-name>
+  rules:
+    - host: app.<cluster-name>.<domain-name>
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service: # point to K8s Service
+                name: foo
+                port:
+                  name: http
+```
+
+### Traefik + Ingress.v1.networking.k8s.io + Nginx-Traefik IngressClass.v1.networking.k8s.io
+
+Nginx-Traefik IngressClass.v1.networking.k8s.io for support of .metadata.annotations.nginx.ingress.kubernetes.io/*
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: app
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m" # custom max body size
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "256k"
+    nginx.ingress.kubernetes.io/proxy-buffering: "on" # needed for rate limiting
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
+spec:
+  ingressClassName: nginx-traefik
+  tls:
+    - secretName: traefik-tls
+      hosts:
+        - app.<cluster-name>.<domain-name>
+  rules:
+    - host: app.<cluster-name>.<domain-name>
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service: # point to K8s Service
+                name: foo
+                port:
+                  name: http
 ```
 
 ## Karpenter
