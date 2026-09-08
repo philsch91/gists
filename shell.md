@@ -11,6 +11,10 @@ set_default_gitconfig() {
 
   local output=$("${PYTHON:-python}" "${SCRIPT_PATH}" "${args[@]}" 2>&1)
   local rc=$?
+  if [ "$rc" -ne 0 ]; then
+      echo "Error: ${output}"
+      return $rc
+  fi
   local version=$(printf '%s' "$output" | tr -d '\n')
   printf '%s' "$version"
   return $rc
@@ -23,6 +27,10 @@ function set_default_gitconfig() {
 
   local output=$("${PYTHON:-python}" "${SCRIPT_PATH}" "${args[@]}" 2>&1)
   local rc=$?
+  if [ "$rc" -ne 0 ]; then
+      echo "Error: ${output}"
+      return $rc
+  fi
   local version=$(printf '%s' "$output" | tr -d '\n')
   printf '%s' "$version"
   return $rc
