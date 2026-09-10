@@ -572,9 +572,18 @@ file /usr/bin/x86_64-linux-gnu-gcc-13
 
 ## make
 ```
+# file /usr/bin/make
 which make | xargs file
 # /usr/bin/make: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=dd791a7b726a553a077eb0dc5944da16b79ab723, for GNU/Linux 3.2.0, stripped
 make --version
+```
+
+## time
+```
+# run the time binary with the explicit path and not the shell builtin in bash
+# set time output format via TIME environment variable
+export TIME="%E"
+/usr/bin/time sleep 2 && echo "done"
 ```
 
 ## Wayland
