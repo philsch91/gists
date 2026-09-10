@@ -5,6 +5,11 @@
 kubectl version
 ```
 
+## options
+```
+kubectl options
+```
+
 ## config
 ```
 kubectl config current-context
@@ -36,6 +41,11 @@ kubectl api-resources | grep -i <resource-name>
 
 ```
 for r in $(kubectl -n <namespace> get deployment,sts,ds | tail -n +2 | awk '{print $1}'); do echo $r; kubectl -n <namespace> get $r -o jsonpath='{.spec.template.spec.containers[0].image}'; echo; done
+```
+
+### get node
+```
+k get node/<node-name> -o jsonpath="{.metadata.labels['kubernetes\.io/os']}"
 ```
 
 ### get deployment
@@ -295,6 +305,13 @@ kubectl auth can-i create deployments [--as <user>] --namespace <namespace>
 ## customresourcedefinition
 ```
 kubectl get customresourcedefinition
+```
+
+## explain
+```
+# kubectl explain customresourcedefinition|ingressclass|ingress
+# kubectl explain gateways.gateway.networking.k8s.io
+kubectl explain <resource-kind>[.<resource-group>]
 ```
 
 ## top
