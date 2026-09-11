@@ -49,6 +49,7 @@ export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1
 - `~/.claude/settings.json`
 - `~/.claude/settings.local.json` # local specifics
 - `~/.claude/projects/<project-path>/<session-id>.jsonl`
+- `~/.claude/projects/<project-path>/<session-id>/custom-title.json`
 - `~/.claude/projects/<project-path>/memory/`
 - `~/.claude/agents/`
 - `~/.claude/agent-memory/<name-of-agent>/`
