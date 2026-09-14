@@ -297,7 +297,7 @@ aws s3api get-bucket-versioning --bucket <account-id>-bucket
 aws s3api get-bucket-versioning --bucket <account-id>-bucket-ew3
 
 # inspect the IAM role used by the replication rule
-aws iam get-role --role-name s3-replication-role
+aws iam get-role --role-name s3-replication-role [--query 'Role.RoleId' --output text]
 
 # list policies attached to that role
 aws iam list-attached-role-policies --role-name s3-replication-role
