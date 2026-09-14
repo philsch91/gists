@@ -1,5 +1,10 @@
 # Terraform
 
+## Variables
+```
+export TF_LOG="TRACE|DEBUG|INFO|WARN|ERROR"
+```
+
 ## config.tf
 
 ### backend "local"
@@ -94,6 +99,21 @@ encrypt      = true
 use_lockfile = true
 ```
 
+## state
+```
+terraform [-chdir=terraform/aws] state list
+## asume_role = iam-assumable-role module source code naming
+## assume_role_with_oidc = iam-assumable-role-with-oidc
+# data.aws_caller_identity.current
+# data.aws_iam_policy.boundary
+# aws_iam_policy.ecr_policy
+# module.ecr_role.data.aws_caller_identity.current
+# module.ecr_role.data.aws_iam_policy_document.assume_role[0]
+# module.ecr_role.data.aws_partition.current
+# module.ecr_role.aws_iam_role.this[0]
+# module.ecr_role.aws_iam_role_policy_attachment.custom[0]
+```
+
 ## Usage
 ```
 # version
@@ -114,6 +134,9 @@ terraform workspace list
 
 # workspace select
 terraform workspace select "<workspace-name(ap-southeast-2-tf-backend)>" || terraform workspace new "<workspace-name(ap-southeast-2-tf-backend)>"
+
+# state list
+terraform [-chdir=terraform/aws] state list
 
 # plan
 terraform [-chdir=terraform/aws] plan [-destroy] [-input=false] [-var-file="testing.tfvars(.json)"] [-var 'name=value'] [-var 'listname=["a", "b", "c"]'] [-out terraform.tfplan] [-detailed-exitcode]
@@ -193,9 +216,6 @@ terraform [-chdir=terraform/aws] output [-no-color] -json
   }
 }
 ```
-
-## Debugging
-`export TF_LOG="TRACE|DEBUG|INFO|WARN|ERROR"`
 
 ## tfenv
 ```
