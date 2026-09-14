@@ -120,7 +120,7 @@ See @README.md for project overview and @package.json for available npm commands
     "skipModelUpdates": false,
     "includeCoAuthoredBy": false,
     "env": {
-        "ENV_VAR_NAME_1": "ENV_VAR_VALUE_1"
+        "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "true"
     },
     "extraKnownMarketplaces": {
         "custom-claude-code-plugins": {
