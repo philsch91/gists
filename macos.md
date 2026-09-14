@@ -55,6 +55,16 @@ scutil --set LocalHostName "<local-hostname>"
 scutil --set HostName "<hostname>"
 ```
 
+## sysctl
+```
+# get iogpu.wired_limit_mb
+sysctl iogpu.wired_limit_mb
+# set iogpu.wired_limit_mb to 32 GB (1024*32)
+sudo sysctl iogpu.wired_limit_mb=32768
+# reset iogpu.wired_limit_mb to default (70% of memory size)
+sudo sysctl iogpu.wired_limit_mb=0
+```
+
 ## chpass (chsh, chfn)
 ```
 # read and display list of built-in shell paths
@@ -95,6 +105,10 @@ vim -c "set nobomb" -c wq! <file-name>
 sips <input-filename> -Z <pixels-height-width-max> --out <output-filename>
 # Resample image at specified size. Image apsect ratio may be altered.
 sips <input-filename> -z <pixels-height> <pixels-width> --out <output-filename>
+# convert SVG to JPEG
+sips -s format jpeg <file-name>.svg --out <file-name>.jpg
+# convert SVG to PNG
+sips -s format png <file-name>.svg -o <file-name>.png
 ```
 
 ## strings
