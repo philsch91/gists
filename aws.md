@@ -152,6 +152,31 @@ aws sso login --profile <profile-name>
 # get NAT gateways (source IPs) for EC2 and EKS
 #a <profile-name>
 aws ec2 describe-nat-gateways --output json | jq -r '.NatGateways[].NatGatewayAddresses[].PrivateIp'
+
+# describe route table routes that point at a TransitGatewayId
+# vs. local, a NAT gateway, an internet gateway, or a VPC endpoint's prefix list
+aws ec2 describe-route-tables --filters "Name=vpc-id,Values=<vpc-id>"
+
+# find TGW attachments for a VPC
+aws ec2 describe-transit-gateway-vpc-attachments \
+  --filters "Name=vpc-id,Values=<vpc-id>" \
+  --query 'TransitGatewayVpcAttachments[].{Id:TransitGatewayAttachmentId,TgwId:TransitGatewayId,State:State}' \
+  --region eu-central-1 \
+  --output table
+
+# list VPC attachments on TGW
+aws ec2 describe-transit-gateway-vpc-attachments \
+  --filters "Name=transit-gateway-id,Values=<tgw-id>" \
+  --query 'TransitGatewayVpcAttachments[].{Id:TransitGatewayAttachmentId,VpcId:ResourceId,State:State,Tags:Tags}' \
+  --region eu-central-1 \
+  --output json
+
+# list attachment types on TGW
+aws ec2 describe-transit-gateway-attachments \
+  --filters "Name=transit-gateway-id,Values=<tgw-id>" \
+  --query 'TransitGatewayAttachments[].{Id:TransitGatewayAttachmentId,ResourceType:ResourceId,ResourceOwnerId:ResourceOwnerId,State:State}' \
+  --region eu-central-1 \
+  --output table
 ```
 
 ### VPC endpoint (VPCE) creation
@@ -195,6 +220,9 @@ aws elb describe-load-balancers --load-balancer-names $LB_HOSTNAME | jq -r '.Loa
 
 ## EKS
 ```
+aws eks describe-cluster --name <cluster-name> | jq -r '.cluster.resourcesVpcConfig.subnetIds'
+aws eks describe-cluster --name <cluster-name> | jq -r '.cluster.resourcesVpcConfig.clusterSecurityGroupId'
+aws eks describe-cluster --name <cluster-name> | jq -r '.cluster.resourcesVpcConfig.securityGroupIds'
 aws eks describe-cluster --name <cluster-name> | jq -r '.cluster.resourcesVpcConfig.publicAccessCidrs'
 aws eks describe-cluster --name <cluster-name> | jq -r .cluster.certificateAuthority.data | base64 -d
 aws eks describe-cluster --name <cluster-name> | jq -r .cluster.endpoint
