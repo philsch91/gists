@@ -7,6 +7,7 @@ claude --resume
 claude --continue
 claude --max-steps 50
 claude --add-dir ../shared-config
+
 claude mcp add <name> --scope user|project|local(=dir-specific) --transport stdio|http|sse ...
 claude mcp add <name> --transport stdio --env ENV_VAR_NAME=ENV_VAR_VALUE -- <command> | npx -y mcp-server
 claude mcp add <name> --transport http http://127.0.0.1:3845/mcp
@@ -26,6 +27,10 @@ claude mcp add terraform --scope user --transport stdio -- docker run -i --rm ha
 claude mcp list
 claude mcp remove <mcp-server>
 claude plugin validate .
+
+claude doctor .
+
+claude config list
 ```
 
 ## Variables
@@ -120,7 +125,8 @@ See @README.md for project overview and @package.json for available npm commands
     "skipModelUpdates": false,
     "includeCoAuthoredBy": false,
     "env": {
-        "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "true"
+        "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "true",
+        "CLAUDE_CODE_FORK_SUBAGENT": "0"
     },
     "extraKnownMarketplaces": {
         "custom-claude-code-plugins": {
@@ -134,7 +140,21 @@ See @README.md for project overview and @package.json for available npm commands
     "enabledPlugins": {
         "plugin-name@custom-claude-code-plugins": true
     },
-    "tui": "default"
+    "tui": "default",
+    "disallowedTools": [
+        "Agent",
+        "Read",
+        "Edit",
+        "Write",
+        "Glob",
+        "Grep",
+        "AskUserQuestion",
+        "WebSearch",
+        "WebFetch",
+        "LSP",
+        "Monitor",
+        "Bash"
+    ]
 }
 ```
 
@@ -209,6 +229,10 @@ project/
 ```
 /init
 /status
+/config
+## usage
+/usage
+/stats
 /update-config # updates ~/.claude/settings.json
 /setup-bedrock
 /edit .claude/settings.json
@@ -217,9 +241,6 @@ project/
 /resume
 /memory # verify if CLAUDE.md and CLAUDE.local.md files are loaded
 /batch <"commands" | -f tasks.md> ## tasks.md: # Tasks\n- [ ] Task1\n- [ ] Task2
-## usage
-/usage
-/stats
 ## mcp
 /mcp [disable <server>]
 ## skills
@@ -270,6 +291,9 @@ rm -rv ~/.claude/plugins/cache/<known-marketplace-name>/<plugin-name>/<version> 
 /btw
 /tui <default|fullscreen>
 /exit
+
+# shell mode
+! env | grep CLAUDE_CODE
 ```
 
 ## Projects
