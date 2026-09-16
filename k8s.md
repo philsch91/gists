@@ -1057,3 +1057,30 @@ metadata:
     topology.kubernetes.io/zone: ap-southeast-1b
   name: ip-44-113-232-235.ap-southeast-1.compute.internal
 ```
+
+## Kyverno
+```
+# validatingwebhookconfigurations.admissionregistration.k8s.io and mutatingwebhookconfigurations.admissionregistration.k8s.io
+
+# The Kyverno admission-controller continuously computes the webhook rules array by unioning the match blocks of every currently-active policy (of the matching type + failure-policy group), and writes that computed result into the webhook object.
+# Policy.spec.rules[].match.any[].resources.kinds: [Namespace] + operations: [CREATE] -> MutatingWebhookConfiguration.webhooks[].rules[].resources: [namespaces] + operations: [CREATE]
+
+kubectl get validatingwebhookconfigurations,mutatingwebhookconfigurations | grep kyverno
+kubectl get mutatingwebhookconfigurations/kyverno-resource-mutating-webhook-cfg -o yaml
+
+kubectl get crd -A | grep kyverno
+
+# clusterpolicies.kyverno.io
+# enforce = blocks, audit = protocol
+kubectl get clusterpolicies.kyverno.io [-o custom-columns=NAME:.metadata.name,MODE:.spec.validationFailureAction,READY:.status.ready]
+kubectl get clusterpolicies/<clusterpolicy-name> -o yaml
+
+# policies.kyverno.io
+kubectl get policies.kyverno.io -A
+
+# clusterpolicyreports.wgpolicyk8s.io
+kubectl get clusterpolicyreports.wgpolicyk8s.io
+
+# policyreports.wgpolicyk8s.io
+kubectl get policyreports.wgpolicyk8s.io -A
+```
