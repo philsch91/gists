@@ -156,6 +156,9 @@ echo "Terraform init exit code: ${INIT_EXIT_CODE}"
 # fmt
 terraform fmt [-check] [-recursive] resource.tf
 
+# validate
+terraform validate
+
 # workspace list
 terraform workspace list
 
