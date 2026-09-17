@@ -52,7 +52,6 @@ export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1
 - `~/.claude/CLAUDE.md` # personal preferences
 - `~/.claude.json` (mcp --scope user (.mcpServers) |local (.projects.<fs-path>.mcpServers))
 - `~/.claude/settings.json`
-- `~/.claude/settings.local.json` # local specifics
 - `~/.claude/projects/<project-path>/<session-id>.jsonl`
 - `~/.claude/projects/<project-path>/<session-id>/custom-title.json`
 - `~/.claude/projects/<project-path>/memory/`
@@ -62,7 +61,7 @@ export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1
 - `$(pwd)/CLAUDE.md` or `$(pwd)/.claude/CLAUDE.md`
 - `$(pwd)/CLAUDE.local.md` # personal project-specific preferences
 - `$(pwd)/.claude/settings.json`
-- `$(pwd)/.claude/settings.local.json`
+- `$(pwd)/.claude/settings.local.json` # local project specifics
 - `$(pwd)/.claude/agents/`
 - `$(pwd)/.mcp.json` (mcp --scope project)
 
@@ -126,8 +125,16 @@ See @README.md for project overview and @package.json for available npm commands
     "includeCoAuthoredBy": false,
     "env": {
         "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "true",
-        "CLAUDE_CODE_FORK_SUBAGENT": "0"
+        "CLAUDE_CODE_FORK_SUBAGENT": "0",
+        "ANTHROPIC_DEFAULT_HAIKU_MODEL": "eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "ANTHROPIC_DEFAULT_SONNET_MODEL": "eu.anthropic.claude-sonnet-5",
+        "ANTHROPIC_DEFAULT_OPUS_MODEL": "eu.anthropic.claude-opus-5",
+        "ANTHROPIC_DEFAULT_MODEL": "eu.anthropic.claude-sonnet-5",
+        "ANTHROPIC_MODEL": "eu.anthropic.claude-sonnet-5",
+        "ANTHROPIC_SMALL_FAST_MODEL": "eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "CLAUDE_CODE_USE_BEDROCK": "1"
     },
+    "model": "claude-sonnet-5",
     "extraKnownMarketplaces": {
         "custom-claude-code-plugins": {
             "source": {
@@ -154,13 +161,7 @@ See @README.md for project overview and @package.json for available npm commands
         "LSP",
         "Monitor",
         "Bash"
-    ]
-}
-```
-
-### ~/.claude/settings.local.json
-```
-{
+    ],
     "permissions": {
         "allow": [
             "Read(//etc/**)"
@@ -173,6 +174,30 @@ See @README.md for project overview and @package.json for available npm commands
                     {
                         "type": "command",
                         "command": "bash ~/.claude/hooks/claude-env-file-hook.sh"
+                    }
+                ]
+            }
+        ],
+        "PreModelSwitch": [
+            {
+                "matcher": ".*",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "echo 'ModelSwitch blocked' && exit 2",
+                        "statusMessage": "PreModelSwitch exit 2"
+                    }
+                ]
+            }
+        ],
+        "UserPromptSubmit": [
+            {
+                "matcher": ".*",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "python3 ~/.claude/scripts/claude_code_userpromptsubmit_hook.py",
+                        "statusMessage": "UserPromptSubmit"
                     }
                 ]
             }
@@ -304,10 +329,19 @@ ls -lht ~/.claude/projects/$(pwd | sed 's/[^a-zA-Z0-9]/-/g')/*.jsonl
 ## Hooks
 ```
 cat ~/.claude/settings.json | jq '.hooks'
-cat ~/.claude/settings.local.json | jq '.hooks'
 cat $(pwd)/.claude/settings.json | jq '.hooks'
 cat $(pwd)/.claude/settings.local.json | jq '.hooks'
 /plugin disable <plugin-name>
+```
+
+### Hooks Stdin Object
+```
+{
+    "session_id": "session_12345",
+    "cwd": "/user/project/dir",
+    "hook_event_name": "UserPromptSubmit",
+    "prompt": "<prompt>"
+}
 ```
 
 ### ~/.claude/hooks/claude-env-file-hook.sh
