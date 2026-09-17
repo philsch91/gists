@@ -7,6 +7,8 @@ export TF_LOG="TRACE|DEBUG|INFO|WARN|ERROR"
 
 ## config.tf
 
+- `terraform.backend` should be omitted for the backend initialization
+
 ### backend "local"
 ```
 terraform {
@@ -33,6 +35,7 @@ terraform {
     }
   }
 
+  # should be omitted for the backend initialization
   backend "s3" {
     bucket = "s3-<account-id>-<region>-tf-backend"
     key = "prod/eks-sg/terraform.tfstate"
@@ -64,6 +67,7 @@ terraform {
     }
   }
 
+  # should be omitted for the backend initialization
   backend "s3" {
     bucket         = "s3-<account-id>-<region>-tf-backend"
     key            = "iam/ec2-instance-manager/terraform.tfstate"
@@ -75,6 +79,29 @@ terraform {
 
 provider "aws" {
   region = "eu-central-1"
+}
+```
+
+### backend "azurerm"
+```
+terraform {
+  required_version = ">= 0.13.4"
+
+  required_providers {
+    azurerm  = ">= 2.19.0"
+    null = "= 2.1.2"
+  }
+
+  # should be omitted for the backend initialization
+  backend "azurerm" {
+    # Further configuration can be found in the backend init
+    key = "terraform-backend-init/terraform.tfstate"
+  }
+}
+
+provider "azurerm" {
+  features {}
+  region = var.region
 }
 ```
 
