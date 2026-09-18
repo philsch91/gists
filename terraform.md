@@ -7,7 +7,7 @@ export TF_LOG="TRACE|DEBUG|INFO|WARN|ERROR"
 
 ## config.tf
 
-- `terraform.backend` should be omitted for the backend initialization
+- `terraform.backend` in `config.tf` should be omitted for the backend initialization
 
 ### backend "local"
 ```
@@ -120,10 +120,11 @@ locals {
 
 ## backend.tfvars
 ```
-bucket       = "<state-bucket>"
-region       = "<region>"
-encrypt      = true
-use_lockfile = true
+bucket            = "<state-bucket>"
+region            = "<region>"
+encrypt           = true
+# dynamodb_table  = "<state-bucket>-<lock-table>" # superseded by use_lockfile
+use_lockfile      = true
 ```
 
 ## state
