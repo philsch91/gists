@@ -47,6 +47,7 @@ openssl req -new -key subsubdomain.subdomain.domain.com.key.pem -out subsubdomai
 ## genrsa + req + x509
 
 ```
+# Leaf or server certificate (${MY_DOMAIN}.cert.pem) = CA signed public key + identity details (domain name)
 CA_NAME="Test-Root-CA"
 
 // generate AES encrypted private key
