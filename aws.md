@@ -273,6 +273,54 @@ eksctl drain nodegroup --cluster=<clusterName> --name=<nodegroupName> --undo
 eksctl delete nodegroup --cluster=<clusterName> --name=<nodegroupName>
 # delete nodes and nodegroup
 eksctl delete nodegroup --cluster=<clusterName> --name=<nodegroupName> --disable-eviction
+
+# aws ssm get-parameter
+aws ssm get-parameter --name /aws/service/ami-windows-latest/Windows_Server-<release>-English-<Core|Full>-EKS_Optimized-<kubernetes-version> --region eu-central-1 --output json
+{
+    "Parameter": {
+        "Name": "/aws/service/ami-windows-latest/Windows_Server-2022-English-Core-EKS_Optimized-1.35",
+        "Type": "String",
+        "Value": "{\"image_name\":\"Windows_Server-2022-English-Core-EKS_Optimized-1.35-2026.09.14\",\"image_id\":\"ami-0ae186f48ab37644d\",\"eks_runtime_version\":\"Containerd version: 2.1.7\",\"kubelet_version\":\"1.35.7\",\"release_version\":\"1.35-2026.09.14\"}",
+        "Version": 12,
+        "LastModifiedDate": "2026-09-16T21:09:22.861000+02:00",
+        "ARN": "arn:aws:ssm:eu-central-1::parameter/aws/service/ami-windows-latest/Windows_Server-2022-English-Core-EKS_Optimized-1.35",
+        "DataType": "text"
+    }
+}
+
+aws ssm get-parameter --name /aws/service/ami-windows-latest/Windows_Server-2022-English-Core-EKS_Optimized-1.35 --region eu-central-1 --output json | jq -r '.Parameter.Value | fromjson | .image_name'
+Windows_Server-2022-English-Core-EKS_Optimized-1.35-2026.09.14
+
+aws ssm get-parameter --name /aws/service/ami-windows-latest/Windows_Server-2022-English-Core-EKS_Optimized-1.35/image_id --region eu-central-1 --output json
+{
+    "Parameter": {
+        "Name": "/aws/service/ami-windows-latest/Windows_Server-2022-English-Core-EKS_Optimized-1.35/image_id",
+        "Type": "String",
+        "Value": "ami-0ae186f48ab37644d",
+        "Version": 12,
+        "LastModifiedDate": "2026-09-16T21:09:22.950000+02:00",
+        "ARN": "arn:aws:ssm:eu-central-1::parameter/aws/service/ami-windows-latest/Windows_Server-2022-English-Core-EKS_Optimized-1.35/image_id",
+        "DataType": "text"
+    }
+}
+
+aws ssm get-parameter --name /aws/service/ami-windows-latest/Windows_Server-2022-English-Core-EKS_Optimized-1.35/image_id --query "Parameter.Value" --region eu-central-1 --output text
+ami-0ae186f48ab37644d
+
+# aws ec2 describe-images
+## "Location": "amazon/Windows_Server..." -> amazon/ prefix -> global AWS AMI catalog
+## .spec.amiSelectorTerms[0].owner: "amazon" and .spec.amiSelectorTerms[0].name: "Windows_Server-2022-English-Core-EKS_Optimized-1.35<-2026.09.14|*>" in EC2NodeClass.v1.karpenter.k8s.aws
+aws ec2 describe-images --image-ids <ami-id> --query "Images[*].{OwnerId:OwnerId, Alias:OwnerAlias, Location:ImageLocation, Name:Name}" --region eu-central-1 --output json
+[
+    {
+        "OwnerId": "999352223265",
+        "Alias": null,
+        "Location": "amazon/Windows_Server-2022-English-Core-EKS_Optimized-1.35-2026.09.14",
+        "Name": "Windows_Server-2022-English-Core-EKS_Optimized-1.35-2026.09.14"
+    }
+]
+
+aws ec2 describe-images --image-ids <ami-id> --query "Images[0].OwnerId" --region eu-central-1 --output text
 ```
 
 ### EKS + EC2 Windows
