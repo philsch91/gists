@@ -220,10 +220,20 @@ git rebase -Xtheirs master # ours: master, theirs (current): release
 ```
 
 ## stash
-1. `git stash (= git stash push)`
-1. `git stash list [--date=relative|local]`
-1. `git stash apply stash@{<index>}`
-1. `git stash drop stash@{<index>}`
+```
+git stash (= git stash push)
+git stash list [--date=relative|local]
+# stash@{0}
+git stash show [-p] stash@{<index>}
+git stash apply stash@{<index>}
+git stash pop stash@{<index>}
+git stash drop stash@{<index>}
+```
+
+## show
+```
+git show stash@{0} --date=local
+```
 
 ## worktree
 ```
