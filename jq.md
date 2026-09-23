@@ -1,5 +1,24 @@
 # jq
 
+## --arg
+```
+# $var_name is available with value "<var-value>"
+jq --arg <var_name> <var-value> 'has($var_name)' "${FILE_NAME}"
+```
+
+## --exit-status (-e)
+```
+if ! jq -e "https://index.docker.io/v1" "/home/<username>/.docker/config.json" >/dev/null; then
+    # exit status was not 0
+    # exit status is 0 for non-false and non-null
+    # exit status is 1 for false or null
+    # exit status is 4 for no valid result
+    # normal exit status is 0 for jq execution
+    # normal exit status is 2 for usage problem or system error
+    # normal exit status is 3 for compile error
+fi
+```
+
 ## identity (.)
 ```
 cat subnets.txt | jq -r . >subnets2.txt
