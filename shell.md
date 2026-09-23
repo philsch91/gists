@@ -1,6 +1,15 @@
 # Shell
 
-Documentation, Notes and Snippets for Shell
+## if
+```
+if <executable>; then
+  echo "Executable execution success(ful) with exit code 0"
+fi
+
+if ! <executable>; then
+  echo "Executable execution error with exit code != 0"
+fi
+```
 
 ## functions
 ```
