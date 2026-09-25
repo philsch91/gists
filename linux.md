@@ -586,6 +586,18 @@ export TIME="%E"
 /usr/bin/time sleep 2 && echo "done"
 ```
 
+## comm
+```
+# -1 suppress column 1 with lines unique to FILE1
+# -2 suppress column 2 with lines unique to FILE2
+# -3 suppress column 3 with lines that appear in both files
+comm [-123]
+# comm -13 returns lines only in the second file
+myvars_before_source=$(compgen -A variable | grep '^myvar_' || true)
+. myvars.sh
+comm -13 <(echo "${myvars_before_source}" | sort) <(compgen -A variable | grep '^myvar_' | sort)
+```
+
 ## Wayland
 ```
 echo $XDG_SESSION_TYPE
