@@ -108,11 +108,17 @@ sudo passwd root
 sudo passwd -S root
 # try to become root
 su -
+
 # manually add user in /etc/passwd
 # UID 0 is root, use 1001
 # GID 0 is root group, use 1001
 echo "<username>:x:<uid>:<gid>::/home/<username>:/sbin/nologin" >>/etc/passwd
 sudo grep '^root:' /etc/shadow
+
+# if `whoami` fails to resolve the UID to a user, add the UID retrieved with `id -u` in /etc/passwd
+if ! whoami &>/dev/null; then
+    echo "default:x:$(id -u):0::${HOME}:/sbin/nologin" >>/etc/passwd
+fi
 ```
 
 ### /etc/passwd
@@ -168,7 +174,23 @@ chown root:root /usr/bin/<filename> /usr/lib/<filename>
 ```
 chmod [-R] <mode> <file>
 chmod -R u+rwx(=<s>7<go>) /home/<username>
+
+# write permissions for user, group and others for /etc/passwd
+chmod ugo+w /etc/passwd
+# write and execute permissions for user, group and others for /etc
+chmod ugo+wx /etc
+
 chmod -R [0]755 /usr/bin/<filename> /usr/lib/<filename>
+```
+
+## chgrp
+```
+# change group ownership to group with GID 0 (root group)
+chgrp 0 /etc/passwd
+# copy user bits to group bits (644->664 or 700->770)
+chmod g=u /etc/passwd
+chgrp 0 /etc
+chmod g=u /etc
 ```
 
 ## readlink
@@ -302,7 +324,7 @@ ldapsearch -x -H ldaps://<ldap-host>:636 -D "CN=TU001,OU=Service_Accounts,OU=Acc
 ## getent
 ```
 getent hosts <hostname>
-getent group <groupname>
+getent group <gid|groupname>
 ```
 
 ## apt
