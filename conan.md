@@ -2,20 +2,38 @@
 
 ## Install
 ```
-# create virtual environment
+# Linux
+## create virtual environment
 cd $HOME/dev
 python3 -m venv conan-python-venv
-# option 1: install in sourced venv
+## option 1: install in sourced venv
 source conan-python-venv/bin/activate
 pip install conan|conan==2.26.2
 pip show conan
+conan version
 deactivate
-# option 2: install with pip in venv
+## option 2: install with pip in venv
 $HOME/dev/conan-python-venv/bin/pip install conan|conan==2.26.2
+
 # Windows
-C:\dev\conan-win-python-venv\Scripts\Activate.ps1
+## create virtual environment
+cd C:\dev
+where python
+python -m venv <project>-win-conan-python-venv
+## install in sourced venv
+C:\dev\<project>-win-conan-python-venv\Scripts\activate.bat
+# C:\dev\<project>-win-conan-python-venv\Scripts\Activate.ps1
+where python
+### C:\dev\<project>-win-conan-python-venv\Scripts\python.exe
+## upgrade pip
+python -m pip install --upgrade pip
+## install conan
+pip install "conan>=1.64.0"
+pip show conan
 where conan
-C:\Users\<user>\AppData\Roaming\Python\Python313\Scripts\conan.exe
+### C:\dev\<project>-win-conan-python-venv\Scripts\conan.exe
+### C:\Users\<user>\AppData\Roaming\Python\Python313\Scripts\conan.exe
+conan version
 python3 -m pip install pip-system-certs
 ```
 
@@ -33,11 +51,13 @@ set CONAN_CACERT_PATH=C:\path\to\certifi\cacert.pem
 ## version
 ```
 conan version
+conan --version # short version
 ```
 
 ## config
 ```
 conan config list
+conan config home
 conan config install .
 ```
 
@@ -87,7 +107,7 @@ conan install . -of build.win.math.debug -o tests=True -r artifactory -pr:a vs17
 # executes build()
 conan build . -of build.release -o tests=True -r artifactory -pr:a gcc13-cpp20-rel [--lockfile .\conan-lx.lock]
 conan build . -of build.release -o tests=True -r artifactory -pr:a gcc13-cpp20-rel-ubuntu [--lockfile .\conan-lx.lock]
-conan build . -of build.win.math.debug -o tests=True -r artifactory -pr:a vs17-cpp20-dbg [-c tools.cmake.cmaketoolchain:generator="Ninja"] [--lockfile .\conan-win.lock]
+conan build . -of build.win.math.debug -o tests=True -r artifactory -pr:a vs17-cpp20-dbg [-s compiler.update=4] [-c tools.cmake.cmaketoolchain:generator="Ninja"] [--lockfile .\conan-win.lock]
 ```
 
 ## create
