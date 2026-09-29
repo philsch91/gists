@@ -108,7 +108,12 @@ sips <input-filename> -z <pixels-height> <pixels-width> --out <output-filename>
 # convert SVG to JPEG
 sips -s format jpeg <file-name>.svg --out <file-name>.jpg
 # convert SVG to PNG
-sips -s format png <file-name>.svg -o <file-name>.png
+sips [--resampleHeightWidth 2200 1600] -s format png <file-name>.svg -o <file-name>.png
+```
+
+## qlmanage
+```
+qlmanage -t -s 2000 <file-name>.svg -o . # creates <file-name>.svg.png
 ```
 
 ## strings
