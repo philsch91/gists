@@ -169,6 +169,19 @@ compiler.runtime=static
 compiler.runtime_type=Debug
 build_type=Debug
 [options]
+
+cat $HOME/.conan2/profiles/vs17-cpp20-dbg-x86-md
+[settings]
+os=Windows
+arch=x86
+compiler=msvc
+compiler.version=194
+compiler.update=4
+compiler.cppstd=20
+compiler.runtime=dynamic
+compiler.runtime_type=Debug
+build_type=Debug
+[options]
 ```
 
 ## CMake
