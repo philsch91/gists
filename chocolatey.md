@@ -19,7 +19,7 @@ Select-String -Path "C:\ProgramData\chocolatey\lib\<package-name>\*.nuspec" -Pat
 # install
 ## --force-dependencies + --force = force installation of dependent packages
 ## --ignore-dependencies = ignore dependency versions and do not download packages depending on the package to be installed
-choco install <pkg> [<pkg2> <pkgn>] [-y] [-f|--force [-x|--force-dependencies]] [--ignore-dependencies] [-v|--verbose] [-d|--debug]
+choco install <pkg> [<pkg2> <pkgn>] [-y] [--version 1.0.0] [-f|--force [-x|--force-dependencies]] [--ignore-dependencies] [-v|--verbose] [-d|--debug]
 # uninstall
 ## --force-dependencies = force uninstallation of dependent packages
 ## --ignore-dependencies + --force = ignore and do not uninstall packages depending on the package to be uninstalled
