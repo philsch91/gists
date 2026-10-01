@@ -56,21 +56,25 @@ git config --global push.autoSetupRemote true
 # config alias
 git config --global alias.allog "log --all --decorate --oneline --graph"
 git config --global alias.lag "log --all --decorate --pretty=oneline --graph"
+
 # config core.autocrlf
-// Set core.autocrlf to false to not change the line endings at all
+## Set core.autocrlf to false to not change the line endings at all
+## For Git in Linux and repositories with CRLF (Windows) line endings
 git config --global core.autocrlf false
-// Set core.autocrlf to input to convert CRLF to LF on commit but not on checkout
+## Set core.autocrlf to input to convert CRLF to LF on commit but not on checkout
 git config --global core.autocrlf input
-// Set core.autocrlf to true to ensure line endings in files on checkout are converted from LF to CRLF for Windows
-// For compatibility, line endings are converted to LF (Unix) style on commit
+## Set core.autocrlf to true to ensure line endings in files on checkout are converted from LF to CRLF for Windows
+## For compatibility, line endings are converted to LF (Unix) style on commit
+## For Git in Windows and mixed-platform repositories
 git config --global core.autocrlf true
+
 # config core.safecrlf
-// Set core.safecrlf to true (default) or warn to verify if the conversion is reversible for the current setting of core.autocrlf
-// Set core.safecrlf to true (default) to reject irreversible conversations
+## Set core.safecrlf to true (default) or warn to verify if the conversion is reversible for the current setting of core.autocrlf
+## Set core.safecrlf to true (default) to reject irreversible conversations
 git config --global core.safecrlf true
-// Set core.safecrlf to warn to only print a warning but accept an irreversible conversion
+## Set core.safecrlf to warn to only print a warning but accept an irreversible conversion
 git config --global core.safecrlf warn
-// Set core.safecrlf to false to suppress warnings but still auto convert
+## Set core.safecrlf to false to suppress warnings but still auto convert
 git config --global core.safecrlf false
 
 echo "https://${github_name}:${github_pat}@github.com" >>${HOME}/.git-credentials
