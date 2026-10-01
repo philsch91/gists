@@ -146,6 +146,9 @@ git fetch [--all] --tags [--prune]
 6. `git pull <remote-name> <remote-branch-name>`
 
 ## fetch
+```
+git fetch origin <remote-branch-name>:<local-branch-name>
+```
 
 ### Fetch and search for a remote branch
 1. `git fetch --all`
@@ -184,14 +187,18 @@ git branch <branch-tag-name> refs/tags/<tag-name>
 ## merge
 
 ```
+# merge the given branch into the current branch
+git merge <branch-name>
+
 # merge commits in (from) `feature` into (to) `master`
 # assuming `master` is our current branch (git branch)
+# ours (current): master, theirs: feature
 
 # merge preferring our current (master) branch changes for merge conflicts
-git merge -Xours feature # ours (current): master, theirs: feature
+git merge -Xours feature
 
 # merge preferring their (feature) branch changes for merge conflicts
-git merge -Xtheirs feature # ours (current): master, theirs: feature
+git merge -Xtheirs feature
 ```
 
 ### Resolve merge conflicts
@@ -204,6 +211,9 @@ git merge -Xtheirs feature # ours (current): master, theirs: feature
 
 ## rebase
 ```
+# rebase current branch onto given local or remote branch
+git rebase <local-branch-name>|<remote-name>/<remote-branch-name>
+
 # rebase local branch interactively
 git rebase -i HEAD~3
 # undo interactive rebase of local branch
@@ -211,12 +221,13 @@ git reset --soft <remote>/<remote-branch-name>
 
 # rebase commits in (from) `release` on (to) `master`
 # assuming `release` is our current branch (git branch)
+# ours (base): master, theirs (current): release
 
-# rebase preferring our (master) branch changes for merge conflicts
-git rebase -Xours master # ours: master, theirs (current): release
+# rebase preferring our base (master) branch changes for merge conflicts
+git rebase -Xours master
 
 # rebase preferring their current (release) branch changes for merge conflicts
-git rebase -Xtheirs master # ours: master, theirs (current): release
+git rebase -Xtheirs master
 ```
 
 ## stash
