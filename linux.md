@@ -45,6 +45,16 @@ AWS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
 REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
 ```
 
+## file
+```
+file </path/to/file>
+```
+
+## stat
+```
+stat </path/to/file>
+```
+
 ## ln
 ```
 # symlink (soft link)
