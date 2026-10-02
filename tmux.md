@@ -67,7 +67,8 @@ Ctrl+b o # switch to next pane
 Ctrl+b Arrow # switch active pane
 Ctrl+b } # swap current pane with the next one
 Ctrl+b { # swap current pane with the previous one
-Alt+Arrow # resize active pane
+Ctrl+b Alt+Arrow # resize active pane
+Ctrl+b :select-layout even-horizontal # resize panes horizontally equal
 Ctrl+b x # kill current pane
 Ctrl+b t # display time
 # scroll/copy mode
@@ -93,16 +94,8 @@ Ctrl+b :show-options -gw mode-keys
 
 ## tmux.conf
 ```
-set -g history-limit 50000
-set -g status-interval 1
-set -g status-left '#H#[default]'
-set -g status-right '#(cut -d " " -f 1-3 /proc/loadavg)#[default] #%Y-%m-%d %H:%M:%S '
-set -ag status-right '#(uptime | cut -d " " -f 4-5 | cut -d "," -f 1)'
-setw -g monitor-activity on
-set -g visual-activity on
-set -g escape-time 1
-##
-unbind(-key) -a [-T <key-table-name>]
+# unbind keys
+unbind(-key) [-a(=all)] [-T <key-table-name>] [key]
 unbind-key -a # unbind all keys in default (prefix) table
 unbind -a -T prefix
 unbind -a -T root
@@ -113,7 +106,7 @@ set(-option) -g <key-table-name> <keys>
 set -g prefix M-w # set Alt/Option+w instead of Ctrl+b
 set -g prefix C-a # set prefix to Ctrl+a instead of Ctrl+b
 set -g mode-keys vi # use copy-mode-vi
-#
+# bind keys
 bind(-key) [-T <key-table-name>] <keys> <command>
 bind M-r source-file ~/.tmux-conf # prefix key (Ctrl+b) + Alt/Option+w to reload config
 bind Space copy-mode # enter scroll/copy mode with prefix key (Ctrl+b) + Space
@@ -132,8 +125,6 @@ bind -T copy-mode-vi y      send -X copy-pipe(-no-clear) 'xsel --input --clipboa
 bind -T copy-mode-vi y      send -X copy-pipe(-no-clear) 'xclip -i -selection clipboard' # Linux 2
 bind -T copy-mode-vi Enter  send -X copy-selection-and-cancel # macOS + iTerm.app
 bind -T copy-mode-vi Enter  send -X copy-pipe-and-cancel # macOS + Terminal.app
-##
-set -g mouse on
 #
 bind -n WheelUpPane copy-mode -e
 bind -T copy-mode-vi WheelUpPane    send -X -N 5 scroll-up
@@ -149,40 +140,6 @@ set-environment -g DISPLAY :0.0
 bind C-c run "tmux show-buffer | xclip -i -selection primary" # Ctrl+b + Ctrl+c
 # X11 selection in tmux paste-buffer
 bind C-v run "tmux set-buffer -- \"$(xclip -o -selection primary)\"; tmux paste-buffer" # Ctrl+b Ctrl+v
-
-# Tmux Plugin Manager
-# 1. Clone TPM
-# git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-# 2. Add the list of plugins and `run '~/.tmux/plugins/tpm/tpm'` in this file
-# 3. Reload tmux env and config to source TPM if tmux is already running
-# tmux source ~/.tmux.conf
-# 4. Add plugin to the list of TPM plugins in this file
-# 5. Press `prefix + I` to fetch and source plugins
-
-# List of plugins
-set -g @plugin 'tmux-plugins/tpm'
-set -g @plugin 'tmux-plugins/tmux-sensible'
-
-# Other examples:
-# https://github.com/tmux-plugins/tmux-resurrect
-set -g @plugin 'tmux-plugins/tmux-resurrect' # persistent sessions
-# https://github.com/tmux-plugins/tmux-continuum
-set -g @plugin 'tmux-plugins/tmux-continuum' # save sessions automatically
-# set -g @plugin 'github_username/plugin_name'
-# set -g @plugin 'github_username/plugin_name#branch'
-# set -g @plugin 'git@github.com:user/plugin'
-# set -g @plugin 'git@bitbucket.com:user/plugin'
-
-# set tmux-resurrect
-set -g @resurrect-capture-pane-contents 'on' # let resurrect capture contents of your panes
-#set -g @resurrect-dir '~/.tmux/resurrect'
-# set tmux-continuum
-set -g @continuum-boot 'on'
-set -g @continuum-restore 'on' # enable continuum
-set -g @continuum-save-interval '5' # save every 5 minutes
-
-# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
-run '~/.tmux/plugins/tpm/tpm'
 ```
 
 ## tmux-resurrect
