@@ -669,8 +669,8 @@ spec:
   listeners:
   - name: https
     protocol: HTTPS
-    port: 8443 # must match .spec.ports[*].targetPort in service and .spec.template.spec.containers[0].ports[*].containerPort in deployment # 443
-    hostname: "*.org.com"
+    port: 8443 # must match .spec.ports[*].targetPort (with .spec.ports[*].port: 443) in service and .spec.template.spec.containers[0].ports[*].containerPort in deployment
+    hostname: "*.subdomain.org.tld"
     tls:
       mode: Terminate
       certificateRefs:
