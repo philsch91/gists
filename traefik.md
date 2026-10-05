@@ -18,7 +18,7 @@ kubectl get deployment -l app.kubernetes.io/name=traefik -A -o jsonpath='{.items
 
 ## Service
 ```
-# .spec.ports[*].targetPort in service must match .spec.template.spec.containers[0].ports[*].containerPort in deployment
+# .spec.ports[*].targetPort in service (with .spec.ports[*].port: 443) must match .spec.template.spec.containers[0].ports[*].containerPort in deployment
 # .spec.ports[*].port in service is exposed via LB
 kubectl -n traefik get svc/traefik -o jsonpath='{.spec.ports}' | grep 443
 kubectl -n traefik get svc/traefik -o go-template='{{ $ing := index .status.loadBalancer.ingress 0 }}{{ if $ing.ip }}{{ $ing.ip }}{{ else }}{{ $ing.hostname }}{{ end }}' | nslookup | awk -F': ' 'NR==6 { print $2 }'
@@ -83,7 +83,7 @@ spec:
   listeners:
   - name: https
     protocol: HTTPS
-    port: 8443 # 443
+    port: 8443 # must match .spec.ports[*].targetPort (with .spec.ports[*].port: 443) in service and .spec.template.spec.containers[0].ports[*].containerPort in deployment
     hostname: "*.subdomain.org.tld"
     tls:
       mode: Terminate
@@ -91,6 +91,12 @@ spec:
       - kind: Secret
         name: traefik-tls
         namespace: traefik
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: http
+    protocol: HTTP
+    port: 80
     allowedRoutes:
       namespaces:
         from: All
