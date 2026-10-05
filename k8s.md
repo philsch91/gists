@@ -591,6 +591,18 @@ apiVersion: networking.k8s.io/v1
 kind: IngressClass
 metadata:
   annotations:
+    meta.helm.sh/release-name: traefik
+    meta.helm.sh/release-namespace: traefik
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: nginx-traefik
+spec:
+  controller: traefik.io/ingress-controller
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  annotations:
     ingressclass.kubernetes.io/is-default-class: "false"
     meta.helm.sh/release-name: traefik
     meta.helm.sh/release-namespace: traefik
@@ -634,8 +646,12 @@ spec:
   controllerName: traefik.io/gateway-controller
 status:
   supportedFeatures:
+  - name: BackendTLSPolicy
   - name: Gateway
+  - name: GRPCRoute
   - name: HTTPRoute
+  - name: HTTPRouteQueryParamMatching
+  - name: HTTPRouteResponseHeaderModification
   - name: TLSRoute
 ```
 
