@@ -58,15 +58,21 @@ git config --global alias.allog "log --all --decorate --oneline --graph"
 git config --global alias.lag "log --all --decorate --pretty=oneline --graph"
 
 # config core.autocrlf
-## Set core.autocrlf to false to not change the line endings at all
-## For Git in Linux and repositories with CRLF (Windows) line endings
-git config --global core.autocrlf false
-## Set core.autocrlf to input to convert CRLF to LF on commit but not on checkout
-git config --global core.autocrlf input
-## Set core.autocrlf to true to ensure line endings in files on checkout are converted from LF to CRLF for Windows
-## For compatibility, line endings are converted to LF (Unix) style on commit
+## Set core.autocrlf to false to not change line endings at all and deactivate automatic normalization
+## With core.autocrlf false, Git treats line endings as bytes instead of text
+## native default
+## use .gitattributes with "*.cs text eol=crlf" instead
+git config core.autocrlf false
+## Set core.autocrlf to input to convert CRLF to LF (normalize) on commit but not on checkout
+git config core.autocrlf input
+## Set core.autocrlf to true to convert CRLF to LF (normalize) on commit and LF to CRLF on checkout for Windows
 ## For Git in Windows and mixed-platform repositories
-git config --global core.autocrlf true
+## For Git in Linux and repositories with CRLF (Windows) line endings
+## Git for Windows default
+## use .gitattributes with "*.cs text eol=crlf" instead
+git config core.autocrlf true
+## --unset core.autocrlf
+git config --local --unset core.autocrlf
 
 # config core.safecrlf
 ## Set core.safecrlf to true (default) or warn to verify if the conversion is reversible for the current setting of core.autocrlf
