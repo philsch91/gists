@@ -669,7 +669,7 @@ spec:
   listeners:
   - name: https
     protocol: HTTPS
-    port: 8443 # must match .spec.ports[*].targetPort (with .spec.ports[*].port: 443) in service and .spec.template.spec.containers[0].ports[*].containerPort in deployment
+    port: 8443 # must match .spec.ports[*].targetPort (with .spec.ports[*].port: 443) in service and .spec.template.spec.containers[0].ports[*].containerPort in deployment of .spec.controllerName of .spec.gatewayClassName
     hostname: "*.subdomain.org.tld"
     tls:
       mode: Terminate
