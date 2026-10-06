@@ -5,12 +5,12 @@
 # --entryPoints.metrics.address=:9100/tcp
 # --entryPoints.traefik.address=:8080/tcp
 # --entryPoints.web.address=:8000/tcp
-# --entryPoints.websecure.address=:8443/tcp
-# --entryPoints.websecure.asDefault=true
 # --entryPoints.web.http.redirections.entryPoint.to=:443
 # --entryPoints.web.http.redirections.entryPoint.scheme=https
 # --entryPoints.web.http.redirections.entryPoint.permanent=true
+# --entryPoints.websecure.address=:8443/tcp
 # --entryPoints.websecure.http.tls=true
+# --entryPoints.websecure.asDefault=true
 kubectl -n traefik get deployment/traefik -o jsonpath='{.spec.template.spec.containers[0].args}'
 kubectl -n traefik get deployment/traefik -o jsonpath='{.spec.template.spec.containers[0].ports}'
 kubectl get deployment -l app.kubernetes.io/name=traefik -A -o jsonpath='{.items[*].spec.template.spec.containers[*].args}' | jq -r . | grep entryPoints
@@ -22,8 +22,62 @@ kubectl get deployment -l app.kubernetes.io/name=traefik -A -o jsonpath='{.items
 # .spec.ports[*].port in service is exposed via LB
 kubectl -n traefik get svc/traefik -o jsonpath='{.spec.ports}' | grep 443
 kubectl -n traefik get svc/traefik -o go-template='{{ $ing := index .status.loadBalancer.ingress 0 }}{{ if $ing.ip }}{{ $ing.ip }}{{ else }}{{ $ing.hostname }}{{ end }}' | nslookup | awk -F': ' 'NR==6 { print $2 }'
-
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    meta.helm.sh/release-name: traefik
+    meta.helm.sh/release-namespace: custom-traefik
+    service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: tagkey.tagname=value,tagkey2.tagname2=value
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+    service.beta.kubernetes.io/aws-load-balancer-manage-backend-security-group-rules: "true"
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: instance
+    service.beta.kubernetes.io/aws-load-balancer-security-groups: sg-01234
+    service.beta.kubernetes.io/aws-load-balancer-subnets: subnet-01234,subnet-56789
+    service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=false
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+  finalizers:
+  - service.kubernetes.io/load-balancer-cleanup
+  - service.k8s.aws/resources
+  labels:
+    app.kubernetes.io/instance: traefik-custom-traefik
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: traefik
+    helm.sh/chart: traefik-41.0.2
+  name: traefik
+  namespace: traefik
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 10.100.85.179
+  clusterIPs:
+  - 10.100.85.179
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: web
+    nodePort: 30594
+    port: 80
+    protocol: TCP
+    targetPort: web
+  - name: websecure
+    nodePort: 30843
+    port: 443
+    protocol: TCP
+    targetPort: websecure
+  selector:
+    app.kubernetes.io/instance: traefik-custom-traefik
+    app.kubernetes.io/name: traefik
+  sessionAffinity: None
+  type: LoadBalancer
+```
+
+## App Service
+```
 apiVersion: v1
 kind: Service
 metadata:
@@ -49,6 +103,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
+    traefik.ingress.kubernetes.io/router.tls: "true"
   name: sticky-app
   namespace: app-namespace # ollama
 spec:
@@ -83,7 +138,7 @@ spec:
   listeners:
   - name: https
     protocol: HTTPS
-    port: 8443 # must match .spec.ports[*].targetPort (with .spec.ports[*].port: 443) in service and .spec.template.spec.containers[0].ports[*].containerPort in deployment
+    port: 8443 # must match .spec.ports[*].targetPort (with .spec.ports[*].port: 443) in service and .spec.template.spec.containers[0].ports[*].containerPort in deployment of .spec.controllerName of .spec.gatewayClassName
     hostname: "*.subdomain.org.tld"
     tls:
       mode: Terminate
