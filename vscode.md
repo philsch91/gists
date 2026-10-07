@@ -2,21 +2,18 @@
 
 ## Files
 ```
-ls -lah /usr/share/code/
-ls -lah /usr/local/bin/code
-ls -lah $(which code)
-ls -lah /usr/local/bin/codium
-ls -lah $(which codium)
-ls -lah /home/<username>/.config/Code/
-ps -ef | grep /usr/share/code | less
-```
-
-## Install
-```
 # Linux
+ls -lah $(which code) # /usr/bin/code
 ls -lah /usr/bin/code
 ls -lah /usr/share/code/
+ls -lah /usr/share/code/code
 ls -lah /usr/share/code/bin/code
+ls -lah /home/<username>/.config/Code/
+ps -ef | grep /usr/share/code | less
+# macOS
+ls -lah /usr/local/bin/code
+ls -lah $(which codium)
+ls -lah /usr/local/bin/codium
 # Windows
 $HOME\AppData\Local\Programs\Microsoft VS Code
 # Windows via Intune
@@ -142,6 +139,11 @@ $HOME/Library/Application\ Support/VSCodium/User/settings.json
     "github.copilot.chat.githubMcpServer.enabled": true,
     "github.copilot.nextEditSuggestions.enabled":  true,
     "python.analysis.typeCheckingMode":  "standard",
+    "python.createEnvironment.trigger":  "off",
+    "chat.tools.urls.autoApprove": {
+        "https://code.visualstudio.com": true,
+        "https://github.com/microsoft/vscode/wiki/*": true
+    },
     "mcp": {
         "servers": {
             "atlassian-jira-mcp-server": {
@@ -209,6 +211,7 @@ $HOME/Library/Application\ Support/VSCodium/User/settings.json
 ls -laht $HOME/.config/Code/User/workspaceStorage/ # ordered by last modified date
 ls -laht $HOME/.config/Code/User/workspaceStorage/<session-id>/
 ls -laht $HOME/.config/Code/User/workspaceStorage/<session-id>/state.vscdb
+ls -laht $HOME/.config/Code/User/workspaceStorage/<session-id>/chatSessions
 find $HOME/.config/Code/User/workspaceStorage/ -type f \( -name "*.json" -o -name "*.jsonl" \) -path "*/chatSessions/*" -print0 | xargs -0 grep -i "<search-string>"
 # Windows
 dir C:\Users\<username>\AppData\Roaming\Code\User\workspaceStorage\<session-id>
@@ -307,7 +310,10 @@ F1 > Developer: Reload Window
 # <dir>/.vscode/settings.json
 {
     "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
-    "python.analysis.extraPaths": ["${workspaceFolder}/.venv/lib/python3.12/site-packages"]
+    "python.defaultInterpreterPath2": "/mnt/c/dev/app-python-venv/bin/python",
+    "python.analysis.extraPaths": ["${workspaceFolder}/.venv/lib/python3.12/site-packages"],
+    "python.terminal.useEnvFile": true,
+    "python.envFile": "${workspaceFolder}/.env"
 }
 ```
 
