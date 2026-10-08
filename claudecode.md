@@ -7,6 +7,9 @@ claude --resume
 claude --continue
 claude --max-steps 50
 claude --add-dir ../shared-config
+claude --model opusplan
+claude --advisor <sonnet|opus|fable>
+claude --model haiku --advisor <sonnet|opus|fable>
 
 claude mcp add <name> --scope user|project|local(=dir-specific) --transport stdio|http|sse ...
 claude mcp add <name> --transport stdio --env ENV_VAR_NAME=ENV_VAR_VALUE -- <command> | npx -y mcp-server
@@ -132,9 +135,12 @@ See @README.md for project overview and @package.json for available npm commands
         "ANTHROPIC_DEFAULT_MODEL": "eu.anthropic.claude-sonnet-5",
         "ANTHROPIC_MODEL": "eu.anthropic.claude-sonnet-5",
         "ANTHROPIC_SMALL_FAST_MODEL": "eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+        "CLAUDE_CODE_ENABLE_EXPERIMENTAL_ADVISOR_TOOL": "1",
+        "CLAUDE_CODE_DISABLE_ADVISOR_TOOL": "0",
         "CLAUDE_CODE_USE_BEDROCK": "1"
     },
-    "model": "claude-sonnet-5",
+    "model": "sonnet|eu.anthropic.claude-sonnet-5-5|opusplan",
+    "advisorModel": "opus|eu.anthropic.claude-opus-5-5",
     "extraKnownMarketplaces": {
         "custom-claude-code-plugins": {
             "source": {
@@ -255,6 +261,11 @@ project/
 /init
 /status
 /config
+/context
+## settings
+/model [opusplan]
+/advisor <sonnet|opus|fable>
+/effort
 ## usage
 /usage
 /stats
@@ -310,9 +321,6 @@ rm -rv ~/.claude/plugins/cache/<known-marketplace-name>/<plugin-name>/<version> 
 ## tasks
 /tasks
 /claude-api
-## settings
-/effort
-/model
 /btw
 /tui <default|fullscreen>
 /exit
