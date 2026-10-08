@@ -94,6 +94,25 @@ groupadd -g <gid> <group-name>
 groupdel <group-name>
 ```
 
+## groupadd + useradd
+```
+export USERNAME=<username>
+export USER_HOME=/home/<username>
+export GROUPNAME=<username>
+
+export UID=1000
+export GID=1000
+export LANG="C.UTF-8"
+export LC_ALL="C.UTF-8"
+
+groupadd -g $GID $GROUPNAME && \
+    useradd -u $UID -g $GID $USERNAME && \
+    mkdir -p $USER_HOME && \
+    chown -R $UID:$GID $USER_HOME && \
+    chmod -R u+rwx ${USER_HOME} && \
+    grep ${USERNAME} /etc/passwd
+```
+
 ## usermod
 ```
 # add user (a) to group (G)
@@ -186,7 +205,9 @@ chmod [-R] <mode> <file>
 chmod -R u+rwx(=<s>7<go>) /home/<username>
 
 # write permissions for user, group and others for /etc/passwd
+# use `chgrp 0 /etc/passwd` and `chmod g=u /etc/passwd` instead
 chmod ugo+w /etc/passwd
+
 # write and execute permissions for user, group and others for /etc
 chmod ugo+wx /etc
 
@@ -197,9 +218,9 @@ chmod -R [0]755 /usr/bin/<filename> /usr/lib/<filename>
 ```
 # change group ownership to group with GID 0 (root group)
 chgrp 0 /etc/passwd
+chgrp 0 /etc
 # copy user bits to group bits (644->664 or 700->770)
 chmod g=u /etc/passwd
-chgrp 0 /etc
 chmod g=u /etc
 ```
 
@@ -310,6 +331,18 @@ nc -zv <host> <port>
 Start network listening
 ```
 nc -lk <port>
+```
+
+## nslookup
+```
+nslookup <name|address>
+```
+
+## dig
+```
+dig <name>
+# reverse lookup
+dig -x <address> [+short]
 ```
 
 ## tar
