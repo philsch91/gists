@@ -14,6 +14,50 @@ curl -iSs -X GET -u <username>:<token> -H "Accept: application/vnd.github+json" 
 ```
 
 ## Actions
+
+```
+name: Configure Maven settings
+description: Writes ~/.m2/settings.xml with Nexus server credentials.
+
+inputs:
+  nexus-username:
+    description: Username for the Nexus repositories.
+    required: true
+  nexus-password:
+    description: Password for the Nexus repositories.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Configure Maven settings
+      shell: bash
+      env:
+        NEXUS_USERNAME: ${{ inputs.nexus-username }}
+        NEXUS_PASSWORD: ${{ inputs.nexus-password }}
+      run: |
+        mkdir -p ~/.m2
+        cat > ~/.m2/settings.xml << EOF
+        <settings>
+          <proxies>
+          </proxies>
+          <servers>
+            <server>
+              <id>nexus-releases</id>
+              <username><![CDATA[${NEXUS_USERNAME}]]></username>
+              <password><![CDATA[${NEXUS_PASSWORD}]]></password>
+            </server>
+            <server>
+              <id>lean-core-framework-releases</id>
+              <username><![CDATA[${NEXUS_USERNAME}]]></username>
+              <password><![CDATA[${NEXUS_PASSWORD}]]></password>
+            </server>
+          </servers>
+        </settings>
+        EOF
+```
+
+### Actions Workflow
 ```
 name: <name>
 on:
