@@ -49,7 +49,7 @@ ${HOME}/.m2/settings.xml # user settings
     <dependency>
       <groupId></groupId>
       <artifactId></artifactId>
-      <scope></scope>
+      <scope>compile(default)|runtime</scope>
     </dependency>
   </dependencies>
 </project>
@@ -206,7 +206,7 @@ mvn help:effective-pom -Dverbose=true
 
 Display the calculated settings as an XML for the project, given any profile enhancement and the inheritance of the global settings into the user-level settings.
 ```
-mvn help:effective-settings
+mvn help:effective-settings [-s settings.xml | grep -A4 "<id>repo-name"]
 ```
 
 ### help:evaluate
