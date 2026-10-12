@@ -242,6 +242,24 @@ Ollama >= v0.18.3
     "java.jdt.ls.vmargs": "",
     "java.autobuild.enabled": false,
     "java.semanticHighlighting.enabled": true,
+    "java.configuration.runtimes": [
+        {
+          "name": "JavaSE-21",
+          "path": "/usr/lib/jvm/java-21-openjdk-amd64",
+          "default": true
+        },
+        {
+          "name": "JavaSE-25",
+          "path": "/usr/lib/jvm/java-25-openjdk-amd64"
+        }
+    ],
+    "java.configuration.runtimes.win": [
+        {
+            "name": "JavaSE-21",
+            "path": "C:\\Program Files\\Java\\jdk-21.0.12.8",
+            "default": true
+        }
+    ],
     "java.configuration.checkProjectSettingsExclusions": false,
     "java.configuration.updateBuildConfiguration": "automatic",
     "java.configuration.updateBuildConfiguration_alt": "interactive",
@@ -259,11 +277,12 @@ Ollama >= v0.18.3
 
 ### vscode-java commands
 ```
-Java: Clean Java Language Server Workspace
+Java: Clean Java Language Server Workspace # reimport project for Ctrl+click
 Java: Import Java Projects into Workspace
+Java: Open Java Language Server Log File
 Java: Update Project Source Attachment
 Java: Update Project Configuration
-Developer: Reload Window
+Developer: Reload Window # reload extension host, java.configuration.runtimes and java.jdt.ls.java.home
 ```
 
 ## vscode-dotnet-runtime
