@@ -208,6 +208,7 @@ java -jar cmdline-jmxclient-0.10.3.jar -:- localhost:4447 org.opin.framework:typ
 
 ## keytool
 ```
+# each entry in a keystore (.jks) is identified by an unique alias
 // import single PEM certificate
 // and create keystore if needed
 keytool -import|-importcert -alias <alias> -file <cert.pem|cert.cer> -keystore keystore.jks -storepass <password>
@@ -246,3 +247,17 @@ keytool -keypasswd -keystore keystore.jks -storepass <store-password> -alias <al
 // change key password of an entry
 keytool -list -keystore keystore.jks -storepass <store-password> -alias <alias-name> -keypasswd <>
 ```
+
+## java.security
+
+### KeyStore.PrivateKeyEntry
+
+- For private keys and certificates or certificate chains, where certificates contain the public key of the private key, for the identity of the own service.
+
+### KeyStore.TrustedCertificateEntry
+
+- For public keys of certificate authorities (CAs), without private keys, for the identity of contacted services.
+
+### KeyStore.SecretKeyEntry
+
+- For keys of symmetric-key encryption.
