@@ -32,6 +32,7 @@ export NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
 
 ## Commands
 ```
+code --version|-v
 # start
 code --ignore-certificate-errors [-n(new window)] .|/path/to/folder|[/path/to/]file.txt
 code --list-extensions --show-versions --ignore-certificate-errors
@@ -78,6 +79,7 @@ F1 > Python: Select Interpreter
 - cschlosser.doxdocgen
 - marlon407.code-groovy
 - yzhang.markdown-all-in-one
+- yzane.markdown-pdf # F1 -> Markdown PDF: Export
 - cliffordfajardo.hightlight-selections-vscode
 - gerane.theme-flatlandmonokai
 - humao.rest-client
