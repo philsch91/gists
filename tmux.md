@@ -82,6 +82,8 @@ Ctrl+b :list-keys -T copy-mode-vi # list key bindings in copy-mode-vi table
 # show value of mode-keys option
 tmux show-options -gw mode-keys
 Ctrl+b :show-options -gw mode-keys
+# misc
+Ctrl+l # clear pane
 ```
 
 ## tmux files
