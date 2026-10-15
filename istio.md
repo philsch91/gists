@@ -1,7 +1,7 @@
 # Istio
 
 -> Gateway -> VirtualService [-> DestinationRule] -> Service<br />
-<- VirtualService [<- DestinationRule] <- ServiceEntry
+[<- DestinationRule] <- VirtualService <- ServiceEntry
 
 ## Deployment.v1.apps
 
@@ -240,13 +240,10 @@ spec:
 ```
 
 ## VirtualService.v1.networking.istio.io
-
 ```
 k [-n <namespace>] get VirtualService.v1.networking.istio.io [-A]
 k -n <namespace> get virtualservice/<virtualservice-name> -o json | jq -r '.spec.gateways'
-```
-
-```
+---
 apiVersion: networking.istio.io/v1
 kind: ServiceEntry
 metadata:
@@ -261,9 +258,7 @@ spec:
     name: https
     protocol: TLS
   resolution: NONE
-```
-
-```
+---
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
@@ -283,7 +278,6 @@ spec:
 ```
 
 ## DestinationRule.v1.networking.istio.io
-
 ```
 apiVersion: networking.istio.io/v1
 kind: ServiceEntry
@@ -303,9 +297,7 @@ spec:
   endpoints:
   - address: 2.2.2.2
   - address: 3.3.3.3
-```
-
-```
+---
 apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
@@ -318,6 +310,18 @@ spec:
       clientCertificate: /etc/certs/myclientcert.pem
       privateKey: /etc/certs/client_private_key.pem
       caCertificates: /etc/certs/rootcacerts.pem
+```
+```
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: dr-cluster-tls
+  namespace: istio-system
+spec:
+  host: app.<cluster-name>-gw.<subdomain>.com
+  trafficPolicy:
+    tls:
+      mode: SIMPLE # initiates TLS (HTTPS) to host
 ```
 
 ## istioctl
