@@ -343,6 +343,17 @@ nslookup <name|address>
 dig <name>
 # reverse lookup
 dig -x <address> [+short]
+
+# SOA resolution of hostname returns CNAME or A record if zone (subdomain) of hostname and zone of returned record are different
+dig [@<dns-server-ip>] SOA <hostname>
+# SOA resolution of subdomain returns main (primary) DNS server
+dig [@<dns-server-ip>] SOA <subdomain>
+
+# NS resolution of hostname returns main (primary) DNS server of CNAME or A record
+dig [@<dns-server-ip>] NS <hostname>
+
+# NS resolution of subdomain returns authorative DNS servers
+dig [@<dns-server-ip>] NS <subdomain>
 ```
 
 ## tar
