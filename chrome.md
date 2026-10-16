@@ -19,11 +19,34 @@ ls $HOME/.config/google-chrome/Default/Sessions
 ```
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o google-chrome-stable_current_amd64.deb
-sudo dpkg -i google-chrome-stable_current_amd64.deb
-sudo apt --fix-broken install
+## dpkg -i = only local without download of dependencies
+# sudo dpkg -i google-chrome-stable_current_amd64.deb
+## apt install creates /etc/apt/sources.list.d/google-chrome.sources
+sudo apt install ./google-chrome-stable_current_amd64.deb
+sudo apt --fix-broken install # optional
+
+cat /etc/apt/sources.list.d/google-chrome.sources
+### THIS FILE IS AUTOMATICALLY CONFIGURED ###
+# Changes to this file will not be preserved.
+# This file will not be recreated if removed.
+X-Repolib-Name: Google Chrome
+Types: deb
+URIs: https://dl.google.com/linux/chrome-stable/deb/
+Suites: stable
+Components: main
+Architectures: amd64
+Signed-By: /usr/share/keyrings/google-chrome.gpg
+
+apt list --installed "*chrome*"
 which google-chrome
 which google-chrome-stable
+
+cp -rv $HOME/.config/google-chrome/Default/Sessions $HOME/.config/google-chrome/Default/Sessions-backup
+mkdir -pv /mnt/wsl/share/google-chrome/Default
+cp -rv $HOME/.config/google-chrome/Default/Sessions-backup /mnt/wsl/share/google-chrome/Default/
+
 google-chrome [--profile-directory=Default] [--no-sandbox] [--disable-gpu] [--disable-software-rasterizer] [--disable-accelerated-video-decode]
+ps -ef | grep google-chrome
 ```
 
 ```
@@ -48,13 +71,20 @@ ls /usr/lib/firefox/libnssckbi.so
 
 ## p11-kit
 ```
+apt list --installed "p11-kit*"
 sudo apt install -y p11-kit p11-kit-modules
 ls /usr/lib/x86_64-linux-gnu/pkcs11
-```
 
-```
+# Ubuntu-20.04
 sudo mv -v /usr/lib/x86_64-linux-gnu/nss/libnssckbi.so /usr/lib/x86_64-linux-gnu/nss/libnssckbi.so.bkp
+# Ubuntu-24.04
+apt list --installed "libnss3-tools*"
+sudo apt install libnss3-tools
+sudo mkdir -pv /usr/lib/x86_64-linux-gnu/nss
 sudo ln -sv -f /usr/lib/x86_64-linux-gnu/pkcs11/p11-kit-trust.so /usr/lib/x86_64-linux-gnu/nss/libnssckbi.so
+# $HOME/.pki/nssdb/libnssckbi.so
+mkdir -pv $HOME/.pki/nssdb
+ln -sv -f /usr/lib/x86_64-linux-gnu/pkcs11/p11-kit-trust.so $HOME/.pki/nssdb/libnssckbi.so
 ```
 
 ### p11-kit Firefox
