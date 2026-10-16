@@ -563,7 +563,7 @@ sudo update-ca-certificates # updates certificates in /etc/ssl/certs/ca-certific
 # /usr/local/share/ca-certificates/ + /usr/sbin/update-ca-certificates
 cp -v root_ca.crt /usr/local/share/ca-certificates/[sub-dir/]
 sudo update-ca-certificates # updates certificates in /etc/ssl/certs/ca-certificates.crt
-openssl s_client -connect foo.whatever.com:443 -CApath /etc/ssl/certs
+echo | openssl s_client -connect foo.whatever.com:443 -CApath /etc/ssl/certs
 ```
 
 ## update-ca-trust
