@@ -45,7 +45,8 @@ cp -rv $HOME/.config/google-chrome/Default/Sessions $HOME/.config/google-chrome/
 mkdir -pv /mnt/wsl/share/google-chrome/Default
 cp -rv $HOME/.config/google-chrome/Default/Sessions-backup /mnt/wsl/share/google-chrome/Default/
 
-google-chrome [--profile-directory=Default] [--no-sandbox] [--disable-gpu] [--disable-software-rasterizer] [--disable-accelerated-video-decode]
+google-chrome [--profile-directory=Default] [--no-sandbox] [--disable-gpu] [--disable-software-rasterizer] [--disable-accelerated-video-decode] [--disable-machine-cert-request-policy] [&]
+
 ps -ef | grep google-chrome
 ```
 
