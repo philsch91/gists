@@ -543,6 +543,7 @@ ls -lah /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 
 /etc/ssl/cert.pem -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 /etc/ssl/certs/ca-bundle.crt -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+/etc/ssl/certs/ca-bundle.trust.crt -> /etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt
 
 /etc/pki/tls/cert.pem -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 /etc/pki/tls/certs/ca-bundle.crt -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
