@@ -1,14 +1,8 @@
 # macOS
 
-## Paths
+## Files
 
-- /usr/local/sbin
-- /usr/sbin
-- /usr/local/bin
-- /usr/bin
-- executables in /usr/local/bin/ take precedence over /usr/bin/
-- ~/.local/bin
-- ~/.local/share/<app>
+[Unix Files](unix.md#files)
 
 ### `/Users/<username>`
 ```
