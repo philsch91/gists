@@ -1,5 +1,11 @@
 # npm
 
+## Variables
+```
+NODE_OPTIONS="--use-system-ca"
+NODE_EXTRA_CA_CERTS="/etc/ssl/certs/ca-bundle.crt"
+```
+
 ## Install
 ```
 apt list --installed nodejs*
@@ -19,15 +25,37 @@ sudo npm install npm@latest -g
 sudo npm update npm -g
 ```
 
+## Install
+```
+# local install
+npm install
+```
+
+## CI
+```
+# clean, repeatable install
+npm ci
+```
+
+## Start
+```
+npm start # alias for npm run start
+```
+
 ## Run
 ```
+npm run <package-json.scripts.name>
+npm run start
+# Angular CLI
 npm run ng -- version
+npm run ng -- build
 npm run ng -- serve [--poll=2000]
 ```
 
 ## npx
 ```
 npx ng version
+npx ng build
 npx ng serve
 ```
 
