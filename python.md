@@ -89,6 +89,9 @@ which python
 # install pip in virtual environment without affecting system (OS) Python
 python -m ensurepip --default-pip
 ...
+python -m pip install pip-tools
+which pip-compile
+pip-compile --generate-hashes --allow-unsafe [--upgrade-package aiohttp --upgrade-package yarl] --output-file requirements.txt requirements.in
 # option 1
 pip install -r requirements.txt
 pip list
