@@ -56,12 +56,20 @@ F1 > Python: Select Interpreter
 ### AI extensions
 - github.copilot-chat # formerly github.copilot
 - continue.continue # https://open-vsx.org/extension/Continue/continue
-### Java + CPP extensions
+- visualstudioexptteam.vscodeintellicode # replaced by github.copilot-chat
+- visualstudioexptteam.intellicode-api-usage-examples # replaced by github.copilot-chat
+### Java extensions
 - vscjava.vscode-java-pack
 - vscjava.vscode-gradle
+- vscjava.vscode-java-upgrade # replaced by vscjava.migrate-java-to-azure
+- vscjava.migrate-java-to-azure
 - madhavd1.javadoc-tools
+### CPP extensions
 - ms-vscode.cpptools-extension-pack
 - ms-vscode.makefile-tools
+### dotnet extensions
+- ms-dotnettools.vscode-dotnet-modernize # replaced by ms-dotnettools.upgrade-agent
+- ms-dotnettools.upgrade-agent
 ### Python extensions
 - ms-python.python
 - ms-python.vscode-pylance
