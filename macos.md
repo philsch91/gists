@@ -4,6 +4,9 @@
 
 [Unix Files](unix.md#files)
 
+- /Users/Shared/
+- $HOME/Public/Drop\ Box/
+
 ### `/Users/<username>`
 ```
 # /Users/<username>/.vscode
