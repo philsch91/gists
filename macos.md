@@ -6,6 +6,8 @@
 
 - /Users/Shared/
 - $HOME/Public/Drop\ Box/
+- ln -sv ~/Library/Mobile\ Documents/ ~/iCloud
+- ln -sv ~/Library/Mobile\ Documents/com~apple~CloudDocs ~/iCloudDocs
 
 ### `/Users/<username>`
 ```
