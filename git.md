@@ -61,7 +61,6 @@ git config --global alias.lag "log --all --decorate --pretty=oneline --graph"
 ## Set core.autocrlf to false to not change line endings at all and deactivate automatic normalization
 ## With core.autocrlf false, Git treats line endings as bytes instead of text
 ## native default
-## use .gitattributes with "*.cs text eol=crlf" instead
 git config core.autocrlf false
 ## Set core.autocrlf to input to convert CRLF to LF (normalize) on commit but not on checkout
 git config core.autocrlf input
