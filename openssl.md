@@ -144,7 +144,9 @@ openssl pkcs12 -in <certificate.pfx> -info -nodes
 ```
 openssl s_client -help
 # server name indication (SNI)
-openssl s_client -connect <hostname>:636 -servername <hostname> [-msg] -CApath /etc/ssl/certs/
+openssl s_client -connect <hostname>:636 -servername <hostname> [-msg] -CApath /etc/ssl/certs|/etc/pki/tls/certs
 # show remote SSL certificate
-echo | openssl s_client -connect <hostname>:443 -servername <hostname> -showcerts 2>/dev/null | openssl x509 -inform pem -noout -text
+echo | openssl s_client -connect <hostname>:443 -showcerts 2>/dev/null | openssl x509 -inform pem -noout -text
+# verify return error
+echo | openssl s_client -connect <hostname>:443 -CAfile /etc/ssl/certs/ca-bundle.crt|/etc/pki/tls/certs/ca-bundle.crt|/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem -verify_return_error
 ```
