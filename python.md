@@ -92,12 +92,16 @@ python -m ensurepip --default-pip
 python -m pip install pip-tools
 which pip-compile
 pip-compile --generate-hashes --allow-unsafe [--upgrade-package aiohttp --upgrade-package yarl] --output-file requirements.txt requirements.in
+pip-compile --generate-hashes --allow-unsafe [--upgrade-package pyasn1 --constraint requirements.in] --output-file requirements-pyasn1.txt requirements-pyasn1.in
+# copy only the generated `pyasn1==...` line and all of its hashes from requirements-pyasn1.txt into requirements.txt, while keeping the lockfile comments in requirements.txt, and use `pip install --no-deps -r requirements.txt`
 # option 1
 pip install -r requirements.txt
 pip list
 # option 2
 python -m pip install -r requirements.txt
 python -m pip list
+# option 3
+pip install --no-cache-dir --require-hashes --no-deps -r requirements.txt
 ...
 deactivate
 ```
