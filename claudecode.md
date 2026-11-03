@@ -261,6 +261,7 @@ project/
 /init
 /status
 /config
+/doctor
 /context
 ## settings
 /model [opusplan]
