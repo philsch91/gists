@@ -73,8 +73,10 @@ remove image: `docker image rm <image-id>`<br />
 
 ### image tag and push
 ```
-docker image tag [<repo>/]<name>:<tag> <registry-host>:<port>/<repo>/<name>:<tag>
-docker image push <registry-host>:<port>/<repo>/<name>:<tag>
+docker image tag [<repo>/]<image-name>:<tag> <registry-host>:<port>/<repo>/<image-name>:<tag>
+docker image push <registry-host>:<port>/<repo>/<image-name>:<tag>
+docker image tag <registry-host>:<port>/<repo>/<image-name>:<tag1> <registry-host>:<port>/<repo>/<image-name>:<tag2>
+docker image push <registry-host>:<port>/<repo>/<image-name>:<tag2>
 ```
 
 ## skopeo
@@ -82,6 +84,25 @@ docker image push <registry-host>:<port>/<repo>/<name>:<tag>
 docker login <docker-registry-uri-1>
 docker login <docker-registry-uri-2>
 skopeo copy docker://<docker-registry-uri-1>/<path>/<image-stream>:<tag> docker://<docker-registry-uri-2>/<path>/<image-stream>:<tag>
+skopeo [--debug] copy --retry-times 5 --retry-delay 5s --image-parallel-copies 1 --dest-creds "AWS:$(aws ecr get-login-password --region eu-central-1)" docker-daemon:<image-name>:latest docker://<registry-host>/<repo>/<image-name>:latest
+```
+
+## regctl
+```
+## regctl files
+ls $HOME/.regctl/config.json
+command -v regctl # /home/<username>/.local/bin/regctl
+regctl version
+regctl registry config
+regctl registry set <registry-host> --blob-chunk 20000000 --blob-max 1000000
+regctl registry login
+aws ecr get-login-password --region eu-central-1 | regctl registry login <registry-host> -u AWS --pass-stdin
+docker save <registry-host>/<repo>/<image-name>:latest -o /tmp/<image-name>.tar
+ls -lh /tmp/<image-name>.tar
+regctl image import ocidir://<image-name>:latest /tmp/<image-name>.tar
+regctl manifest get ocidir://<image-name>:latest
+regctl image copy ocidir://<image-name>:latest <registry-host>/<repo>/<image-name>:latest
+regctl image copy <registry-host>/<repo>/<image-name>:latest <registry-host>/<repo>/<image-name>:<tag>
 ```
 
 ## Notes
@@ -94,6 +115,11 @@ write tcp 172.30.230.84:52646->3.122.9.124:443: write: connection reset by peer
 ### Solution: Set MTU of eth0 to 1300 Bytes
 ```
 sudo ip link set dev eth0 mtu 1300
+
+ip link show eth0
+# 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1300 qdisc mq state UP mode DEFAULT group default qlen 1000
+#     link/ether 00:15:5d:55:53:19 brd ff:ff:ff:ff:ff:ff
+
 ip addr show eth0 | grep mtu
 # 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1300 qdisc mq state UP group default qlen 1000
 ```
