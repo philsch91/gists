@@ -385,8 +385,16 @@ apt-get [-s|--simulate] upgrade
 apt-get [-u|--show-upgraded] [-V|--verbose-versions] [[--assume-no]] upgrade # show upgraded version summary
 ### apt list --installed [-qq|--quiet] <(*)package-name(*)>
 
+## apt-cache search
+apt-cache search <package-name>
+
+## apt-cache policy
+apt-cache policy <package-name>
+
 ## apt install
-apt-get [-f|--fix-broken] [-m|--fix-missing] [[--no-cache]] install <package-name>|./<file-name>.deb
+## apt install = interactive
+## apt-get install = non-interactive
+apt-get [-f|--fix-broken] [-m|--fix-missing] [[--no-cache]] install [-y] [--no-install-recommends] <package-name>|./<file-name>.deb
 
 # /etc/apt/trusted.gpg.d/
 ls -lah /etc/apt/trusted.gpg.d/
@@ -434,6 +442,10 @@ apt install zstd
 ## apt install (upgrade) apache2-utils
 apt install apache2-utils
 command -v htpasswd
+
+## apt install (upgrade) skopeo
+apt install skopeo
+command -v skopeo
 
 ## apt install azure-cli
 echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ <repo-name>|noble main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
@@ -723,8 +735,15 @@ sudo service docker stop
 # xUbuntu_20.04 or xUbuntu_22.04
 echo "deb http://download.opensuse.org/repositories/home:/alvistack/xUbuntu_20.04/ /" | sudo tee /etc/apt/sources.list.d/home:alvistack.list
 curl -fsSL https://download.opensuse.org/repositories/home:alvistack/xUbuntu_20.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_alvistack.gpg > /dev/null
+
+# xUbuntu_24.04
+echo "deb http://download.opensuse.org/repositories/home:/alvistack/xUbuntu_24.04/ /" | sudo tee /etc/apt/sources.list.d/home:alvistack.list
+curl -fsSL https://download.opensuse.org/repositories/home:alvistack/xUbuntu_24.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_alvistack.gpg > /dev/null
+
 sudo apt update
 sudo apt install skopeo
+sudo apt install podman
+skopeo --version
 ```
 
 ## sysctl
