@@ -21,6 +21,7 @@ docker info | grep -i "Concurrent"
 docker info --format '{{json .}}' | grep -i "MaxConcurrentUploads"
 docker info --format '{{.MaxConcurrentUploads}}'
 docker network inspect bridge | grep -i mtu
+docker inspect --format='{{.Config.User}}' [<registry-host>/][<repo>/]<image-name>:<tag>
 ```
 
 ### /etc/systemd/system/docker.service.d/override.conf + systemctl restart docker
@@ -102,7 +103,7 @@ ls -lh /tmp/<image-name>.tar
 regctl image import ocidir://<image-name>:latest /tmp/<image-name>.tar
 regctl manifest get ocidir://<image-name>:latest
 regctl image copy ocidir://<image-name>:latest <registry-host>/<repo>/<image-name>:latest
-regctl image copy <registry-host>/<repo>/<image-name>:latest <registry-host>/<repo>/<image-name>:<tag>
+regctl image copy [--platform linux/amd64|linux/arm64] <registry-host>/<repo>/<image-name>:latest <registry-host>/<repo>/<image-name>:<tag>
 ```
 
 ## Notes
