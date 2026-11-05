@@ -136,6 +136,13 @@ root:*:19836:0:99999:7:::
 echo '<username>:<password>' | sudo chpasswd
 ```
 
+## id
+```
+command -v id # /usr/bin/id
+id -u # 1001 (0=root)
+id -un # <username>
+```
+
 ## sudo
 
 - /etc/sudoers
