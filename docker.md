@@ -22,6 +22,7 @@ docker info --format '{{json .}}' | grep -i "MaxConcurrentUploads"
 docker info --format '{{.MaxConcurrentUploads}}'
 docker network inspect bridge | grep -i mtu
 docker inspect --format='{{.Config.User}}' [<registry-host>/][<repo>/]<image-name>:<tag>
+docker inspect --format '{{.Os}}/{{.Architecture}}' [<registry-host>/][<repo>/]<image-name>:<tag> # linux/amd64
 ```
 
 ### /etc/systemd/system/docker.service.d/override.conf + systemctl restart docker
@@ -35,6 +36,7 @@ sudo systemctl restart docker
 ## info
 ```
 docker info [| grep -i registry]
+docker info --format '{{.OSType}}/{{.Architecture}}' # linux/x86_64
 ```
 
 ## login
@@ -98,12 +100,15 @@ regctl registry config
 regctl registry set <registry-host> --blob-chunk 20000000 --blob-max 1000000
 regctl registry login
 aws ecr get-login-password --region eu-central-1 | regctl registry login <registry-host> -u AWS --pass-stdin
-docker save <registry-host>/<repo>/<image-name>:latest -o /tmp/<image-name>.tar
+docker save [<registry-host>/][<repo>/]<image-name>:latest -o /tmp/<image-name>.tar
 ls -lh /tmp/<image-name>.tar
 regctl image import ocidir://<image-name>:latest /tmp/<image-name>.tar
 regctl manifest get ocidir://<image-name>:latest
-regctl image copy ocidir://<image-name>:latest <registry-host>/<repo>/<image-name>:latest
-regctl image copy [--platform linux/amd64|linux/arm64] <registry-host>/<repo>/<image-name>:latest <registry-host>/<repo>/<image-name>:<tag>
+# push
+regctl image copy [--platform linux/amd64|linux/arm64] ocidir://<image-name>:latest <registry-host>/<repo>/<image-name>:latest
+regctl image copy [--platform linux/amd64|linux/arm64] [<registry-host>/][<repo>/]<image-name>:latest <registry-host>/<repo>/<image-name>:<tag>
+# copy
+regctl image copy <registry-host>/<repo>/<image-name>:latest <registry-host>/<repo>/<image-name>:<tag>
 ```
 
 ## Notes
