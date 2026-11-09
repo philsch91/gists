@@ -87,9 +87,10 @@ openssl x509 -inform der -in <file.cer> -outform pem -out <file.pem>
 ## rsa + x509 + md5
 ```
 # get and compare hashes of private key and certificate
+# private key (certificate.key)
 openssl rsa -noout -modulus -in <certificate.key> | openssl md5
 MD5(stdin)= 2c6c4f2f2af9ca734c21997924cb17a4
-
+# certificate + chain (certificate.cer)
 openssl x509 -noout -modulus -in <certificate.cer> | openssl md5
 MD5(stdin)= 2c6c4f2f2af9ca734c21997924cb17a4
 ```
