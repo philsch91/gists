@@ -46,7 +46,7 @@ docker login <docker-registry-uri> -u <user-name> -p <password> [--password-stdi
 
 ## build
 ```
-docker build -f <dockerfile-path> -t <image-name>:<image-tag> [--build-arg http_proxy= --build-arg https_proxy=] <build-context-path>|.
+docker build --pull -f <dockerfile-path> -t <image-name>:<image-tag> [--build-arg http_proxy= --build-arg https_proxy=] <build-context-path>|.
 ```
 
 ## run
