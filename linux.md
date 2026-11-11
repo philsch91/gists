@@ -5,6 +5,9 @@
 [Unix Files](unix.md#files)
 
 ## Variables
+
+[Unix Variables](unix.md#variables)
+
 ```
 # or /etc/ssl/certs/ca-bundle.crt
 SSL_CERT_FILE="/etc/ssl/certs/ca-certificates.crt"
@@ -58,7 +61,7 @@ useradd -m|--create-home [-s|--shell /bin/bash] -u|--uid <numerical-uid(1000,100
 ## groupadd
 ```
 # addgroup = interactive wrapper for groupadd
-groupadd -g <gid> <group-name>
+groupadd -g|--gid <gid> <group-name>
 groupdel <group-name>
 ```
 
@@ -335,11 +338,11 @@ dig [@<dns-server-ip>] NS <subdomain>
 ```
 mkdir -pv /tmp/subdir
 # -xzvf for .tar.gz (.tgz)
-tar -C /tmp/subdir -xzvf /tmp/filename.<tar.gz|tgz>
+tar -C|--directory= /tmp/subdir -xzvf /tmp/filename.<tar.gz|tgz>
 # --zstd -xvf for .tar.zst
-tar -C /tmp/subdir --zstd -xvf /tmp/filename.tar.zst
+tar -C|--directory= /tmp/subdir --zstd -xvf /tmp/filename.tar.zst
 # -xvf for .tar.gz (.tgz) and .tar.zst
-tar -C /tmp/subdir -xvf /tmp/filename.<tar.gz|tgz|tar.zst>
+tar -C|--directory= /tmp/subdir -xvf /tmp/filename.<tar.gz|tgz|tar.zst>
 rm -v /tmp/filename.<tar.gz|tgz|tar.zst>
 ls -lah /tmp/subdir
 ```
