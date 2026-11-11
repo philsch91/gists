@@ -33,6 +33,47 @@ sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
 
+### Dockerfile
+```
+FROM registry.access.redhat.com/ubi9/ubi:latest
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+USER root
+
+ENV UID=1001 \
+    GID=1001 \
+    USERNAME="runner" \
+    DOCKER_GID=123
+
+ENV CURL_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt \
+    AWS_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt \
+    REQUESTS_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt \
+    SSL_CERT_FILE=/etc/pki/tls/certs/ca-bundle.crt
+
+ENV RUNNER_MANUALLY_TRAP_SIG=1 \
+    ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT=1 \
+    ImageOS=ubi9 \
+    BUILDKITD_FLAGS=--oci-worker-no-process-sandbox \
+    BUILDCTL_CONNECT_RETRIES_MAX=4 \
+    BUILDKIT_HOST=unix:///run/user/${UID}/buildkit/buildkitd.sock \
+    TMPDIR=/tmp \
+    TMPDIR_USER=/home/${USERNAME}/.local/tmp \
+    XDG_RUNTIME_DIR=/run/user/${UID} \
+    container=podman \
+    PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/share/maven/bin:/usr/local/go/bin
+
+# Create user and home in one layer
+RUN set -eux && \
+    groupadd -g $GID $USERNAME && \
+    groupadd -g $DOCKER_GID docker && \
+    useradd -u $UID --create-home --shell /bin/bash -g $GID --groups docker $USERNAME && \
+    chown -R $UID:$GID /home/$USERNAME && \
+    echo "${USERNAME} ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USERNAME} && chmod 0440 /etc/sudoers.d/${USERNAME} && \
+    grep -q "^${USERNAME}:" /etc/subuid || echo "${USERNAME}:100000:65536" >> /etc/subuid && \
+    grep -q "^${USERNAME}:" /etc/subgid || echo "${USERNAME}:100000:65536" >> /etc/subgid
+```
+
 ## info
 ```
 docker info [| grep -i registry]
@@ -100,12 +141,13 @@ regctl registry config
 regctl registry set <registry-host> --blob-chunk 20000000 --blob-max 1000000
 regctl registry login
 aws ecr get-login-password --region eu-central-1 | regctl registry login <registry-host> -u AWS --pass-stdin
-docker save [<registry-host>/][<repo>/]<image-name>:latest -o /tmp/<image-name>.tar
-ls -lh /tmp/<image-name>.tar
-regctl image import ocidir://<image-name>:latest /tmp/<image-name>.tar
-regctl manifest get ocidir://<image-name>:latest
+docker build --pull -f Dockerfile -t <image-name>:latest .
+docker save [<registry-host>/][<repo>/]<image-name>:latest -o /tmp/<image-name>_<tag>.tar
+ls -lh /tmp/<image-name>_<tag>.tar
+regctl image import ocidir:///tmp/<image-name>:latest /tmp/<image-name>_<tag>.tar
+regctl manifest get ocidir:///tmp/<image-name>:latest
 # push
-regctl image copy [--platform linux/amd64|linux/arm64] ocidir://<image-name>:latest <registry-host>/<repo>/<image-name>:latest
+regctl image copy [--platform linux/amd64|linux/arm64] ocidir:///tmp/<image-name>:latest <registry-host>/<repo>/<image-name>:latest
 regctl image copy [--platform linux/amd64|linux/arm64] [<registry-host>/][<repo>/]<image-name>:latest <registry-host>/<repo>/<image-name>:<tag>
 # copy
 regctl image copy <registry-host>/<repo>/<image-name>:latest <registry-host>/<repo>/<image-name>:<tag>
