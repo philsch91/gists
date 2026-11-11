@@ -210,11 +210,17 @@ for((i=0;i<=3600;i++)); do echo "$(date)" >>/tmp/readiness.log; time curl -k --n
 # print each command (with expansions) before execution
 # combined with the PS4 variable for the trace prefix
 set -o xtrace (set -x)
+
 # exit if variables are unset
 ## use ${var:-} to guard for unset variables
 set -o nounset (set -u)
+
 # exit if a command returns non-zero status
 set -o errexit (set -e)
+
+# errexit + nounset + xtrace
+set -eux
+
 # fail if any command anywhere in a pipeline (cmd1 | cmd2) fails
 set -o pipefail
 # -n = no execution (noexec) and syntax check, return code 0 = no errors
