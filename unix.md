@@ -9,6 +9,14 @@
 - ~/.local/bin
 - ~/.local/share/<app>
 
+## Variables
+```
+# POSIX standard (IEEE Std 1003.1)
+echo $TMPDIR
+TMPDIR_FILE=$(mktemp)
+TMPDIR_DIR=$(mktemp -d)
+```
+
 ## Shell
 
 ```
