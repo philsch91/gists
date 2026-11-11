@@ -31,6 +31,10 @@ find /Users/<username>/Library/ -type d -iname "code" 2>/dev/null
 find /Users/<username>/Library/ -type f -iname "code" 2>/dev/null
 ```
 
+## Variables
+
+[Unix Variables](unix.md#variables)
+
 ## nvram
 
 ```
