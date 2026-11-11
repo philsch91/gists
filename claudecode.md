@@ -292,9 +292,9 @@ project/
 ### in ~/.claude/plugins/known_marketplaces.json
 ### and in ~/.claude/plugins/marketplaces/<repository-marketplace-name>
 /plugin marketplace add <source> [options]
-/plugin marketplace add https://<url>[.git][#branch]
+/plugin marketplace add https://<url>[.git][#branch] # GitHub enterprise server
 /plugin marketplace add ./path/to/marketplace
-/plugin marketplace add <github-org>/<github-repo>[@ref]
+/plugin marketplace add <github-org>/<github-repo>[@ref] # public GitHub
 ### view repository URL
 /plugin marketplace update
 ### update repository plugins
