@@ -44,7 +44,7 @@ helm -n argocd upgrade argocd oci://ghcr.io/argoproj/argo-helm/argo-cd --version
 
 ## version
 ```
-argocd version [--grpc-web] [| grep server]
+argocd version [--grpc-web] [--client] [| grep server]
 argocd completion
 argocd configure
 ```
