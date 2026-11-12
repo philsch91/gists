@@ -56,22 +56,40 @@ ENV RUNNER_MANUALLY_TRAP_SIG=1 \
     ImageOS=ubi9 \
     BUILDKITD_FLAGS=--oci-worker-no-process-sandbox \
     BUILDCTL_CONNECT_RETRIES_MAX=4 \
-    BUILDKIT_HOST=unix:///run/user/${UID}/buildkit/buildkitd.sock \
     TMPDIR=/tmp \
     TMPDIR_USER=/home/${USERNAME}/.local/tmp \
-    XDG_RUNTIME_DIR=/run/user/${UID} \
+    XDG_RUNTIME_DIR=/home/${USERNAME}/.local/run \
     container=podman \
     PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/share/maven/bin:/usr/local/go/bin
+
+ENV BUILDKIT_HOST=unix://${XDG_RUNTIME_DIR}/buildkit/buildkitd.sock
 
 # Create user and home in one layer
 RUN set -eux && \
     groupadd -g $GID $USERNAME && \
     groupadd -g $DOCKER_GID docker && \
     useradd -u $UID --create-home --shell /bin/bash -g $GID --groups docker $USERNAME && \
-    chown -R $UID:$GID /home/$USERNAME && \
-    echo "${USERNAME} ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USERNAME} && chmod 0440 /etc/sudoers.d/${USERNAME} && \
+    # chown -R $UID:$GID /home/$USERNAME && \
+    chgrp -R 0 /home/$USERNAME && \
+    chmod -R g=u /home/$USERNAME && \
+    echo "${USERNAME} ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USERNAME} && \
+    chmod 0440 /etc/sudoers.d/${USERNAME} && \
     grep -q "^${USERNAME}:" /etc/subuid || echo "${USERNAME}:100000:65536" >> /etc/subuid && \
     grep -q "^${USERNAME}:" /etc/subgid || echo "${USERNAME}:100000:65536" >> /etc/subgid
+
+RUN set -eux && \
+    chgrp 0 /etc/passwd && \
+    chmod g=u /etc/passwd
+
+RUN set -eux && \
+    mkdir -p ${XDG_RUNTIME_DIR} && \
+    chown ${UID}:${GID} /home/${USERNAME}/.local ${XDG_RUNTIME_DIR} && \
+    chgrp 0 /home/${USERNAME}/.local ${XDG_RUNTIME_DIR} && \
+    chmod g=u /home/${USERNAME}/.local && \
+    chmod 0770 ${XDG_RUNTIME_DIR}
+
+WORKDIR /home/${USERNAME}
+USER ${USERNAME}
 ```
 
 ## info
@@ -85,9 +103,14 @@ docker info --format '{{.OSType}}/{{.Architecture}}' # linux/x86_64
 docker login <docker-registry-uri> -u <user-name> -p <password> [--password-stdin]
 ```
 
+## pull
+```
+docker pull <registry-host>:<port>/<repo>/<image-name>:<tag>
+```
+
 ## build
 ```
-docker build --pull -f <dockerfile-path> -t <image-name>:<image-tag> [--build-arg http_proxy= --build-arg https_proxy=] <build-context-path>|.
+docker build --pull --progress=plain -f <dockerfile-path> -t <image-name>:<image-tag> [--build-arg http_proxy= --build-arg https_proxy=] <build-context-path>|. [2>&1 | tee -a /tmp/docker-build.log]
 ```
 
 ## run
