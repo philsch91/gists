@@ -196,10 +196,10 @@ chmod -R [0]755 /usr/bin/<filename> /usr/lib/<filename>
 ```
 # change group ownership to group with GID 0 (root group)
 chgrp 0 /etc/passwd
-chgrp 0 /etc
+# chgrp 0 /etc # for sed -i /etc/passwd
 # copy user bits to group bits (644->664 or 700->770)
 chmod g=u /etc/passwd
-chmod g=u /etc
+# chmod g=u /etc # for sed -i /etc/passwd
 ```
 
 ## readlink
