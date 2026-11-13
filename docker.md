@@ -114,29 +114,60 @@ docker build --pull --progress=plain -f <dockerfile-path> -t <image-name>:<image
 ```
 
 ## run
-run new container image: `docker run -dt [--entrypoint new-entrypoint|/bin/bash] --name <container-name> [-e <env-var-name>=<env-var-value> ...] [-p 443:443] <image>:<tag>`\
-run container image interactively: `docker run [--rm] -it <image>:<tag> [<cmd>]`<br />
+```
+# --rm = remove container after exit
+# -d|--detach = detach container from terminal
+# run new container image
+docker run -dt [--entrypoint new-entrypoint|/bin/bash] --name <container-name> [-e <env-var-name>=<env-var-value> ...] [-p 443:443] <image>:<tag>
+
+# run container image interactively
+docker run [--rm] -it <image>:<tag> [<cmd>]
+docker run --rm -d -p 8080:8080 --name ngx nginx:latest && curl -sI localhost:8080
+```
 
 ## ps
-show all running and stopped containers: `docker ps -a`\
-stop all running containers: `docker stop (docker ps -aq)`\
-
-## rm
-remove container: `docker rm <container-id>`\
-remove all containers: `docker rm (docker ps -aq)`<br />
+```
+# show all running and stopped containers
+docker ps -a
+# stop all running containers
+docker stop (docker ps -aq)
+```
 
 ## start
-start existing container: `docker start <container-name>`\
-### exec
-execute bash shell in running container: `docker exec -it <container-name> bash`\
-### stop
-stop container: `docker stop <container-id>`\
+```
+# start existing container
+docker start <container-name>
+```
+
+## exec
+```
+# execute bash shell in running container
+docker exec -it <container-name> bash
+```
+
+## stop
+```
+# stop container
+docker stop <container-id>
+```
+
+## rm
+```
+# remove container
+docker rm <container-id>
+# remove all containers
+docker rm (docker ps -aq)
+```
 
 ## image
-
-show all images: `docker image ls`\
-remove all images: `docker image rm (docker ps -q)`\
-remove image: `docker image rm <image-id>`<br />
+```
+# show all images
+docker image ls
+# remove all images
+docker image rm (docker ps -q)
+# remove image
+docker image rm <image-id>
+```
 
 ### image tag and push
 ```
