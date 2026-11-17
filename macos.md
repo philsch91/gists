@@ -108,10 +108,29 @@ vim -c "set nobomb" -c wq! <file-name>
 sips <input-filename> -Z <pixels-height-width-max> --out <output-filename>
 # Resample image at specified size. Image apsect ratio may be altered.
 sips <input-filename> -z <pixels-height> <pixels-width> --out <output-filename>
+
+# --setProperty|-s format <value>
 # convert SVG to JPEG
 sips -s format jpeg <file-name>.svg --out <file-name>.jpg
 # convert SVG to PNG
 sips [--resampleHeightWidth 2200 1600] -s format png <file-name>.svg -o <file-name>.png
+# convert PNG to JPEG and remove transparency (alpha channel)
+sips -s format jpeg -s formatOptions 95 input-2880x1800.png --out output-2880x1800.jpg
+
+# --resampleHeightWidth
+sips --resampleHeightWidth 1800 2880 input-3024x1964.png -o output-2880x1800.png
+sips --resampleHeightWidth 800 1280 input-3024x1964.png -o output-1280x800.png
+
+# --resampleWidth + --cropToHeightWidth
+# --cropToHeightWidth: height first, then width
+sips --resampleWidth 2880 input-3024x1964.png --out temp.png && \
+sips --cropToHeightWidth 1800 2880 temp.png --out output-2880x1800.png && \
+rm -v temp.png
+
+# --resampleWidth + --cropOffset
+sips --resampleWidth 2880 input-3024x1964.png --out temp.png && \
+sips --cropOffset 70 1 --cropToHeightWidth 1800 2880 temp.png --out output-2880x1800.png && \
+rm -v temp.png
 ```
 
 ## qlmanage
