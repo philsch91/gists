@@ -185,6 +185,9 @@ terraform [-chdir=terraform/aws] apply [-destroy] [-var-file="testing.tfvars(.js
 
 # output
 terraform [-chdir=terraform/aws] output [-no-color] -json
+
+# destroy
+terraform destroy -target=<resource-type>.<resource-name> -var-file=variables.tfvars
 ```
 
 ## init
