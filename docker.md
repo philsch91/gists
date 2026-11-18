@@ -110,7 +110,16 @@ docker pull <registry-host>:<port>/<repo>/<image-name>:<tag>
 
 ## build
 ```
-docker build --pull --progress=plain -f <dockerfile-path> -t <image-name>:<image-tag> [--build-arg http_proxy= --build-arg https_proxy=] <build-context-path>|. [2>&1 | tee -a /tmp/docker-build.log]
+docker build --pull --progress=plain --secret id=rh_org,src=<file> --secret id=rh_activationkey,src=<file> -f <dockerfile-path> -t <image-name>:<image-tag> [--build-arg http_proxy= --build-arg https_proxy=] <build-context-path>|. [2>&1 | tee -a /tmp/docker-build.log]
+```
+
+Usage in Dockerfile:
+```
+RUN --mount=type=secret,id=rh_org --mount=type=secret,id=rh_activationkey \
+    set -eux && \
+    cat /run/secrets/rh_org && \
+    cat /run/secrets/rh_activationkey && \
+    subscription-manager register --org="$(cat /run/secrets/rh_org)" --activationkey="$(cat /run/secrets/rh_activationkey)"
 ```
 
 ## run
@@ -205,6 +214,9 @@ regctl image copy [--platform linux/amd64|linux/arm64] ocidir:///tmp/<image-name
 regctl image copy [--platform linux/amd64|linux/arm64] [<registry-host>/][<repo>/]<image-name>:latest <registry-host>/<repo>/<image-name>:<tag>
 # copy
 regctl image copy <registry-host>/<repo>/<image-name>:latest <registry-host>/<repo>/<image-name>:<tag>
+
+# tag delete
+regctl tag delete <registry-host>/<repo>/<image-name>:<tag>
 ```
 
 ## Notes
