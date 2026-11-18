@@ -9,11 +9,13 @@
 [Unix Variables](unix.md#variables)
 
 ```
+# RedHat: /etc/pki/tls/certs/ca-bundle.crt
 # or /etc/ssl/certs/ca-bundle.crt
 SSL_CERT_FILE="/etc/ssl/certs/ca-certificates.crt"
 CURL_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
 AWS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
 REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
+NODE_EXTRA_CA_CERTS="/etc/ssl/certs/ca-certificates.crt"
 ```
 
 ## file
@@ -571,6 +573,7 @@ ls -lah /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 /etc/pki/tls/certs/ca-bundle.crt -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 
 # /usr/bin/update-ca-trust
+# ca-certificates package: /usr/share/pki/ca-trust-source/anchors/
 cp -v *.crt /etc/pki/ca-trust/source/anchors/
 update-ca-trust
 ```
