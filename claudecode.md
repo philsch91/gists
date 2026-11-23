@@ -52,6 +52,7 @@ export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1
 
 ## Files
 
+- `/etc/claude-code/managed-settings.json`
 - `/etc/claude-code/CLAUDE.md` or `/Library/Application Support/ClaudeCode/CLAUDE.md` or `C:\Program Files\ClaudeCode\CLAUDE.md`
 - `~/.claude/CLAUDE.md` # personal preferences
 - `~/.claude.json` (mcp --scope user (.mcpServers) |local (.projects.<fs-path>.mcpServers))
