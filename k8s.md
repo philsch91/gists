@@ -164,6 +164,7 @@ kubectl debug -it <pod-name-to-copy> --copy-to=<pod-name>-debug --container=<con
 kubectl annotate --overwrite pod <pod-name>-debug livenessprobe=disabled
 
 // kubectl debug node
+kubectl debug node/<node-name> --image=<image> --profile=general -it -- chroot /host /bin/bash
 // creates pod on node with 'hostPID: true'
 // and the host root filesystem mounted at /host
 kubectl debug node/<node-name> --image=alpine --profile=sysadmin -it -- \
