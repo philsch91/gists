@@ -28,6 +28,7 @@ for cm in $(k -n argocd get cm | grep -i argocd | awk '{print $1}'); do k -n arg
 
 for scr in $(k -n argocd get secret | grep -i argocd | awk '{print $1}'); do k -n argocd get secret/${scr} -o yaml >/tmp/argocd/${scr}.yaml; done
 
+# argocd cluster add <context-name>
 for cluster_secret in $(k -n argocd get secret -l argocd.argoproj.io/secret-type=cluster | tail -n +2 | awk '{print $1}'); do cluster_values=$(k -n argocd get secret/$cluster_secret -o jsonpath='{.data.name}{"\t"}{.data.server}{"\t"}{.data.config}'); echo "Name: $(echo $cluster_values | awk '{print $1}' | base64 -d)"; echo "Server: $(echo $cluster_values | awk '{print $2}' | base64 -d)"; echo "Config: $(echo $cluster_values | awk '{print $3}' | base64 -d)"; done
 
 # argocd repocreds add registry.name.tld --username <username> --password <password> --type helm --enable-oci
@@ -90,9 +91,13 @@ argocd admin initial-password reset
 ```
 
 ## cluster
-Add and remove cluster connected via kubectl in ArgoCD connected via argocd
 ```
-argocd cluster add <context-name (k config current-context)> --name <cluster-name> -y --insecure
+# add and remove cluster connected via kubectl in ArgoCD connected via argocd
+# kubectl --context="<context-name>" auth can-i create Secrets|ServiceAccount --namespace kube-system|<custom-namespace>
+# kubectl --context="<context-name>" auth can-i create ClusterRole|ClusterRoleBinding
+argocd cluster add <context-name (k config current-context)> --name <cluster-name> [--system-namespace <custom-namespace>] -y --insecure
+# kubectl -n kube-system get sa/argocd-manager -o jsonpath="{.secrets}"
+# kubectl -n kube-system get secret/argocd-manager-token-<id> -o jsonpath="{.data.token}" | base64 -d
 argocd cluster rm <context-name>
 argocd cluster list
 ```
