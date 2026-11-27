@@ -66,12 +66,14 @@ set +x
 export PASSWORD="${PASSWORD}"
 test "${DEBUG}" = "1" && set -x
 
-# one-liner
-if [ -d $XDG_CONFIG_HOME ]; then echo "$XDG_CONFIG_HOME exists and is a directory"; else echo "$XDG_CONFIG_HOME directory does not exist"; fi
-
 # shorthand
 ## combines logical operators
 [ -d $XDG_CONFIG_HOME ] && echo "$XDG_CONFIG_HOME exists and is a directory" || echo "$XDG_CONFIG_HOME directory does not exist"
+
+# if + test = if catches non-zero RC ($?)
+# one-liner
+set -euo pipefail
+if [ -d $XDG_CONFIG_HOME ]; then echo "$XDG_CONFIG_HOME exists and is a directory"; else echo "$XDG_CONFIG_HOME directory does not exist"; fi
 
 if [ $# -ne 1 -a "$2" != "old" ]; then
   # number of arguments is not equal to 1 and argument 2 is not equal to "old"
@@ -212,22 +214,26 @@ for((i=0;i<=3600;i++)); do echo "$(date)" >>/tmp/readiness.log; time curl -k --n
 
 ## bash
 ```
-# print each command (with expansions) before execution
-# combined with the PS4 variable for the trace prefix
-set -o xtrace (set -x)
+# exit if a command returns non-zero status
+set -o errexit (set -e)
 
 # exit if variables are unset
 ## use ${var:-} to guard for unset variables
 set -o nounset (set -u)
 
-# exit if a command returns non-zero status
-set -o errexit (set -e)
+# fail if any command anywhere in a pipeline (cmd1 | cmd2) fails
+set -o pipefail
+
+# errexit + nounset + pipefail = Bash strict mode
+set -euo pipefail
+
+# print each command (with expansions) before execution
+# combined with the PS4 variable for the trace prefix
+set -o xtrace (set -x)
 
 # errexit + nounset + xtrace
 set -eux
 
-# fail if any command anywhere in a pipeline (cmd1 | cmd2) fails
-set -o pipefail
 # -n = no execution (noexec) and syntax check, return code 0 = no errors
 bash -n <file>.sh
 echo $?
