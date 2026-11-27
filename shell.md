@@ -61,6 +61,11 @@ unset <variable-name>
 
 ## test
 ```
+DEBUG="${DEBUG:-0}"
+set +x
+export PASSWORD="${PASSWORD}"
+test "${DEBUG}" = "1" && set -x
+
 # one-liner
 if [ -d $XDG_CONFIG_HOME ]; then echo "$XDG_CONFIG_HOME exists and is a directory"; else echo "$XDG_CONFIG_HOME directory does not exist"; fi
 
